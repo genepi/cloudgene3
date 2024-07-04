@@ -118,7 +118,7 @@ public class AuthenticationService {
 
 	}
 
-	public ValidatedApiTokenResponse validateApiToken(String token) {
+	public Mono<ValidatedApiTokenResponse> validateApiToken(String token) {
 
 		Publisher<Authentication> authentication = validator.validateToken(token, null);
 
@@ -164,7 +164,7 @@ public class AuthenticationService {
 				}
 
 			});
-		}).block();
+		}).single();
 
 	}
 
