@@ -23,6 +23,7 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
+import reactor.core.publisher.Mono;
 
 @Controller
 public class ApiTokenController {
@@ -107,7 +108,7 @@ public class ApiTokenController {
 	@Post("/api/v2/tokens/verify")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Secured(SecurityRule.IS_ANONYMOUS)
-	public HttpResponse<ValidatedApiTokenResponse> verify(String token) {
+	public HttpResponse<Mono<ValidatedApiTokenResponse>> verify(String token) {
 
 		return HttpResponse.ok(authenticationService.validateApiToken(token));
 
