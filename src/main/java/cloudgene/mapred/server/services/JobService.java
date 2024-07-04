@@ -415,7 +415,10 @@ public class JobService {
 					}
 
 					// copy to workspace in input directory
+					long start = System.currentTimeMillis();
+					log.debug("Upload file " + inputFile.getAbsolutePath() + " to workspace...");
 					String target = workspace.uploadInput(fieldName, inputFile);
+					log.debug("File " + inputFile.getAbsolutePath() + " uploaded in " + (System.currentTimeMillis() - start) + " ms");
 
 					if (inputParam.isFolder()) {
 						props.put(fieldName, workspace.getParent(target));

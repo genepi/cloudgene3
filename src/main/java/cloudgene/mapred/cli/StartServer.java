@@ -25,6 +25,8 @@ public class StartServer extends Tool {
 
 	public static final String SECURITY_FILENAME = "config/security.yaml";
 
+	public static final String SERVER_FILENAME = "config/server.yaml";
+
 	private String[] args;
 
 	public StartServer(String[] args) {
@@ -34,13 +36,15 @@ public class StartServer extends Tool {
 
 	@Override
 	public void createParameters() {
-		addOptionalParameter("port", "running webinterface on this port [default: 8082]", Tool.STRING);
+		addFlag("verbose", "running in verbose mode");
 	}
 
 	@Override
 	public int run() {
 
-		if (new File("webapp").exists()) {
+		if (isFlagSet("verbose")) {
+			System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "logback-verbose.xml");
+		} else if (new File("webapp").exists()) {
 			System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "logback.xml");
 		} else {
 			System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "logback-dev.xml");
@@ -78,12 +82,26 @@ public class StartServer extends Tool {
 					Application.settings.getSecretKey());
 			properties.put("micronaut.autoRetireInterval", Application.settings.getAutoRetireInterval() + "h");
 
-			if (new File(SECURITY_FILENAME).exists()) {
-				System.out.println("Use config file " + SECURITY_FILENAME);
-				System.setProperty("micronaut.config.files", SECURITY_FILENAME);
-			} else {
+			String customConfigurationFiles = null;
 
+			if (new File(SECURITY_FILENAME).exists()) {
+				customConfigurationFiles = SECURITY_FILENAME;
 			}
+
+			if (new File(SERVER_FILENAME).exists()) {
+				if (customConfigurationFiles != null) {
+					customConfigurationFiles += ",";
+				} else {
+					customConfigurationFiles = "";
+				}
+				customConfigurationFiles += SERVER_FILENAME;
+			}
+
+			if (customConfigurationFiles != null) {
+				System.out.println("Use config file(s): " + customConfigurationFiles);
+				System.setProperty("micronaut.config.files", customConfigurationFiles);
+			}
+
 
 			String baseUrl = Application.settings.getBaseUrl();
 			if (!baseUrl.trim().isEmpty()) {

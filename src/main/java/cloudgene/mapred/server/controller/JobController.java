@@ -85,10 +85,15 @@ public class JobController {
 	@Secured(SecurityRule.IS_AUTHENTICATED)
 	public Publisher<HttpResponse<Object>> submit(Authentication authentication, String app, @Body MultipartBody body) {
 
+		long start = System.currentTimeMillis();
+		log.debug("Start submit process and parse multipary body");
+
 		return formUtil.processMultipartBody(body, new Function<List<Parameter>, HttpResponse<Object>>() {
 
 			@Override
 			public HttpResponse<Object> apply(List<Parameter> form) {
+
+				log.debug("Multi part parsed in " + (System.currentTimeMillis() - start) + " ms.");
 
 				User user = authenticationService.getUserByAuthentication(authentication,
 						AuthenticationType.ALL_TOKENS);
@@ -97,7 +102,12 @@ public class JobController {
 
 					blockInMaintenanceMode(user);
 
+					log.debug("Start submit job");
+					long start = System.currentTimeMillis();
+
 					AbstractJob job = jobService.submitJob(app, form, user);
+
+					log.debug("Job " + job.getId() + " submitted in " + (System.currentTimeMillis() - start) + " ms.");
 
 					String message = String.format("Job: Created job ID %s for user %s (ID %s - email %s)", user.getId(),
 							user.getUsername(), user.getId(), user.getMail());
