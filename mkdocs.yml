@@ -1,81 +1,101 @@
-site_name: Cloudgene 3
+site_name: "Cloudgene"
+copyright: "&copy; 2010 - 2024 Lukas Forer and Sebastian Schönherr"
+repo_url: https://github.com/genepi/cloudgene3/
+repo_name: genepi/cloudgene3
+
 theme:
   name: material
-  feature:
-    tabs: true
+  features:
+    - content.tooltips
+    #- navigation.expand
+    - navigation.tabs
+    #- navigation.tabs.sticky
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    #- toc.integrate
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+  font:
+    text: Segoe UI #Avenir
+    code: Roboto Mono
+
+  palette:
+    primary: blue
+    accent: blue
+  logo: "https://www.cloudgene.io/images/logo.png"
+  favicon: images/favicon.svg
+
 extra_css:
-  - extra.css
-repo_url: https://github.com/genepi/cloudgene3/
-google_analytics: ['UA-873221-12', 'docs.cloudgene.io']
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://buttons.github.io/buttons.js
+
+
 nav:
 
-- Cloudgene:
-    - Installation: index.md
-    - Getting Started: daemon/getting-started.md
-    - Install Applications: daemon/install-apps.md
-    - Configuration:
-        - Settings File: daemon/configuration.md
-        - Customization: daemon/customization.md
-    - Manage Permissions: daemon/permissions.md
-    - Manage Jobs: daemon/jobs.md
-    - Administration: daemon/administration.md
-
-- Usage:
-    - Introduction: cli/introduction.md
+- Home: index.md
+- Installation: installation.md
+- Documentation:
+  - Getting Started: server/getting-started.md
+  - Server Management:
+    - Install Applications: server/install-apps.md
+    - Manage Permissions: server/permissions.md
+    - Manage Jobs: server/jobs.md
+    - Configuration: server/configuration.md
+    - Customization: server/customization.md
+    - Administration: server/administration.md
+  - Develop Applications:
+    - Getting Started: developers/introduction.md
+    - Inputs: developers/inputs.md
+    - Outputs: developers/outputs.md
+    - Nextflow Interface: developers/steps/nextflow.md
+    - Environment Variables: developers/environment_variables.md
+    - Control Patterns: developers/control-patterns.md
+    - Reporting: developers/reporting.md
+    - Legacy Steps:
+      - BashCommand: developers/steps/BashCommand.md
+      - RMarkdown (Docker): developers/steps/RMarkdownDocker.md
+      - Docker: developers/steps/Docker.md
+  - Command Line Interface (CLI):
     - cloudgene install: cli/cloudgene-install.md
     - cloudgene github-install: cli/cloudgene-github-install.md
     - cloudgene clone: cli/cloudgene-clone.md
     - cloudgene remove: cli/cloudgene-remove.md
     - cloudgene ls: cli/cloudgene-ls.md
     - cloudgene validate: cli/cloudgene-validate.md
-    - cloudgene verify-cluster: cli/cloudgene-verify-cluster.md
     - cloudgene run: cli/cloudgene-run.md
     - cloudgene server: cli/cloudgene-server.md
     - cloudgene version: cli/cloudgene-version.md
-
-- Development:
-    - Introduction: developers/introduction.md
-    - Steps:
-        - BashCommand: developers/steps/BashCommand.md
-        - RMarkdown (Docker): developers/steps/RMarkdownDocker.md
-        - Docker: developers/steps/Docker.md
-        - Groovy: developers/steps/Groovy.md
-    - Inputs:
-      - Introduction: developers/inputs.md
-      - Files and Folders: developers/inputs/files-folders.md
-      - Text: developers/inputs/text.md
-      - Number: developers/inputs/number.md
-      - List: developers/inputs/list.md
-      - Radio: developers/inputs/radio.md
-      - Checkbox: developers/inputs/checkbox.md
-      - App List: developers/inputs/app-list.md
-      - Terms Checkbox: developers/inputs/terms_checkbox.md
-      - Layout: developers/inputs/layout.md
-    - Outputs: developers/outputs.md
-    - Environment Variables: developers/environment_variables.md
-    - Control patterns: developers/control-patterns.md
-
-- Tutorials:
-    - Using AppLinks to link to other applications: tutorials/application-links.md
-    - Using InstallActions to import HDFS files: tutorials/installation-actions.md
-
-- API Reference:
-    - Introduction: api/introduction.md
+  - REST API Reference:
+    - Getting Started: api/introduction.md
     - Authentication: api/authentication.md
     - Submit Job: api/job-submission.md
     - Job Status: api/job-status.md
     - List Jobs: api/list-jobs.md
     - Job Details: api/job-details.md
-
-
-extra:
-  feature:
-    tabs: true
-
+- Tutorials:
+  - Using AppLinks to link to other applications: tutorials/application-links.md
+  - Getting Started with Cloudgene and Nextflow Pipeline Integration: tutorials/nextflow-integration.md
+  - Getting Started with Reporting: tutorials/nextflow-reporting.md
+- About: about.md
 
 markdown_extensions:
-  - codehilite
   - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - attr_list
+  - md_in_html
   - toc:
+      title: On this page
       permalink: true
-  - footnotes

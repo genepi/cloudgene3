@@ -52,27 +52,21 @@ name: My Service
 port: 8082
 # max file size that can be uploaded in Bytes. -1 is unlimited [deafult: -1]
 uploadLimit: 50000
-# root url of the web-application [default: empty]
-urlPrefix: /my-service
+# server name
+serverName: "https://localhost:8082"
+# base url of the web-application [default: empty]
+baseUrl: /my-service
 ```
 
-## HTTPS Certificate and Security
+## Security
 
-Activate secure Cookies and use your own SSL Certificate to secure your connection:
+Please change the secretKey to generate JWT tokens:
 
 ```yaml
-# use https with the provided key store [default: false]
-https: true
-httpsKeystore: /your/key.jks
-httpsPassword: password
-# use secure cookies [default: false]
-secureCookie: true
 # use this secret key to generate JWT tokens.
 # please use a secret random string
 secretKey: some-random-string
 ```
-
-More about on how to setup a java Keystore can be found [here](http://seppinho.github.io/restlet/webservice/2015/08/31/restlet/).
 
 
 ## Directories and Workspace
@@ -84,12 +78,6 @@ If your service produces a lot of data, it could be useful to set the workspace 
 tempPath: tmp
 # location for the results of a job [default: workspace]
 localWorkspace: /mnt/new-disc/workspace
-# HDFS location for the results of a job [default: cloudgene/data]
-hdfsWorkspace: cloudgene/data
-# if set all HDFS files are deleted after job execution [default: true]
-removeHdfsWorkspace: true
-# HDFS location for the meta-data of an app [default: cloudgene/apps]
-hdfsAppWorkspace: cloudgene/apps
 ```
 
 ## Downloads

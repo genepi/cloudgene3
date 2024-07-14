@@ -10,20 +10,15 @@ The webserver can be started with the following command:
 ./cloudgene server
 ```
 
-The webservice is available on [http://localhost:8082](http://localhost:8082). Please use username `admin` and password `admin1978` to login. You can use the `--port` flag to change the port from `8082` to `8085`:
-
-```sh
-./cloudgene server --port 8085
-```
-
-The default port can also be changed in the [configuration file](configuration.md#web-application).
+The webservice is available on [http://localhost:8082](http://localhost:8082). Please use username `admin` and password `admin1978` to login. 
+The default port can be changed in the [configuration file](configuration.md#web-application).
 
 ## Install your first application
 
-Stop the webservice by pressing `CTRL-C`. The **hello-cloudgene** application can be installed by using the following command:
+Stop the webservice by pressing `CTRL-C`. The **cg-fetchngs** application can be installed by using the following command:
 
 ```sh
-./cloudgene install lukfor/hello-cloudgene
+./cloudgene install lukfor/cg-fetchngs
 ```
 
 Next, restart Cloudgene with the following command:
@@ -47,6 +42,6 @@ The **hello-cloudgene** application displays several inspiring quotes:
 
 ## What's next?
 
-- [Install additional applications](/daemon/install-apps)
-- [Configure and customize Cloudgene](/daemon/configuration) to support E-Mail notification, SSL cerificates,
-- Learn how to [manage permissions](/daemon/permissions) and [handle jobs](/daemon/jobs)
+- [Install additional applications](/server/install-apps)
+- [Configure and customize Cloudgene](/server/configuration) to support E-Mail notification, SSL cerificates,
+- Learn how to [manage permissions](/server/permissions) and [handle jobs](/daemon/jobs)

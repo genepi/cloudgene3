@@ -1,50 +1,82 @@
+---
+hide:
+  - navigation
+  - toc 
+---
+<div class="header" markdown="1">
 
-# Installation
+# Cloudgene 3
 
-This page helps you to install, configure and running Cloudgene.
-
-
-## Requirements
-
-
-You will need the following things properly installed on your computer.
-
-* [Java 17 or higher](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-
-### Optional
-
-* [Docker](https://www.docker.com/)
-* MySQL Server
+## Turn Your Nextflow Pipeline into a Powerful Web Service
 
 
-## Download and Installation
+[:fontawesome-solid-book: Getting Started](server/introduction.md){ .md-button .md-button} [:fontawesome-solid-download: Installation](installation.md){ .md-button } [:fontawesome-brands-github: Source](https://github.com/genepi/cloudgene){ .md-button }
+</div>
 
-Download the latest version from our download page using the following commands:
+---
 
-* `mkdir cloudgene`
-* `cd cloudgene`
-* `curl -s install.cloudgene.io | bash`
+- **Build** your analysis pipeline in Nextflow
+- **Integrate** your analysis pipeline into Cloudgene by writing a simple configuration file
+- **Get** a powerful web application with user management, data transfer, error handling and more
+- **Deploy** your application with one click to in-house clusters or public Clouds like Amazon AWS
+- **Offer** your application as SaaS to other scientists, managing thousands of jobs like a pro
+- **Share** your application, enabling others to clone your service to their own hardware or private cloud instance
 
-Test the installation with the following command:
+---
 
-```sh
-./cloudgene version
-```
+## Integrate your Nextflow pipeline
 
-Now you are ready to [start Cloudgene](/daemon/getting-started) and [install applications](/daemon/install-apps).
+=== ":material-file: cloudgene.yaml"
 
-## Docker image
+    ```yaml
+    id: fetch-ngs
+    name: FetchNGS
+    description: Pipeline to fetch metadata and raw FastQ files from public databases
+    version: 1.12.0
+    website: https://github.com/nf-core/fetchngs
+    workflow:
+      steps:
+        - name: Fetch NGS
+          script: nf-core/fetchngs
+          revision: 1.12.0
+    
+      inputs:
+        - id: input
+          description: IDs
+          type: textarea
+          value: "SRR12696236"
+          writeFile: "ids.csv"
+    
+      outputs:
+        - id: outdir
+          description: Output
+          type: local-folder
+    ```
 
-We provide a [Docker image](https://github.com/genepi/cloudgene-docker) to get a full-working Cloudgene instance in minutes without any installation. After the successful installation of [Docker](http://www.docker.io), all you need to do is:
 
-```bash
-docker run -d -p 8080:80 genepi/cloudgene
-```
+---
 
-After about 1 minute you are able to access your Cloudgene instance on [http://localhost:8080](http://localhost:8080). Please use username `admin` and password `admin1978` to login.
+## Who uses Cloudgene?
 
-You can now [install applications](/daemon/install-apps) and submit jobs.
 
-## Manual installation
+### Michigan Imputation Server
 
-All releases are also available on [Github](https://github.com/genepi/cloudgene/releases).
+
+
+### mtDNA-Server
+
+---
+
+## Citation
+
+---
+
+## About
+
+Cloudgene has been created by [Lukas Forer](https://twitter.com/lukfor) and [Sebastian Schönherr](https://twitter.com/seppinho) and is MIT Licensed.
+
+
+[![@lukfor](https://avatars.githubusercontent.com/u/210220?s=64&v=4)](https://github.com/lukfor)
+[![@seppinho](https://avatars.githubusercontent.com/u/1942824?s=64&v=4)](https://github.com/seppinho)
+
+Thanks to all the [contributors](about.md) to help us maintaining and improving Cloudgene!

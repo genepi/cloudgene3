@@ -1,0 +1,40 @@
+.md-header {
+  background: #4D4D4D;
+}
+
+.md-tabs {
+  background: #4D4D4D;
+}
+
+.md-footer {
+    margin-top: 40px;
+    background-color: #4D4D4D;
+}
+
+.header {
+    color: #000000 !important;
+    text-align: center;
+    padding: 20px;
+}
+
+.header h1 {
+    color: #000000de !important;
+    font-size: 250%;
+    margin: 0px;
+    font-weight: bold;
+}
+
+.header h2 {
+    color: #000000de !important;
+    font-size: 175%;
+    margin-top: 10px !important;
+    margin-bottom: 50px !important;
+}
+
+.md-header__topic {
+    display: none;
+}
+
+.md-logo img{
+    height: 1.8rem !important;
+}
