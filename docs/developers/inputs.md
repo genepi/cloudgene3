@@ -54,6 +54,9 @@ These properties define the basic behavior of an input parameter:
 | `details`     | no       | Provides more details about the parameter (default: **empty**).                                             |
 | `help`        | no       | Contains the link to a help page for this parameter (default: **empty**).<br>If a link is provided, an icon appears near the label: ![](/images/inputs/help.png) |
 
+- Add serialize
+- Add writeToFile
+
 ## Checkbox
 
 Creates a checkbox with two different states. The `values` property contains values that are used if the checkbox is either selected (`true`) or unselected (`false`).
@@ -185,7 +188,7 @@ Creates a checkbox that must be selected before the job can be submitted (e.g., 
 
 ![](/images/inputs/checkbox.png)
 
-## App List
+## Datasets
 
 Creates a drop-down list where the user can select an application. The `category` property is optional and can be used to display only applications with the provided category. The value of this parameter contains the **Application Link** of the selected application.
 

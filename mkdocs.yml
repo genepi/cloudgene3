@@ -58,7 +58,6 @@ nav:
     - Reporting: developers/reporting.md
     - Legacy Steps:
       - BashCommand: developers/steps/BashCommand.md
-      - RMarkdown (Docker): developers/steps/RMarkdownDocker.md
       - Docker: developers/steps/Docker.md
   - Command Line Interface (CLI):
     - cloudgene install: cli/cloudgene-install.md

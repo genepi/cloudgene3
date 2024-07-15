@@ -49,6 +49,9 @@ These properties define the basic behaviour of an output parameter:
 | `download` | no | If `download` is set to true, the file or folder can be downloaded (default: **true**). |
 | `adminOnly` | no | (default: **false**). |
 
+- Add serialize
+- Add includes/excludes
+
 ## Types
 
 At the moment the following types of output parameters are supported:

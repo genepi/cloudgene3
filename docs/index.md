@@ -24,7 +24,7 @@ hide:
 
 ---
 
-## Integrate your Nextflow pipeline
+## :octicons-package-16: Integrate Your Nextflow pipelines
 
 === ":material-file: cloudgene.yaml"
 
@@ -52,9 +52,53 @@ hide:
           description: Output
           type: local-folder
     ```
-
-
 ---
+
+## :fontawesome-solid-diagram-project: Combine Your Nextflow pipeline with others
+
+=== ":material-file: cloudgene.yaml"
+
+    ```yaml
+    id: fetch-ngs
+    name: FetchNGS
+    description: Pipeline to fetch metadata and raw FastQ files from public databases
+    version: 1.12.0
+    website: https://github.com/nf-core/fetchngs
+    author: Harshil Patel, Moritz E. Beber and Jose Espinosa-Carrasco
+    logo: https://raw.githubusercontent.com/nf-core/fetchngs/master/docs/images/nf-core-fetchngs_logo_light.png
+    
+    workflow:
+    steps:
+      - name: Fetch Data
+        type: nextflow #set default?
+        script: nf-core/fetchngs
+        revision: 1.12.0
+        stdout: true # set deafault?
+        params:
+          input: "${input_ids}"
+    
+      - name: Run Kraken2 using taxprofiler
+        type: nextflow #set default?
+        script: nf-core/taxprofiler
+        revision: 1.1.8
+        stdout: true # set deafault?
+        params:
+          input: "${outdir}/samplesheet/samplesheet.csv"
+          run_kraken2: true
+          databases: "https://raw.githubusercontent.com/nf-core/test-datasets/taxprofiler/database_full_v1.2.csv"
+     
+    inputs:
+      - id: input_ids
+        description: IDs
+        type: textarea
+        writeFile: "ids.csv"
+        serialize: false
+    
+    outputs:
+      - id: outdir
+        description: Output
+        type: local-folder
+    ```
 
 ## Who uses Cloudgene?
 
