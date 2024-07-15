@@ -6,7 +6,6 @@ import java.util.Map;
 import cloudgene.mapred.steps.BashCommandStep;
 import cloudgene.mapred.steps.GroovyStep;
 import cloudgene.mapred.steps.JavaExternalStep;
-import cloudgene.mapred.steps.RMarkdownDockerStep;
 import cloudgene.mapred.wdl.WdlStep;
 
 public class CloudgeneStepFactory {
@@ -25,7 +24,6 @@ public class CloudgeneStepFactory {
 	private CloudgeneStepFactory() {
 		registeredClasses = new HashMap<String, Class>();
 		register("java", JavaExternalStep.class);
-		register("rmd_docker", RMarkdownDockerStep.class);
 		register("groovy", GroovyStep.class);
 		register("command", BashCommandStep.class);
 	}

@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.plugins.docker.DockerPlugin;
 import cloudgene.mapred.plugins.nextflow.NextflowPlugin;
-import cloudgene.mapred.plugins.rscript.RMarkdownPlugin;
-import cloudgene.mapred.plugins.rscript.RScriptPlugin;
 import cloudgene.mapred.util.Settings;
 
 public class PluginManager {
@@ -34,8 +32,6 @@ public class PluginManager {
 	private PluginManager() {
 		plugins = new Vector<IPlugin>();
 		plugins.add(new DockerPlugin());
-		plugins.add(new RScriptPlugin());
-		plugins.add(new RMarkdownPlugin());
 		plugins.add(new NextflowPlugin());
 	}
 
