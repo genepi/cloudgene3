@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import cloudgene.mapred.jobs.Step;
+import cloudgene.mapred.plugins.nextflow.report.CommandOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,29 +50,59 @@ public class NextflowTask {
 		}
 
 		String workDir = (String) trace.get("workdir");
+
 		String reportFilename = FileUtil.path(workDir, Report.DEFAULT_FILENAME);
+		if (parseReport(reportFilename)) {
+			return;
+		}
+
+		String logFilename = FileUtil.path(workDir, "cloudgene.log");
+		if (parseCommandOutput(logFilename)){
+			return;
+		}
+
+		String outputFilename = FileUtil.path(workDir, CommandOutput.DEFAULT_FILENAME);
+		parseCommandOutput(outputFilename);
+
+	}
+
+	private boolean parseCommandOutput(String reportFilename) throws IOException {
 		IWorkspace workspace = context.getJob().getWorkspace();
 		if (!workspace.exists(reportFilename)) {
-			return;
+			return false;
+		}
+		context.log("Load process output file from '" + reportFilename + "'");
+		InputStream stream = context.getWorkspace().download(reportFilename);
+		try {
+			CommandOutput report = new CommandOutput(stream);
+			for (ReportEvent event : report.getEvents()) {
+				ReportEventExecutor.execute(event, context, step);
+			}
+		} catch (Exception e) {
+			log.error("[Job {}] Invalid report file.", context.getJobId(), e);
+			logText = "Invalid report file: \n" + FileUtil.readFileAsString(stream);
+		}
+		return true;
+	}
+
+	private boolean parseReport(String reportFilename) throws IOException {
+		IWorkspace workspace = context.getJob().getWorkspace();
+		if (!workspace.exists(reportFilename)) {
+			return false;
 		}
 
 		context.log("Load report file from '" + reportFilename + "'");
 		InputStream stream = workspace.download(reportFilename);
 		try {
-			parseReport(reportFilename);
+			Report report = new Report(stream);
+			for (ReportEvent event : report.getEvents()) {
+				ReportEventExecutor.execute(event, context, step);
+			}
 		} catch (Exception e) {
-			log.error("[Job {}] Invalid report file.", e);
+			log.error("[Job {}] Invalid report file.", context.getJobId(), e);
 			logText = "Invalid report file: \n" + FileUtil.readFileAsString(stream);
 		}
-
-	}
-
-	private void parseReport(String reportFilename) throws IOException {
-		InputStream stream = context.getWorkspace().download(reportFilename);
-		Report report = new Report(stream);
-		for (ReportEvent event : report.getEvents()) {
-			ReportEventExecutor.execute(event, context, step);
-		}
+		return true;
 	}
 
 	public int getId() {
