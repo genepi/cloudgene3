@@ -11,6 +11,7 @@ import java.util.Vector;
 
 import cloudgene.mapred.jobs.*;
 import cloudgene.mapred.plugins.PluginManager;
+import cloudgene.mapred.plugins.nextflow.report.CommandOutput;
 import cloudgene.mapred.util.MapValueParser;
 import cloudgene.mapred.wdl.WdlParameterInput;
 import cloudgene.mapred.wdl.WdlParameterInputType;
@@ -187,17 +188,27 @@ public class NextflowStep extends CloudgeneStep {
 			collector.cleanProcesses(context);
 
 			File report = new File(executionDir, Report.DEFAULT_FILENAME);
-			if (!report.exists()) {
+			if (report.exists()) {
+				context.log("Load report file from '" + report.getCanonicalPath() + "'");
+				try {
+					parseReport(report);
+				} catch (Exception e) {
+					log.error("[Job {}] Invalid report file.", context.getJobId(), e);
+				}
+			}
+
+			File outputFile = new File(executionDir, "cloudgene.out");
+			if (!outputFile.exists()) {
 				return successful;
 			}
-							
-			context.log("Load report file from '" + report.getCanonicalPath() + "'");
+
+			context.log("Load output file from '" + outputFile.getCanonicalPath() + "'");
 			try {
-				parseReport(report);
+				parseOutput(outputFile);
 			} catch (Exception e) {
-				log.error("[Job {}] Invalid report file.", context.getJobId(), e);
+				log.error("[Job {}] Invalid output file.", context.getJobId(), e);
 			}
-			
+
 			return successful;
 
 		} catch (Exception e) {
@@ -215,7 +226,16 @@ public class NextflowStep extends CloudgeneStep {
 			ReportEventExecutor.execute(event, context, context.getCurrentStep());
 		}
 	}
-	
+
+	private void parseOutput(File file) throws IOException {
+		CommandOutput report = new CommandOutput(file.getAbsolutePath());
+		context.log("Execute " + report.getEvents().size() + " events.");
+		for (ReportEvent event : report.getEvents()) {
+			context.log("Event: " + event);
+			ReportEventExecutor.execute(event, context, context.getCurrentStep());
+		}
+	}
+
 	@Override
 	public void updateProgress() {
 

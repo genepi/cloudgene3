@@ -60,10 +60,6 @@ public class CommandOutput {
 				default:
 					throw new IOException("Unknown command: " + command.getName());
 			}
-			System.out.println("Command: " + command.getName());
-			for (Map.Entry<String, String> param : command.getParameters().entrySet()) {
-				System.out.println("  " + param.getKey() + ": " + param.getValue());
-			}
 		}
 	}
 
