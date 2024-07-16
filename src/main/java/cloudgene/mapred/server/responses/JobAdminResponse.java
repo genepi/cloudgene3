@@ -88,7 +88,6 @@ public class JobAdminResponse {
 			File file = new File(folder);
 			if (file.exists()) {
 				long size = FileUtils.sizeOfDirectory(file);
-				System.out.println("----> " + size);
 				job.setWorkspaceSize(FileUtils.byteCountToDisplaySize(size));
 			}
 

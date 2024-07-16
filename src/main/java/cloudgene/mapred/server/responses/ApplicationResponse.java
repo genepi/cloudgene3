@@ -28,7 +28,11 @@ public class ApplicationResponse {
 
 	private String filename = "";
 
-	private boolean loaded2 = false;
+	private String name;
+
+	private String version;
+
+	private boolean loaded = false;
 
 	private String errorMessage = "";
 
@@ -36,9 +40,11 @@ public class ApplicationResponse {
 
 	private String permission = "";
 
-	private WdlApp wdlApp = null;
-
 	private String source = "";
+
+	private String category = "";
+
+	private boolean workflow = true;
 
 	private List<Environment.Variable> environment;
 
@@ -50,13 +56,15 @@ public class ApplicationResponse {
 
 		ApplicationResponse appResponse = new ApplicationResponse();
 		appResponse.setId(app.getId());
+		appResponse.setName(app.getWdlApp().getName());
+		appResponse.setVersion(app.getWdlApp().getVersion());
 		appResponse.setEnabled(app.isEnabled());
 		appResponse.setFilename(app.getFilename());
 		appResponse.setLoaded(app.isLoaded());
 		appResponse.setErrorMessage(app.getErrorMessage());
 		appResponse.setPermission(app.getPermission());
-		// TODO: check if we need wdl app and file? only in details?
-		appResponse.setWdlApp(app.getWdlApp());
+		appResponse.setWorkflow(app.getWdlApp().getWorkflow() != null);
+		appResponse.setCategory(app.getWdlApp().getCategory());
 
 		if (new File(app.getFilename()).exists()) {
 			appResponse.setSource(FileUtil.readFileAsString(app.getFilename()));
@@ -109,6 +117,30 @@ public class ApplicationResponse {
 		this.id = id;
 	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setWorkflow(boolean workflow) {
+		this.workflow = workflow;
+	}
+
+	public boolean isWorkflow() {
+		return workflow;
+	}
+
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -126,11 +158,11 @@ public class ApplicationResponse {
 	}
 
 	public boolean isLoaded() {
-		return loaded2;
+		return loaded;
 	}
 
 	public void setLoaded(boolean loaded) {
-		this.loaded2 = loaded;
+		this.loaded = loaded;
 	}
 
 	public String getErrorMessage() {
@@ -165,14 +197,6 @@ public class ApplicationResponse {
 		this.source = source;
 	}
 
-	public WdlApp getWdlApp() {
-		return wdlApp;
-	}
-
-	public void setWdlApp(WdlApp wdlApp) {
-		this.wdlApp = wdlApp;
-	}
-
 	public List<Environment.Variable> getEnvironment() {
 		return environment;
 	}
@@ -189,4 +213,11 @@ public class ApplicationResponse {
 		this.config = config;
 	}
 
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getCategory() {
+		return category;
+	}
 }

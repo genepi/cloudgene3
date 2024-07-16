@@ -77,22 +77,23 @@ public class ServerService {
 			data.set("user", userJson);
 
 			ApplicationRepository repository = application.getSettings().getApplicationRepository();
-			List<WdlApp> apps = repository.getAllByUser(user, ApplicationRepository.APPS);
+			List<cloudgene.mapred.apps.Application> apps = repository.getAllByUser(user, ApplicationRepository.APPS);
 			data.putPOJO("apps", apps);
 
 			List<ObjectNode> appsJson = new Vector<ObjectNode>();
 			List<ObjectNode> deprecatedAppsJson = new Vector<ObjectNode>();
 			List<ObjectNode> experimentalAppsJson = new Vector<ObjectNode>();
 
-			for (WdlApp app : apps) {
+			for (cloudgene.mapred.apps.Application app : apps) {
 				ObjectNode appJson = mapper.createObjectNode();
 				appJson.put("id", app.getId());
-				appJson.put("name", app.getName());
-				if (app.getRelease() == null) {
+				appJson.put("name", app.getWdlApp().getName());
+				appJson.put("version", app.getWdlApp().getVersion());
+				if (app.getWdlApp().getRelease() == null) {
 					appsJson.add(appJson);
-				} else if (app.getRelease().equals("deprecated")) {
+				} else if (app.getWdlApp().getRelease().equals("deprecated")) {
 					deprecatedAppsJson.add(appJson);
-				} else if (app.getRelease().equals("experimental")) {
+				} else if (app.getWdlApp().getRelease().equals("experimental")) {
 					experimentalAppsJson.add(appJson);
 				} else {
 					appsJson.add(appJson);

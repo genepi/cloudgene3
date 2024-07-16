@@ -25,7 +25,7 @@ export default Control.extend({
 
       var grouped = {};
       applications.forEach(function(item) {
-        var category = item.wdlApp.category;
+        var category = item.category;
         if (category == undefined) {
           category = "Application";
         }
@@ -136,10 +136,10 @@ export default Control.extend({
       reload: 'true'
     }, function (applications) {
 
-  var grouped = {};
+      var grouped = {};
       applications.forEach(function(item) {
-        var category = item.wdlApp.category;
-        if (category == undefined) {
+        var category = item.category;
+        if (category == undfined) {
           category = "Application";
         }
         if (!grouped[category]) {

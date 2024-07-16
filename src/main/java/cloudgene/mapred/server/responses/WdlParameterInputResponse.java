@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import cloudgene.mapred.apps.Application;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -171,7 +172,7 @@ public class WdlParameterInputResponse {
 		this.label = label;
 	}
 
-	public static WdlParameterInputResponse build(WdlParameterInput input, List<WdlApp> apps) {
+	public static WdlParameterInputResponse build(WdlParameterInput input, List<Application> apps) {
 		WdlParameterInputResponse response = new WdlParameterInputResponse();
 		response.setId(input.getId());
 		response.setDescription(input.getDescription());
@@ -211,15 +212,15 @@ public class WdlParameterInputResponse {
 			String bind = input.getValues().get("bind");
 			List<PropertyResponse> propertyResponses = new ArrayList<PropertyResponse>();
 
-			for (WdlApp app : apps) {
+			for (Application app : apps) {
 				if (category == null || category.isEmpty()) {
 					continue;
 				}
-				if (app.getCategory() == null || !app.getCategory().equals(category)) {
+				if (app.getWdlApp().getCategory() == null || !app.getWdlApp().getCategory().equals(category)) {
 					continue;
 				}
-				Object values = app.getProperties().get(property);
-				PropertyResponse propertyResponse = PropertyResponse.build("apps@" + app.getId(), app.getName(),
+				Object values = app.getWdlApp().getProperties().get(property);
+				PropertyResponse propertyResponse = PropertyResponse.build("apps@" + app.getId(), app.getWdlApp().getName(),
 						values);
 				propertyResponses.add(propertyResponse);
 
@@ -247,19 +248,19 @@ public class WdlParameterInputResponse {
 
 		if (input.getTypeAsEnum() == WdlParameterInputType.APP_LIST) {
 			List<PropertyResponse> propertyResponses = new ArrayList<PropertyResponse>();
-			for (WdlApp app : apps) {
+			for (Application app : apps) {
 				String category = input.getCategory();
 
 				if (category != null && !category.isEmpty()) {
 					// filter by category
-					if (app.getCategory() != null && app.getCategory().equals(category)) {
+					if (app.getWdlApp().getCategory() != null && app.getWdlApp().getCategory().equals(category)) {
 						PropertyResponse propertyResponse = PropertyResponse.build("apps@" + app.getId(),
-								app.getName());
+								app.getWdlApp().getName());
 						propertyResponses.add(propertyResponse);
 					}
 
 				} else {
-					PropertyResponse propertyResponse = PropertyResponse.build("apps@" + app.getId(), app.getName());
+					PropertyResponse propertyResponse = PropertyResponse.build("apps@" + app.getId(), app.getWdlApp().getName());
 					propertyResponses.add(propertyResponse);
 				}
 
@@ -270,7 +271,7 @@ public class WdlParameterInputResponse {
 		return response;
 	}
 
-	public static List<WdlParameterInputResponse> build(List<WdlParameterInput> inputs, List<WdlApp> apps) {
+	public static List<WdlParameterInputResponse> build(List<WdlParameterInput> inputs, List<Application> apps) {
 		List<WdlParameterInputResponse> response = new Vector<WdlParameterInputResponse>();
 
 		for (WdlParameterInput input : inputs) {

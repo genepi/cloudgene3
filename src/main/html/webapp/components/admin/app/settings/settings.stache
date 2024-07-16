@@ -1,5 +1,5 @@
 <p><a href="#!pages/admin-apps">Applications</a> / {{application.id}}</p>
-<h2>{{application.id}}</h2>
+<h2>{{application.name}} <small class="text-muted">{{application.version}}</small></h2>
 
 <p>Change settings for application <b>{{application.wdlApp.name}}</b>.</p>
 
@@ -16,7 +16,7 @@
   <br><p>Custom Configuration:<br>
   <small class="text-muted">All hardware specific parameters can be set here. If you use the AWSBatch profile this is the place to set your credentials</small></p>
 
-<div style=" display: flex; 
+<div style=" display: flex;
    justify-content: center;
    align-items: center;
    flex-direction: row;">

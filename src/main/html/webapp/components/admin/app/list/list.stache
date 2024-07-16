@@ -36,12 +36,12 @@
                  <small>{{id}}</small>
               </td> -->
               <td>
-                {{#if wdlApp.workflow}}
+                {{#if workflow}}
                   <i class="fas fa-rocket"></i>
                 {{else}}
                   <i class="fas fa-table"></i>
                 {{/if}}
-               {{wdlApp.name}}<br>
+               {{name}}<br>
                 {{#changed}}
                     <small class="text-danger">Warning: File <b>{{filename}}</b> changed on disk. Reload Apps to solve this issue.</small>
                 {{/changed}}
@@ -49,7 +49,7 @@
                     <small class="text-danger">{{errorMessage}}</small>
                 {{/errorMessage}}
               </td>
-              <td>{{wdlApp.version}}</td>
+              <td>{{version}}</td>
               <td>
                 <button type="button" class="edit-permission-btn btn btn-sm btn-outline-secondary">
                       <i class="fas fa-users"></i> {{permission}}
@@ -57,7 +57,7 @@
               </td>
               <td class="text-right">
 
-                  {{#if wdlApp.workflow}}
+                  {{#if workflow}}
                       <a class="btn edit-settings-btn btn btn-sm btn-outline-secondary" href="#!pages/admin-apps/{{id}}">
                           <i class="fas fa-cog"></i>
                       </a>

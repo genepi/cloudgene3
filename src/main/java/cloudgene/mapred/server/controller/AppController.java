@@ -47,7 +47,7 @@ public class AppController {
 
 		applicationService.checkRequirements(app);
 		ApplicationRepository repository = applicationService.getRepository();
-		List<WdlApp> apps = repository.getAllByUser(user, ApplicationRepository.APPS_AND_DATASETS);
+		List<Application> apps = repository.getAllByUser(user, ApplicationRepository.APPS_AND_DATASETS);
 
 		WdlAppResponse response = WdlAppResponse.build(app.getWdlApp(), apps);
 

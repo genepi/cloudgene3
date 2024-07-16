@@ -89,7 +89,6 @@ public class ApplicationService {
 				return app;
 
 			} catch (Exception e) {
-				e.printStackTrace();
 				throw new JsonHttpStatusException(HttpStatus.BAD_REQUEST,
 						String.format(APPLICATION_NOT_REMOVED, e.getMessage()));
 			}

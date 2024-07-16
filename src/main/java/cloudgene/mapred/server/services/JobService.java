@@ -229,7 +229,7 @@ public class JobService {
 		try {
 			workspace.delete(job.getId());
 		} catch (Exception e) {
-			log.error("Deleteting " + job.getId() + " form workspace failed.", e);
+			log.error("Deleting " + job.getId() + " form workspace failed.", e);
 		}
 
 		return job;
@@ -331,7 +331,7 @@ public class JobService {
 			try {
 				workspace.delete(job.getId());
 			} catch (Exception e) {
-				log.error("Deleteting " + job.getId() + " from workspace failed.", e);
+				log.error("Deleting " + job.getId() + " from workspace failed.", e);
 			}
 
 			return "Retired job " + job.getId();

@@ -70,18 +70,17 @@ public class ApplicationRepository {
 		indexApps = new HashMap<String, Application>();
 		log.info("Reload applications...");
 		for (Application app : apps) {
-			log.info("Register application " + app.getId());
-			// load application
 			try {
 				log.info("Load workflow file " + app.getFilename());
 				app.loadWdlApp();
 				WdlApp wdlApp = app.getWdlApp();
 				// update wdl id with id from application
-				if (wdlApp != null) {
+				/*if (wdlApp != null) {
 					wdlApp.setId(app.getId());
-				}
+				}*/
+				log.info("Application " + app.getId() + " loaded.");
 			} catch (IOException e) {
-				log.error("Application " + app.getId() + " has syntax errors.", e);
+				log.error("Application " + app.getFilename() + " has syntax errors.", e);
 			}
 			indexApps.put(app.getId(), app);
 
@@ -112,12 +111,9 @@ public class ApplicationRepository {
 
 		// try without version
 		List<Application> versions = new Vector<Application>();
-		for (String idd : indexApps.keySet()) {
-			String[] tiles = idd.split("@");
-			if (tiles.length == 2) {
-				if (id.equals(tiles[0])) {
-					versions.add(indexApps.get(idd));
-				}
+		for (Application app: apps) {
+			if (id.equals(app.getWdlApp().getId())) {
+				versions.add(app);
 			}
 		}
 		if (versions.isEmpty()) {
@@ -138,9 +134,9 @@ public class ApplicationRepository {
 
 	}
 
-	public List<WdlApp> getAllByUser(User user, int filter) {
+	public List<Application> getAllByUser(User user, int filter) {
 
-		List<WdlApp> listApps = new Vector<WdlApp>();
+		List<Application> listApps = new Vector<Application>();
 
 		for (Application application : getAll()) {
 
@@ -151,12 +147,12 @@ public class ApplicationRepository {
             WdlApp wdlApp = application.getWdlApp();
 
             if (filter == APPS_AND_DATASETS) {
-                listApps.add(wdlApp);
+                listApps.add(application);
             } else if (filter == APPS && wdlApp.getWorkflow() != null) {
-				listApps.add(wdlApp);
+				listApps.add(application);
 
             } else if (filter == DATASETS && wdlApp.getWorkflow() != null) {
-				listApps.add(wdlApp);
+				listApps.add(application);
             }
 
         }
@@ -168,14 +164,8 @@ public class ApplicationRepository {
 
 	public void remove(Application application) throws IOException {
 		log.info("Remove application " + application.getId());
-		// delete application in app folder
-		// TODO: add some check to avoid deleting whole hdd. e.g. delete only if its in
-		// app folders...
-		// FileUtil.deleteDirectory(application.getWdlApp().getPath());
-		// remove from app list
 		apps.remove(application);
 		reload();
-
 	}
 
 	public Application install(String url) throws IOException, GitHubException {
@@ -226,14 +216,6 @@ public class ApplicationRepository {
 
 		return application;
 
-	}
-
-	public void removeById(String id) throws IOException {
-		for (Application app : new Vector<Application>(getAll())) {
-			if (app.getId().startsWith(id)) {
-				remove(app);
-			}
-		}
 	}
 
 	public Application installFromUrl(String url) throws IOException {
@@ -438,25 +420,9 @@ public class ApplicationRepository {
 			return null;
 		}
 
-		String id = application.getWdlApp().getId() + "@" + application.getWdlApp().getVersion();
-
 		// application with same version is already installed.
-		if (indexApps.get(id) != null) {
-			throw new IOException("Application " + id + " is already installed");
-		}
-
-		// check if its an update an remove old version
-		Application installedApplication = null;
-		for (String installedId : indexApps.keySet()) {
-			String name = installedId.split(":")[0];
-			if (name.equals(application.getWdlApp().getId())) {
-				installedApplication = indexApps.remove(installedId);
-			}
-		}
-
-		if (installedApplication != null) {
-			log.info("Update application from " + installedApplication.getId() + " to " + id);
-			remove(installedApplication);
+		if (indexApps.get(application.getId()) != null) {
+			throw new IOException("Application " + application.getId() + " is already installed");
 		}
 
 		if (moveToApps) {
@@ -486,14 +452,7 @@ public class ApplicationRepository {
 
 		}
 
-		application.setId(id);
 		apps.add(application);
-
-		WdlApp wdlApp = application.getWdlApp();
-		// TODO: check if it is needed!
-		if (wdlApp != null) {
-			wdlApp.setId(id);
-		}
 
 		indexApps.put(application.getId(), application);
 
@@ -531,7 +490,7 @@ public class ApplicationRepository {
 	}
 
 	public String getConfigDirectory(WdlApp app) {
-		return FileUtil.path(CONFIG_PATH, app.getId().split("@")[0], app.getVersion());
+		return FileUtil.path(CONFIG_PATH, app.getId(), app.getVersion());
 	}
 
 	public boolean hasAccess(User user, Application application) {

@@ -1,6 +1,8 @@
 package cloudgene.mapred.server.responses;
 
 import java.util.List;
+
+import cloudgene.mapred.apps.Application;
 import cloudgene.mapred.wdl.WdlApp;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 
@@ -107,7 +109,7 @@ public class WdlAppResponse {
 		this.params = params;
 	}
 
-	public static WdlAppResponse build(WdlApp app, List<WdlApp> apps) {
+	public static WdlAppResponse build(WdlApp app, List<Application> apps) {
 		WdlAppResponse response = new WdlAppResponse();
 		response.setId(app.getId());
 		response.setName(app.getName());

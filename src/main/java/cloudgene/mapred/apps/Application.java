@@ -12,8 +12,6 @@ public class Application implements Comparable<Application> {
 
 	private String permission;
 
-	private String id;
-
 	private boolean syntaxError = false;
 
 	private WdlApp wdlApp = null;
@@ -21,12 +19,6 @@ public class Application implements Comparable<Application> {
 	private String errorMessage = "";
 
 	private boolean enabled = true;
-
-	public Application(String id, String permission, String filename) {
-		this.id = id;
-		this.permission = permission;
-		this.filename = filename;
-	}
 
 	public Application() {
 
@@ -48,26 +40,12 @@ public class Application implements Comparable<Application> {
 		return permission.split(",");
 	}
 
-	public boolean hasPermission(String group) {
-		String[] permissions = getPermissions();
-		for (String permission : permissions) {
-			if (permission.toLowerCase().equals(group.toLowerCase())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public void setPermission(String permission) {
 		this.permission = permission;
 	}
 
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getId() {
-		return id;
+		return wdlApp.getId() + "@" + wdlApp.getVersion();
 	}
 
 	public void loadWdlApp() throws IOException {
@@ -107,10 +85,6 @@ public class Application implements Comparable<Application> {
 		this.enabled = enabled;
 	}
 
-	public boolean isInstalled(String hdfsAppFolder) {
-		return false;
-	}
-
 	public String getType() {
 		if (isLoaded()) {
 			if (wdlApp.getWorkflow() != null) {
@@ -129,14 +103,18 @@ public class Application implements Comparable<Application> {
 
 	@Override
 	public int compareTo(Application o) {
-		// sort by category
+		// sort by type
 		int result = getType().compareTo(o.getType());
 		if (result != 0) {
 			return result;
-		} else {
-			// sort by id
-			return getId().compareTo(o.getId());
 		}
+		// sort by name
+		result =  wdlApp.getName().compareTo(o.wdlApp.getName());
+		if (result != 0) {
+			return result;
+		}
+		// sort by version
+		return  wdlApp.getVersion().compareTo(o.wdlApp.getVersion());
 	}
 
 }
