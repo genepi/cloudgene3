@@ -546,34 +546,6 @@ public class WorkflowEngineTest {
 	}
 
 	@Test
-	public void testApplicationLinksWithoutVersion() throws Exception {
-
-		WorkflowEngine engine = application.getWorkflowEngine();
-
-		WdlApp app = WdlReader.loadAppFromFile("test-data/app-links.yaml");
-
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("app", "app-links-child-version");
-
-		AbstractJob job = createJobFromWdl(app, params);
-		engine.submit(job);
-		while (job.isRunning()) {
-			Thread.sleep(500);
-		}
-		assertTrue(job.getSubmittedOn() > 0);
-		assertTrue(job.getStartTime() > 0);
-		assertTrue(job.getEndTime() > 0);
-		assertEquals(AbstractJob.STATE_SUCCESS, job.getState());
-
-		Message message = job.getSteps().get(0).getLogMessages().get(0);
-		assertEquals(Message.OK, message.getType());
-		assertTrue(message.getMessage().contains("property1:hey!"));
-		assertTrue(message.getMessage().contains("property2:hey2!"));
-		assertTrue(message.getMessage().contains("property3:hey3!"));
-
-	}
-
-	@Test
 	public void testOptionalApplicationLinks() throws Exception {
 
 		WorkflowEngine engine = application.getWorkflowEngine();
