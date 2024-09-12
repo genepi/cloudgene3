@@ -31,7 +31,16 @@ public class DatabaseConnectorFactory {
 			String user = settings.get("user");
 			String password = settings.get("password");
 
-			return new MySqlConnector(host, port, database, user, password);
+			MySqlConnector connector = new MySqlConnector(host, port, database, user, password);
+			if (settings.containsKey("maxActive")) {
+				int maxActive = Integer.parseInt(settings.get("maxActive"));
+				connector.setMaxActive(maxActive);
+			}
+			if (settings.containsKey("maxWait")) {
+				int maxWait = Integer.parseInt(settings.get("maxWait"));
+				connector.setMaxWait(maxWait);
+			}
+			return connector;
 
 		} else {
 

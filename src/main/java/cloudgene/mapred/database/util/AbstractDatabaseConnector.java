@@ -1,8 +1,12 @@
 package cloudgene.mapred.database.util;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractDatabaseConnector implements DatabaseConnector {
+
+	protected static final Logger log = LoggerFactory.getLogger(DatabaseUpdater.class);
 
 	private int maxActive = 10;
 
@@ -26,6 +30,7 @@ public abstract class AbstractDatabaseConnector implements DatabaseConnector {
 		dataSource.setTestWhileIdle(testWhileIdle);
 		dataSource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
 		dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
+
 		return dataSource;
 
 	}

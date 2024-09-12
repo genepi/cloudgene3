@@ -61,22 +61,27 @@ public class MySqlConnector extends AbstractDatabaseConnector {
 
 		log.debug("Establishing connection to " + user + "@" + host + ":" + port);
 
-		if (DbUtils.loadDriver("com.mysql.jdbc.Driver")) {
-			try {
-				dataSource = createDataSource();
+		if (DbUtils.loadDriver("com.mysql.cj.jdbc.Driver")) {
 
-				dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-				dataSource.setUrl("jdbc:mysql://" + host + "/" + database
-						+ "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true");
-				dataSource.setUsername(user);
-				dataSource.setPassword(password);
+			dataSource = createDataSource();
+			dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+			dataSource.setUrl("jdbc:mysql://" + host + "/" + database
+					+ "?autoReconnect=true&allowMultiQueries=true&rewriteBatchedStatements=true");
+			dataSource.setUsername(user);
+			dataSource.setPassword(password);
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			log.debug("Max Active Connections: " + dataSource.getMaxActive());
+			log.debug("Max Idle Connections: " + dataSource.getMaxIdle());
+			log.debug("Min Idle Connections: " + dataSource.getMinIdle());
+			log.debug("Initial Size: " + dataSource.getInitialSize());
+			log.debug("Max Wait: " + dataSource.getMaxWait());
+			log.debug("Default Auto-Commit: " + dataSource.getDefaultAutoCommit());
+			log.debug("Validation Query: " + dataSource.getValidationQuery());
+			log.debug("Test on Borrow: " + dataSource.getTestOnBorrow());
+			log.debug("Test on Return: " + dataSource.getTestOnReturn());
 
 		} else {
-			System.out.println("MySQL Driver class not found.");
+			throw  new SQLException("MySQL Driver class not found.");
 		}
 
 	}
@@ -84,7 +89,6 @@ public class MySqlConnector extends AbstractDatabaseConnector {
 	@Override
 	public void disconnect() throws SQLException {
 		dataSource.close();
-
 	}
 
 	@Override
