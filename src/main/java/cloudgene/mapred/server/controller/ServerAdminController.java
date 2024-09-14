@@ -14,6 +14,7 @@ import cloudgene.mapred.server.responses.NextflowConfigResponse;
 import cloudgene.mapred.server.responses.ServerResponse;
 import cloudgene.mapred.server.responses.StatisticsResponse;
 import cloudgene.mapred.server.services.ServerService;
+import cloudgene.mapred.util.TextUtil;
 import genepi.io.FileUtil;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.MediaType;
@@ -88,8 +89,7 @@ public class ServerAdminController {
 	public String getLogs() {
 		File file = new File(LOG_FILENAME);
 		if (file.exists()) {
-			String content = serverService.tail(file, 1000);
-			return content;
+			return TextUtil.tail(file, 1000);
 		} else {
 			return "No log file available.";
 		}

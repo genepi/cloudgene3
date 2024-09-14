@@ -38,12 +38,11 @@ public class DockerBinary {
 		if (isInstalled()) {
 			String binary = getBinary();
 			Command command = new Command(binary, "version");
-			command.saveStdOut(FileUtil.path("docker-version.txt"));
+			StringBuffer stdout = new StringBuffer();
+			command.writeStdout(stdout);
 			command.setSilent(true);
 			command.execute();
-			String version = FileUtil.readFileAsString("docker-version.txt");
-			FileUtil.deleteFile("docker-version.txt");
-			return version;
+			return stdout.toString();
 		} else {
 			return "Docker not installed.";
 		}

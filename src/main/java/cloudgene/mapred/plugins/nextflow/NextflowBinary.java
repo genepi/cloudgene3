@@ -63,12 +63,11 @@ public class NextflowBinary {
 	public String getVersion() {
 		if (isInstalled()) {
 			Command command = new Command(binary, "info");
-			command.saveStdOut(FileUtil.path("info-version.txt"));
+			StringBuffer stdout = new StringBuffer();
+			command.writeStdout(stdout);
 			command.setSilent(true);
 			command.execute();
-			String version = FileUtil.readFileAsString("info-version.txt");
-			FileUtil.deleteFile("info-version.txt");
-			return version;
+			return stdout.toString();
 		} else {
 			return "Nextflow not installed.";
 		}

@@ -95,7 +95,9 @@
 						</div>
 					{{else}}
 						<h5 class="card-title"><i class="fas fa-times-circle text-danger"></i> {{name}}</h5>
-						{{{error}}}
+						<div class="log-pane">
+							<pre>{{error}}</pre>
+						</div>
 					{{/enabled}}
 				</div>
 			</div>

@@ -48,6 +48,8 @@ public class Settings {
 
 	private List<Map<String, String>> errorHandlers = new Vector<Map<String, String>>();
 
+	private List<Map<String, String>> resources = new Vector<>();
+
 	private int autoRetireInterval = 5;
 
 	private int retireAfter = 6;
@@ -387,6 +389,14 @@ public class Settings {
 
 	public List<Map<String, String>> getErrorHandlers() {
 		return errorHandlers;
+	}
+
+	public void setResources(List<Map<String, String>> resources) {
+		this.resources = resources;
+	}
+
+	public List<Map<String, String>> getResources() {
+		return resources;
 	}
 
 	public void setRepository(ApplicationRepository repository) {

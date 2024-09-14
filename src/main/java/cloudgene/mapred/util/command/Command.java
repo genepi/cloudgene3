@@ -3,9 +3,6 @@ package cloudgene.mapred.util.command;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-
-import org.apache.commons.codec.digest.DigestUtils;
 
 public class Command {
 
@@ -15,19 +12,15 @@ public class Command {
 
 	private boolean silent = false;
 
-	private boolean deleteInput = false;
-
 	private String directory = null;
-
-	private StringBuffer stout = new StringBuffer();
 
 	private String stdoutFileName = null;
 
 	private String stderrFileName = null;
 
-	private List<String> inputs = new Vector<String>();
+	private StringBuffer stdout;
 
-	private List<String> outputs = new Vector<String>();
+	private StringBuffer stderr;
 
 	public Command(String cmd, String... params) {
 		this.cmd = cmd;
@@ -38,7 +31,7 @@ public class Command {
 		this.cmd = cmd;
 	}
 
-	public void setParams(String... params) {
+	public void setArgs(String... params) {
 		this.params = params;
 	}
 
@@ -48,6 +41,15 @@ public class Command {
 			this.params[i] = params.get(i);
 		}
 	}
+
+	public void writeStdout(StringBuffer stdout) {
+		this.stdout = stdout;
+	}
+
+	public void writeStderr(StringBuffer stderr) {
+		this.stderr = stderr;
+	}
+
 
 	public void saveStdOut(String filename) {
 		this.stdoutFileName = filename;
@@ -72,19 +74,20 @@ public class Command {
 		try {
 
 			ProcessBuilder builder = new ProcessBuilder(command);
-			// builder.redirectErrorStream(true);
+			// ensure it works on MacOS
+			builder.environment().put("PATH", builder.environment().get("PATH") + ":" + "/usr/local/bin/");
 			if (directory != null) {
 				builder.directory(new File(directory));
 			}
 
 			Process process = builder.start();
-			CommandStreamHandler handler = new CommandStreamHandler(
-					process.getInputStream(), stdoutFileName);
+			CommandStreamHandler handler = new CommandStreamHandler(process.getInputStream(), stdoutFileName);
+			handler.setStringBuffer(stdout);
 			handler.setSilent(silent);
 			Thread inputStreamHandler = new Thread(handler);
 
-			CommandStreamHandler handler2 = new CommandStreamHandler(
-					process.getErrorStream(), stderrFileName);
+			CommandStreamHandler handler2 = new CommandStreamHandler(process.getErrorStream(), stderrFileName);
+			handler2.setStringBuffer(stderr);
 			handler2.setSilent(silent);
 			Thread errorStreamHandler = new Thread(handler2);
 
@@ -104,11 +107,8 @@ public class Command {
 				process.destroy();
 			}
 
-			if (deleteInput) {
-				new File(cmd).delete();
-			}
-
 			return 0;
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return -1;
@@ -121,14 +121,6 @@ public class Command {
 
 	public void setSilent(boolean silent) {
 		this.silent = silent;
-	}
-
-	public boolean isDeleteInput() {
-		return deleteInput;
-	}
-
-	public void setDeleteInput(boolean deleteInput) {
-		this.deleteInput = deleteInput;
 	}
 
 	public void setDirectory(String directory) {
@@ -148,43 +140,6 @@ public class Command {
 			}
 		}
 		return result;
-	}
-
-	public String getStdOut() {
-		return stout.toString();
-	}
-
-	public void addInput(String input) {
-		inputs.add(input);
-	}
-
-	public void addOutput(String output) {
-		outputs.add(output);
-	}
-
-	public List<String> getInputs() {
-		return inputs;
-	}
-
-	public List<String> getOutputs() {
-		return outputs;
-	}
-
-	private boolean isNoFile(String param) {
-		return !inputs.contains(param) && !outputs.contains(param);
-	}
-
-	public String getSignature() {
-
-		String fullCommand = cmd;
-		for (String param : params) {
-			if (isNoFile(param)) {
-				fullCommand += param;
-			}
-		}
-
-		return DigestUtils.md5Hex(fullCommand);
-
 	}
 
 	public String getName() {

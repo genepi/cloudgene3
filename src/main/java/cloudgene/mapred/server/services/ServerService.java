@@ -3,15 +3,12 @@ package cloudgene.mapred.server.services;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import cloudgene.mapred.plugins.nextflow.NextflowPlugin;
+import cloudgene.mapred.util.command.Command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -211,6 +208,34 @@ public class ServerService {
 			plugins.add(pluginObject);
 		}
 
+		//check user defined resources
+		for (Map<String, String> resource: application.getSettings().getResources()){
+			String name = resource.get("name");
+			ObjectNode pluginObject = mapper.createObjectNode();
+			pluginObject.put("name", name);
+			if (!resource.containsKey("command")) {
+				pluginObject.put("error", "Command defined in resource '" + name + "'");
+			}
+			String cmd = resource.get("command");
+			String[] tiles = cmd.split(" ");
+			String[] params = Arrays.copyOfRange(tiles, 1, tiles.length);
+			Command command = new Command(tiles[0], params);
+			command.setSilent(true);
+			StringBuffer output = new StringBuffer();
+			StringBuffer error = new StringBuffer();
+			command.writeStdout(output);
+			command.writeStderr(error);
+			int exitCode = command.execute();
+			if (exitCode == 0) {
+				pluginObject.put("enabled", true);
+				pluginObject.put("details", output.toString());
+			}else {
+				pluginObject.put("enabled", false);
+				pluginObject.put("error",  output.toString()+ "\n" + error.toString());
+			}
+			plugins.add(pluginObject);
+		}
+
 		// database
 		object.put("db_max_active", application.getDatabase().getDataSource().getMaxActive());
 		object.put("db_active", application.getDatabase().getDataSource().getNumActive());
@@ -220,53 +245,6 @@ public class ServerService {
 				application.getDatabase().getDataSource().getMaxOpenPreparedStatements());
 
 		return object.toString();
-	}
-
-	public String tail(File file, int lines) {
-		java.io.RandomAccessFile fileHandler = null;
-		try {
-			fileHandler = new java.io.RandomAccessFile(file, "r");
-			long fileLength = fileHandler.length() - 1;
-			StringBuilder sb = new StringBuilder();
-			int line = 0;
-
-			for (long filePointer = fileLength; filePointer != -1; filePointer--) {
-				fileHandler.seek(filePointer);
-				int readByte = fileHandler.readByte();
-
-				if (readByte == 0xA) {
-					line = line + 1;
-					if (line == lines) {
-						if (filePointer == fileLength) {
-							continue;
-						}
-						break;
-					}
-				} else if (readByte == 0xD) {
-					line = line + 1;
-					if (line == lines) {
-						if (filePointer == fileLength - 1) {
-							continue;
-						}
-						break;
-					}
-				}
-				sb.append((char) readByte);
-			}
-
-			String lastLine = sb.reverse().toString();
-			return lastLine;
-		} catch (java.io.IOException e) {
-			log.error("Parsing log file failed.", e);
-			return null;
-		} finally {
-			if (fileHandler != null)
-				try {
-					fileHandler.close();
-				} catch (IOException e) {
-					log.error("Parsing log file failed.", e);
-				}
-		}
 	}
 
 	public void updateNextflowConfig(String content) {
