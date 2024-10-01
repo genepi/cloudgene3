@@ -133,4 +133,7 @@ public class NextflowPlugin implements IPlugin {
 		return FileUtil.path(Configuration.getConfigDirectory(), "nextflow.config");
 	}
 
+	public String getNextflowEnv() {
+		return FileUtil.path(Configuration.getConfigDirectory(), "nextflow.env");
+	}
 }

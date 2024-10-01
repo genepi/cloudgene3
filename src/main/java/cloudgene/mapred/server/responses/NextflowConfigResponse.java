@@ -17,7 +17,9 @@ import genepi.io.FileUtil;
 @JsonClassDescription
 public class NextflowConfigResponse {
 
-	private String content = "";
+	private String config = "";
+
+	private String env = "";
 
 	private List<Variable> variables = new Vector<Variable>();
 
@@ -28,21 +30,33 @@ public class NextflowConfigResponse {
 		NextflowConfigResponse response = new NextflowConfigResponse();
 		String configFilename = plugin.getNextflowConfig();
 		File configFile = new File(configFilename);
-		if (!configFile.exists()) {
-			return response;
+		if (configFile.exists()) {
+			response.setConfig(FileUtil.readFileAsString(configFilename));
 		}
 
-		response.setContent(FileUtil.readFileAsString(configFilename));
+		String envFilename = plugin.getNextflowEnv();
+		File envFile = new File(envFilename);
+		if (envFile.exists()) {
+			response.setEnv(FileUtil.readFileAsString(envFilename));
+		}
 		response.setVariables(settings.buildEnvironment().toList());
 		return response;
 	}
 
-	public void setContent(String content) {
-		this.content = content;
+	public void setConfig(String config) {
+		this.config = config;
 	}
 
-	public String getContent() {
-		return content;
+	public String getConfig() {
+		return config;
+	}
+
+	public void setEnv(String env) {
+		this.env = env;
+	}
+
+	public String getEnv() {
+		return env;
 	}
 
 	public void setVariables(List<Variable> variables) {

@@ -26,7 +26,8 @@ export default Control.extend({
   'submit': function (form, event) {
     event.preventDefault();
 
-    this.nextflowConfig.attr('content', $(form).find("[name='content']").val());
+    this.nextflowConfig.attr('config', $(form).find("[name='config']").val());
+    this.nextflowConfig.attr('env', $(form).find("[name='env']").val());
     this.nextflowConfig.save(function (data) {
       bootbox.alert("Nextflow configuration updated.");
     }, function (response) {

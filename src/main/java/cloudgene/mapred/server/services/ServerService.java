@@ -253,4 +253,10 @@ public class ServerService {
 		FileUtil.writeStringBufferToFile(filename, new StringBuffer(content));
 	}
 
+	public void updateNextflowEnv(String content) {
+		NextflowPlugin plugin = (NextflowPlugin) PluginManager.getInstance().getPlugin(NextflowPlugin.ID);
+		String filename = plugin.getNextflowEnv();
+		FileUtil.writeStringBufferToFile(filename, new StringBuffer(content));
+	}
+
 }

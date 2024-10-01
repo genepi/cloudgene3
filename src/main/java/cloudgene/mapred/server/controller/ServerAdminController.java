@@ -125,9 +125,10 @@ public class ServerAdminController {
 	}
 
 	@Post("/nextflow/config/update")
-	public NextflowConfigResponse updateNextflowConfig(String content) {
+	public NextflowConfigResponse updateNextflowConfig(String config, String env) {
 
-		serverService.updateNextflowConfig(content);
+		serverService.updateNextflowConfig(config);
+		serverService.updateNextflowEnv(env);
 
 		return NextflowConfigResponse.build(application.getSettings());
 
