@@ -35,10 +35,13 @@ export default Control.extend({
     var nextflowProfile = $('#nextflow-profile').val();
     var nextflowConfig = $('#nextflow-config').val();
     var nextflowWork = $('#nextflow-work').val();
+    var nextflowEnv = $('#nextflow-env').val();
+
 
     this.application.attr('config').attr('nextflow.profile', nextflowProfile);
     this.application.attr('config').attr('nextflow.config', nextflowConfig);
     this.application.attr('config').attr('nextflow.work', nextflowWork);
+    this.application.attr('config').attr('nextflow.env', nextflowEnv);
     this.application.save(function (data) {
       bootbox.alert("Application settings updated.");
     },

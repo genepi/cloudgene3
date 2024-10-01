@@ -37,6 +37,8 @@ public class NextflowBinary {
 
 	private String name;
 
+	private File envScript;
+
 	public static NextflowBinary build(Settings settings) {
 		String binary = new BinaryFinder("nextflow").settings(settings, "nextflow", "home").env("NEXTFLOW_HOME")
 				.envPath().path("/usr/local/bin").find();
@@ -125,10 +127,17 @@ public class NextflowBinary {
 		this.name = name;
 	}
 
+	public void setEnvScript(File envScript) {
+		this.envScript = envScript;
+	}
+
 	public List<String> buildCommand() {
 
 		List<String> nextflow = new Vector<String>();
 		nextflow.add("PATH=$PATH:/usr/local/bin");
+		if (envScript != null && envScript.exists()) {
+			nextflow.add("source " + envScript.getAbsolutePath() + ";");
+		}
 		nextflow.add(getBinary());
 		
 		nextflow.add("-log");

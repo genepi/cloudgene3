@@ -40,6 +40,7 @@ public class Environment {
 			add("JOB_PRIORITY", context.getJob().getPriority() + "");
 			add("JOB_SUBMITTED_ON", context.getJob().getSubmittedOn() + "");
 		}
+		add("JOB_LOCATION", context.getLocalTemp());
 		add("USER_NAME", context.getUser().getUsername());
 		add("USER_EMAIL", context.getUser().getMail());
 		add("USER_FULL_NAME", context.getUser().getFullName());

@@ -21,6 +21,7 @@ public class NextflowPlugin implements IPlugin {
 	public static final String ID = "nextflow";
 	public static final String NEXTFLOW_CONFIG = "nextflow.config";
 	public static final String NEXTFLOW_YAML = "nextflow.yaml";
+	public static final String NEXTFLOW_ENV = "nextflow.env";
 
 	private Settings settings;
 
@@ -82,6 +83,10 @@ public class NextflowPlugin implements IPlugin {
 		writer.write(properties);
 		writer.close();
 
+		String nextflowEnv = FileUtil.path(appFolder, NEXTFLOW_ENV);
+		String contentEnv = config.get("nextflow.env");
+		StringBuffer contentNextflowEnv = new StringBuffer(contentEnv == null ? "" : contentEnv);
+		FileUtil.writeStringBufferToFile(nextflowEnv, contentNextflowEnv);
 	}
 
 	@Override
@@ -112,6 +117,12 @@ public class NextflowPlugin implements IPlugin {
 		}
 		if (properties.get("work") != null) {
 			config.put("nextflow.work", properties.get("work").toString());
+		}
+
+		String nextflowEnv = FileUtil.path(appFolder, NEXTFLOW_ENV);
+		if (new File(nextflowEnv).exists()) {
+			String content = FileUtil.readFileAsString(nextflowEnv);
+			config.put("nextflow.env", content);
 		}
 
 		return config;
