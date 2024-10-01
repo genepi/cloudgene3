@@ -6,9 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.jobs.engine.handler.IJobErrorHandler;
 import cloudgene.mapred.jobs.engine.handler.JobErrorHandlerFactory;
 import cloudgene.mapred.util.Configuration;
+import io.micronaut.runtime.event.ApplicationShutdownEvent;
+import io.micronaut.runtime.event.annotation.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,6 +119,14 @@ public class Application {
 
 		}
 
+	}
+
+	@EventListener
+	public void stop(final ApplicationShutdownEvent event) throws SQLException {
+		System.out.println("Shutting down Cloudgene...");
+		log.info("Shutting down Cloudgene...");
+		engine.block();
+		database.disconnect();
 	}
 
 	public WorkflowEngine getWorkflowEngine() {
