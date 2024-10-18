@@ -249,7 +249,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../tutorials/nextflow-integration/" class="md-tabs__link">
+        <a href="../../tutorials/nextflow-reporting/" class="md-tabs__link">
           
   
   Tutorials
@@ -667,45 +667,120 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#project-structure" class="md-nav__link">
+  <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
-      Project structure
+      Prerequisites
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#cloudgeneyaml" class="md-nav__link">
+  <a href="#creating-the-cloudgene-yaml-file" class="md-nav__link">
     <span class="md-ellipsis">
-      cloudgene.yaml
+      Creating the Cloudgene YAML File
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating the Cloudgene YAML File">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#header-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      Header Section
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Section
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow Section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defining-the-workflow-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining the Workflow Object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defining-inputs-and-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Inputs and Outputs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extended-example-with-textarea-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extended Example with Textarea Input
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-default-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting Default Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connecting Pipelines
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-steps" class="md-nav__link">
+  <a href="#local-nextflow-script" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining steps
+      Local Nextflow Script
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-input-parameters" class="md-nav__link">
+  <a href="#complete-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining input parameters
+      Complete Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#serve-the-webservice" class="md-nav__link">
+  <a href="#conclusion" class="md-nav__link">
     <span class="md-ellipsis">
-      Serve the webservice
+      Conclusion
     </span>
   </a>
   
@@ -1380,27 +1455,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../tutorials/nextflow-integration/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Getting Started with Cloudgene and Nextflow Pipeline Integration
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../tutorials/nextflow-reporting/" class="md-nav__link">
         
   
@@ -1492,45 +1546,120 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#project-structure" class="md-nav__link">
+  <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
-      Project structure
+      Prerequisites
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#cloudgeneyaml" class="md-nav__link">
+  <a href="#creating-the-cloudgene-yaml-file" class="md-nav__link">
     <span class="md-ellipsis">
-      cloudgene.yaml
+      Creating the Cloudgene YAML File
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating the Cloudgene YAML File">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#header-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      Header Section
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-section" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Section
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflow Section">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#defining-the-workflow-object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining the Workflow Object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defining-inputs-and-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining Inputs and Outputs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extended-example-with-textarea-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      Extended Example with Textarea Input
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-default-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setting Default Parameters
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-pipelines" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connecting Pipelines
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-steps" class="md-nav__link">
+  <a href="#local-nextflow-script" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining steps
+      Local Nextflow Script
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#defining-input-parameters" class="md-nav__link">
+  <a href="#complete-example" class="md-nav__link">
     <span class="md-ellipsis">
-      Defining input parameters
+      Complete Example
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#serve-the-webservice" class="md-nav__link">
+  <a href="#conclusion" class="md-nav__link">
     <span class="md-ellipsis">
-      Serve the webservice
+      Conclusion
     </span>
   </a>
   
@@ -1555,142 +1684,154 @@
 
 
 <h1 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h1>
-<p>The idea behind Cloudgene is quite simple: If you are able to execute your program or Hadoop application on the command line, take some minutes and write a YAML configuration to connect your program with Cloudgene. Doing so, you are able to transform your Hadoop command line program (or a set of programs) into a web-based service, present your collaborators a scalable best practices workflow and provide reproducible science.</p>
-<h2 id="project-structure">Project structure<a class="headerlink" href="#project-structure" title="Permanent link">&para;</a></h2>
-<p>First of all, we create a new project folder for our new application. This folder must contain a file called <code>cloudgene.yaml</code>. This file is also called the <em>Manifest File</em> and includes all information needed in order to install and execute your programs or pipelines. This folder contains also all other files that are needed by your workflow steps. For example binaries, a jar file of a ready-to-use MapReduce program, a PIG script or some R-Markdown script.</p>
-<p>A basic Cloudgene application usually looks something like this:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>my-cloudgene-app
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── cloudgene.yaml
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── sample-mapredduce-program.jar
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── sample-rmarkdown-report.Rmd
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── some-folder
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>|   ├── dataset2.csv
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>|   └── my-binary
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── README.md
+<p>This guide will walk you through creating a Cloudgene YAML file that acts as a bridge between the Nextflow pipeline and Cloudgene. We'll create a Cloudgene YAML file, define workflow steps, inputs, and outputs, and demonstrate how to set default parameters.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
+<p>Before you begin, ensure you have the following:</p>
+<ul>
+<li>Cloudgene installed</li>
+<li>Nextflow installed</li>
+<li>Basic understanding of YAML syntax</li>
+</ul>
+<h2 id="creating-the-cloudgene-yaml-file">Creating the Cloudgene YAML File<a class="headerlink" href="#creating-the-cloudgene-yaml-file" title="Permanent link">&para;</a></h2>
+<p>The Cloudgene YAML file defines the link between the Nextflow pipeline and Cloudgene. It contains metadata about the pipeline, the workflow steps, inputs, and outputs.</p>
+<h3 id="header-section">Header Section<a class="headerlink" href="#header-section" title="Permanent link">&para;</a></h3>
+<p>The header section includes basic information about the pipeline:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fetch-ngs</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FetchNGS</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pipeline to fetch metadata and raw FastQ files from public databases</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/nf-core/fetchngs</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Harshil Patel, Moritz E. Beber and Jose Espinosa-Carrasco</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nt">logo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/nf-core/fetchngs/master/docs/images/nf-core-fetchngs_logo_light.png</span>
 </code></pre></div>
-<p>After we are finished developing our application, we create a zip file of this folder. This zip file contains all needed files and can be deployed to any Cloudgene webserver by uploading it.</p>
-<p>Read more about <a href="/docs/03-installing-apps">installing applications</a>.</p>
-<h2 id="cloudgeneyaml">cloudgene.yaml<a class="headerlink" href="#cloudgeneyaml" title="Permanent link">&para;</a></h2>
-<p>The file content starts with a simple header containing general information about the application, followed by the description of input/output parameters as well as all steps of the workflows:</p>
-<p>A simple example looks like this:</p>
-<p><div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tool-name</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Tool Name</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tool-description</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tool-category</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://www.my-website.com</span>
+<h3 id="workflow-section">Workflow Section<a class="headerlink" href="#workflow-section" title="Permanent link">&para;</a></h3>
+<p>The workflow section defines the steps, inputs, and outputs.</p>
+<h4 id="defining-the-workflow-object">Defining the Workflow Object<a class="headerlink" href="#defining-the-workflow-object" title="Permanent link">&para;</a></h4>
+<p>In the workflow object, we define a step that executes the <code>nf-core/fetchngs</code> pipeline at version 1.12.0:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">workflow</span><span class="p">:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fetch NGS</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nf-core/fetchngs</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">      </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
 </code></pre></div>
-The two most important fields are <code>id</code>, <code>name</code> and <code>version</code>, without them your application won’t be able to install. The <code>id</code> and <code>version</code> fields are used together to create a unique id. <code>description</code> and <code>website</code> should be used to describe your application.</p>
-<p>The next step is to add the <code>workflow</code> section to your configuration file to define steps as well as input- and output-parameters.</p>
-<h2 id="defining-steps">Defining steps<a class="headerlink" href="#defining-steps" title="Permanent link">&para;</a></h2>
-<p>The simplest way to model a workflow is to create a list of steps where each step depends on its forerunner. Steps are defined in the <code>steps</code> section where each step is defined by a <code>name</code> and type specific properties.</p>
-<p>A simple example with two steps looks like this:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello-cloudgene</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hello Cloudgene</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">workflow</span><span class="p">:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Step1</span>
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/echo hey cloudgene developer! I am step 1.</span>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">      </span><span class="nt">stdout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Step2</span>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/echo hey cloudgene developer! I am step 2.</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">      </span><span class="nt">stdout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<h4 id="defining-inputs-and-outputs">Defining Inputs and Outputs<a class="headerlink" href="#defining-inputs-and-outputs" title="Permanent link">&para;</a></h4>
+<p>The pipeline has one input and one output. We define the corresponding variables and their types.</p>
+<p><strong>Example with File Input:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ID File</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local_file</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outdir</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-folder</span>
 </code></pre></div>
-<p>In this example we used the command line tool <code>echo</code> to print out some text. However, Cloudgene supports a variety of different step types which can be combined into one workflow to take advantage of different technologies.</p>
-<p>To test our workflow we copy the content into a file named <code>hello-cloudgene.yaml</code>. Next, we can upload the zip file of our application to a Cloudgene webserver or we execute it on our developement machine with the <code>cloudgene-cli</code> program:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cloudgene<span class="w"> </span>run<span class="w"> </span>hello-cloudgene.yaml
+<p>Cloudgene automatically creates a user interface with input parameters. Upon submission, it generates the outputs (folders or files). All inputs and outputs are automatically added to the <code>params.json</code> file, which Cloudgene uses to execute the Nextflow workflow.</p>
+<h3 id="extended-example-with-textarea-input">Extended Example with Textarea Input<a class="headerlink" href="#extended-example-with-textarea-input" title="Permanent link">&para;</a></h3>
+<p>We can extend the configuration to allow users to enter a list of IDs in a textarea. Cloudgene writes this content to a file.</p>
+<p><strong>Example with Textarea Input:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">workflow</span><span class="p">:</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fetch NGS</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nf-core/fetchngs</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IDs</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textarea</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">      </span><span class="nt">writeFile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ids.csv&quot;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">  </span><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outdir</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-folder</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Cloudgene 1.30.6
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>http://www.cloudgene.io
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>(c) 2009-2018 Lukas Forer and Sebastian Schoenherr
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>Built by lukas on 2018-11-19T10:14:17Z
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>hello-cloudgene 1.0
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>[INFO]  No external Haddop cluster set.
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>[WARN]  Cluster seems unreachable. Hadoop support disabled.
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>[INFO]  Submit job job-20181119-112052...
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>[OUT]   hey cloudgene developer! I am step 1.
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>[OK]    Execution successful.
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>[OUT]   hey cloudgene developer! I am step 2.
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>[OK]    Execution successful.
-<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
-<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>Done! Executed without errors.
-<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>Results can be found in file:///home/lukas/new-cloudgene/job-20181119-112052
+<h3 id="setting-default-parameters">Setting Default Parameters<a class="headerlink" href="#setting-default-parameters" title="Permanent link">&para;</a></h3>
+<p>We can also set default parameters without requiring user inputs.</p>
+<p><strong>Example with Default Parameters:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">workflow</span><span class="p">:</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fetch NGS</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nf-core/fetchngs</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">params</span><span class="p">:</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="nt">monochrome_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 </code></pre></div>
-<p>We see that Cloudgene executes our workflow and prints the text to the terminal.</p>
-<h2 id="defining-input-parameters">Defining input parameters<a class="headerlink" href="#defining-input-parameters" title="Permanent link">&para;</a></h2>
-<p>Input parameters are defined in the <code>inputs</code> section where each parameter is defined by an unique <code>id</code>, a textual <code>description</code> and a <code>type</code>.</p>
-<p>We extend the example above by an input parameter to set the message:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello-cloudgene</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Hello Cloudgene</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="nt">workflow</span><span class="p">:</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Step1</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/bin/echo hey cloudgene developer! $message</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="nt">stdout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">message</span>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Message</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">text</span>
+<h2 id="connecting-pipelines">Connecting Pipelines<a class="headerlink" href="#connecting-pipelines" title="Permanent link">&para;</a></h2>
+<p>Cloudgene supports the connection of multiple pipelines by allowing you to define workflows that consist of multiple steps. Each step can execute a separate pipeline, and the output of one pipeline can be passed as the input to the next.</p>
+<p>In this example, Cloudgene connects two Nextflow pipelines (nf-core/fetchngs and nf-core/taxprofiler) into a single workflow, making it easy to fetch data and then run a taxonomic profiler.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">workflow</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fetch Data</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nf-core/fetchngs</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">      </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">      </span><span class="nt">stdout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">params</span><span class="p">:</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${input_ids}&quot;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run taxprofiler</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nf-core/taxprofiler</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">      </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1.8</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">      </span><span class="nt">stdout</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">      </span><span class="nt">params</span><span class="p">:</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">        </span><span class="nt">input</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${outdir}/samplesheet/samplesheet.csv&quot;</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="nt">databases</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://raw.githubusercontent.com/nf-core/test-datasets/taxprofiler/database_full_v1.2.csv&quot;</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">        </span><span class="nt">multiqc_title</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${CLOUDGENE_JOB_NAME}&quot;</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input_ids</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IDs</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textarea</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">      </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;SRR12696236&quot;</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">      </span><span class="nt">writeFile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ids.csv&quot;</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">      </span><span class="nt">serialize</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">  </span><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outdir</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local_folder</span>
 </code></pre></div>
-<p>If the workflow is executed on a Cloudgene Webserver, a web-interface is automatically created where the user has to enter the message. However, if we execute the workflow using <code>cloudgene-cli</code>, the parameter has to be set as a command-line argument:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>cloudgene<span class="w"> </span>run<span class="w"> </span>hello-cloudgene.yaml<span class="w"> </span>--message<span class="w"> </span><span class="s2">&quot;Using an input parameter is easy!&quot;</span>
+<h2 id="local-nextflow-script">Local Nextflow Script<a class="headerlink" href="#local-nextflow-script" title="Permanent link">&para;</a></h2>
+<p>You can also place the <code>cloudgene.yaml</code> file directly into your pipeline directory and set the <code>script</code> property to the Nextflow script (e.g., <code>main.nf</code>). In this case, if you install the application via GitHub, Cloudgene automatically downloads the pipeline and executes the script.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">workflow</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Execute Pipeline</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">main.nf</span>
 </code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Cloudgene 1.30.6
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>http://www.cloudgene.io
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>(c) 2009-2018 Lukas Forer and Sebastian Schoenherr
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>Built by lukas on 2018-11-19T10:14:17Z
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>hello-cloudgene 1.0
+<h2 id="complete-example">Complete Example<a class="headerlink" href="#complete-example" title="Permanent link">&para;</a></h2>
+<p>Here’s a complete example combining all the sections:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fetch-ngs</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">FetchNGS</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Pipeline to fetch metadata and raw FastQ files from public databases</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="nt">website</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/nf-core/fetchngs</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Harshil Patel, Moritz E. Beber and Jose Espinosa-Carrasco</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="nt">logo</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://raw.githubusercontent.com/nf-core/fetchngs/master/docs/images/nf-core-fetchngs_logo_light.png</span>
 <a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
-<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>[INFO]  No external Haddop cluster set.
-<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>[WARN]  Cluster seems unreachable. Hadoop support disabled.
-<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>[INFO]  Submit job job-20181119-112527...
-<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>  Input values:
-<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>    message: Using an input parameter is easy!
-<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>[OUT]   hey cloudgene developer! Using an input parameter is easy!
-<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>[OK]    Execution successful.
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="nt">workflow</span><span class="p">:</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span><span class="nt">steps</span><span class="p">:</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Fetch NGS</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">      </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nf-core/fetchngs</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">      </span><span class="nt">revision</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.12.0</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">      </span><span class="nt">params</span><span class="p">:</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="nt">monochrome_logs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
 <a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
-<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>Done! Executed without errors.
-<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>Results can be found in file:///home/lukas/new-cloudgene/job-20181119-112527
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="w">  </span><span class="nt">inputs</span><span class="p">:</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">input</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IDs</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">textarea</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">      </span><span class="nt">writeFile</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ids.csv&quot;</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a><span class="w">  </span><span class="nt">outputs</span><span class="p">:</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">outdir</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a><span class="w">      </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Output</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-folder</span>
 </code></pre></div>
-<h2 id="serve-the-webservice">Serve the webservice<a class="headerlink" href="#serve-the-webservice" title="Permanent link">&para;</a></h2>
-<p>Before you can start a webservice for your workflow, you have to install it:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cloudgene<span class="w"> </span>install<span class="w"> </span>hello-cloudgene.yaml
-</code></pre></div>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Cloudgene 1.30.6
-<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>http://www.cloudgene.io
-<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>(c) 2009-2018 Lukas Forer and Sebastian Schoenherr
-<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>Built by lukas on 2018-11-19T10:14:17Z
-<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>
-<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>Installing application hello-cloudgene...
-<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>Process file hello-cloudgene.yaml....
-<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>[OK] 1 Applications installed:
-<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
-<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>APPLICATION                        VERSION             STATUS              FILENAME
-<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>hello-cloudgene                    1.0                 OK                  hello-cloudgene.yaml
-</code></pre></div>
-<p>Next, we can start the webserver:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cloudgene<span class="w"> </span>server
-</code></pre></div>
-<p>The webservice is available on <a href="http://localhost:8082">http://localhost:8082</a>. Please use username <code>admin</code> and password <code>admin1978</code> to login.</p>
-<p>Click on <strong>Run</strong> and slect your application (<strong>hello-cloudgene</strong>). Cloudgene creates automatically a web-interface for your input parameters:</p>
-<div class="screenshot">
-<img src="../../images/screenshots/hello-cloudgene-yaml.png">
-</div>
-
-<p>Enter a message and click on <strong>Submit Job</strong> to run your workflow. You should see the following job output:</p>
-<div class="screenshot">
-<img src="../../images/screenshots/hello-cloudgene-yaml-output.png">
-</div>
-
-<p>You can install different workflows in the same instance and define in the <a href="/daemon/permissions">Admin Dashboard</a> who has access to each of them.</p>
+<h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
+<p>You have now created a Cloudgene YAML file that defines a Nextflow pipeline workflow with inputs, outputs, and default parameters. This configuration allows Cloudgene to generate a user interface, handle inputs and outputs, and execute the Nextflow workflow seamlessly.</p>
+<p>For more information, refer to the <a href="https://cloudgene.readthedocs.io/">Cloudgene documentation</a> and the <a href="https://github.com/nf-core/fetchngs">nf-core/fetchngs repository</a>.</p>
 
 
 
