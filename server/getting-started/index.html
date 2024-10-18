@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../images/favicon.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -459,9 +459,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#start-cloudgene-server" class="md-nav__link">
+  <a href="#start-the-cloudgene-server" class="md-nav__link">
     <span class="md-ellipsis">
-      Start Cloudgene Server
+      Start the Cloudgene Server
     </span>
   </a>
   
@@ -470,7 +470,7 @@
         <li class="md-nav__item">
   <a href="#install-your-first-application" class="md-nav__link">
     <span class="md-ellipsis">
-      Install your first application
+      Install Your First Application
     </span>
   </a>
   
@@ -479,7 +479,7 @@
         <li class="md-nav__item">
   <a href="#whats-next" class="md-nav__link">
     <span class="md-ellipsis">
-      What's next?
+      What's Next?
     </span>
   </a>
   
@@ -1518,9 +1518,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#start-cloudgene-server" class="md-nav__link">
+  <a href="#start-the-cloudgene-server" class="md-nav__link">
     <span class="md-ellipsis">
-      Start Cloudgene Server
+      Start the Cloudgene Server
     </span>
   </a>
   
@@ -1529,7 +1529,7 @@
         <li class="md-nav__item">
   <a href="#install-your-first-application" class="md-nav__link">
     <span class="md-ellipsis">
-      Install your first application
+      Install Your First Application
     </span>
   </a>
   
@@ -1538,7 +1538,7 @@
         <li class="md-nav__item">
   <a href="#whats-next" class="md-nav__link">
     <span class="md-ellipsis">
-      What's next?
+      What's Next?
     </span>
   </a>
   
@@ -1562,37 +1562,29 @@
   
 
 
-<h1 id="getting-started">Getting started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
-<p>This guide helps you to start Cloudgene and to install your first application. You have to install Cloudgene properly on your computer before you can start.</p>
-<h2 id="start-cloudgene-server">Start Cloudgene Server<a class="headerlink" href="#start-cloudgene-server" title="Permanent link">&para;</a></h2>
-<p>The webserver can be started with the following command:</p>
+<h1 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h1>
+<p>This guide will help you start Cloudgene and install your first application. You must install Cloudgene properly on your computer before you can begin.</p>
+<h2 id="start-the-cloudgene-server">Start the Cloudgene Server<a class="headerlink" href="#start-the-cloudgene-server" title="Permanent link">&para;</a></h2>
+<p>The web server can be started with the following command:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>./cloudgene<span class="w"> </span>server
 </code></pre></div>
-<p>The webservice is available on <a href="http://localhost:8082">http://localhost:8082</a>. Please use username <code>admin</code> and password <code>admin1978</code> to login. 
-The default port can be changed in the <a href="../configuration/#web-application">configuration file</a>.</p>
-<h2 id="install-your-first-application">Install your first application<a class="headerlink" href="#install-your-first-application" title="Permanent link">&para;</a></h2>
-<p>Stop the webservice by pressing <code>CTRL-C</code>. The <strong>cg-fetchngs</strong> application can be installed by using the following command:</p>
+<p>The web service is available at <a href="http://localhost:8082">http://localhost:8082</a>. Please use the username <code>admin</code> and password <code>admin1978</code> to log in. The default port can be changed in the <a href="../configuration/#web-application">configuration file</a>.</p>
+<h2 id="install-your-first-application">Install Your First Application<a class="headerlink" href="#install-your-first-application" title="Permanent link">&para;</a></h2>
+<p>Stop the web service by pressing <code>CTRL-C</code>. The <strong>cg-fetchngs</strong> application can be installed using the following command:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>./cloudgene<span class="w"> </span>install<span class="w"> </span>lukfor/cg-fetchngs
 </code></pre></div>
 <p>Next, restart Cloudgene with the following command:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>./cloudgene<span class="w"> </span>server
 </code></pre></div>
-<p>Open Cloudgene in your browser and login. A new menu item <strong>Run</strong> appears in the menubar. Click on it to start a new job:</p>
-<div class="screenshot">
-<img src="../../images/screenshots/menubar.png">
-<img src="../../images/screenshots/hello-cloudgene.png">
-</div>
-
-<p>The <strong>hello-cloudgene</strong> application displays several inspiring quotes:</p>
-<div class="screenshot">
-<img src="../../images/screenshots/hello-cloudgene-results.png">
-</div>
-
-<h2 id="whats-next">What's next?<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
+<p>Open Cloudgene in your browser and log in. A new menu item, <strong>Run</strong>, will appear in the menu bar. Click on it to start a new job:</p>
+<p><img alt="" src="../../images/index/cg-fetchngs.png" /></p>
+<p>The <strong>cg-fetchngs</strong> application starts the nf-core pipeline, downloads the entered IDs, and provides the results for download.</p>
+<p><img alt="" src="../../images/index/cg-fetchngs-results.png" /></p>
+<h2 id="whats-next">What's Next?<a class="headerlink" href="#whats-next" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="/server/install-apps">Install additional applications</a></li>
-<li><a href="/server/configuration">Configure and customize Cloudgene</a> to support E-Mail notification, SSL cerificates,</li>
-<li>Learn how to <a href="/server/permissions">manage permissions</a> and <a href="/daemon/jobs">handle jobs</a></li>
+<li><a href="/server/configuration">Configure and customize Cloudgene</a> to support email notifications and SSL certificates.</li>
+<li>Learn how to <a href="/server/permissions">manage permissions</a> and <a href="/daemon/jobs">handle jobs</a>.</li>
 </ul>
 
 
@@ -1649,7 +1641,7 @@ The default port can be changed in the <a href="../configuration/#web-applicatio
     <script id="__config" type="application/json">{"base": "../..", "features": ["content.tooltips", "navigation.tabs", "search.highlight", "search.share", "search.suggest", "toc.follow", "content.tabs.link", "content.code.annotate", "content.code.copy"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="https://buttons.github.io/buttons.js"></script>
       
