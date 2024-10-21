@@ -2,7 +2,7 @@
 
 Input parameters define which files or information the end user must provide. For example, if you have a workflow that analyzes a CSV file, you can define an input parameter to ask the user to upload their data file.
 
-Cloudgene supports POSIX-compatible filesystems (e.g., Linux or OS X), the Hadoop Distributed File System (HDFS), and basic input fields for numbers or strings. The Cloudgene web interface is dynamically created based on these input parameters.
+Cloudgene supports files, folders and basic input fields for numbers or strings. The Cloudgene web interface is dynamically created based on these input parameters.
 
 Input parameters are defined in the `inputs` section, where each parameter is identified by a unique `id`, a textual `description`, and a `type`.
 
@@ -80,7 +80,7 @@ Creates a file-upload field where one file can be selected and uploaded.
 ```yaml
 - id: image
   description: Image
-  type: local_file
+  type: file
 ```
 
 - The uploaded file will be copied into the local workspace.
@@ -94,7 +94,7 @@ Creates a file-upload field where multiple files can be selected and uploaded.
 ```yaml
 - id: images
   description: Images
-  type: local_folder
+  type: folder
 ```
 
 - The uploaded files will be copied into the local workspace.
@@ -108,7 +108,7 @@ The `accept` attribute specifies the types of files that the server accepts. By 
 ```yaml
 - id: image
   description: Image
-  type: local_file
+  type: file
   accept: .jpg
 ```
 
@@ -190,13 +190,13 @@ Creates a checkbox that must be selected before the job can be submitted (e.g., 
 
 ## Datasets
 
-Creates a drop-down list where the user can select an application. The `category` property is optional and can be used to display only applications with the provided category. The value of this parameter contains the **Application Link** of the selected application.
+Creates a drop-down list where the user can select a dataset. Datasets are applications with properties but without a workflow object. The `category` property is optional and can be used to display only datasets from the specified category. The value of this parameter contains a map with the properties of the selected application.
 
 ```yaml
-- id: refData
+- id: reference_data
   description: Reference Data
-  type: app_list
+  type: dataset
   category: ref-data
 ```
 
-Learn more about [Application Links](/tutorials/application-links) and their advantages.
+Learn more about [Datasets](/developers/datasets) and their advantages.

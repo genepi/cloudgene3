@@ -53,6 +53,7 @@ nav:
     - Inputs: developers/inputs.md
     - Outputs: developers/outputs.md
     - Environment Variables: developers/environment_variables.md
+    - Datasets: developers/datasets.md
     - Reporting: developers/reporting.md
   - Command Line Interface (CLI):
     - cloudgene install: cli/cloudgene-install.md
@@ -71,9 +72,6 @@ nav:
     - Job Status: api/job-status.md
     - List Jobs: api/list-jobs.md
     - Job Details: api/job-details.md
-- Tutorials:
-  - Getting Started with Reporting: tutorials/nextflow-reporting.md
-  - Using AppLinks to link to other applications: tutorials/application-links.md
 - About: about.md
 
 markdown_extensions:

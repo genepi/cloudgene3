@@ -1,8 +1,8 @@
-# Using AppLinks to link to other applications
+# Datasets
 
-**AppLinks allow you to link applications to each other. Linking two applications allows you to access one application's properties from within the other.**
+Datasets allow you to link applications to each other. Linking two applications enables access to one application's properties from within the other.
 
-In this tutorial we create an application that provides different datasets. The user can select one of these datasets and gets some information about it. This example can be used as a template for your own applications.
+In this tutorial, we will create an application that provides different datasets. The user can select one of these datasets and receive some information about it. This example can be used as a template for your own applications.
 
 ## Dataset Analyzer
 

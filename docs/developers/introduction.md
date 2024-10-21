@@ -54,19 +54,19 @@ The pipeline has one input and one output. We define the corresponding variables
 inputs:
   - id: input
     description: ID File
-    type: local_file
+    type: file
 
 outputs:
   - id: outdir
     description: Output
-    type: local-folder
+    type: folder
 ```
 
 Cloudgene automatically creates a user interface with input parameters. Upon submission, it generates the outputs (folders or files). All inputs and outputs are automatically added to the `params.json` file, which Cloudgene uses to execute the Nextflow workflow.
 
 ### Extended Example with Textarea Input
 
-We can extend the configuration to allow users to enter a list of IDs in a textarea. Cloudgene writes this content to a file by setting the flag `writeFile`.
+We can extend the configuration to allow users to enter a list of IDs in a textarea. Cloudgene writes this content to a file by setting the flag `writeFile`. We can also set a default value with `value`.
 
 Here’s a complete example combining all the sections:
 
@@ -88,16 +88,28 @@ workflow:
         monochrome_logs: false
 
   inputs:
-    - id: input
+    - id: input_ids
       description: IDs
       type: textarea
+      value: "SRR12696236"
       writeFile: "ids.csv"
+      serialize: false
 
   outputs:
     - id: outdir
       description: Output
-      type: local-folder
+      type: folder
 ```
+
+You can save the content in a file named `cloudgene.yaml` and install it with the following command:
+
+```bash
+cloudgene install /path/to/cloudgene.yaml
+```
+
+Once the webserver is started using `cloudgene server`, you can open the web interface to run the application.
+
+If you update the `cloudgene.yaml` file, you need to go to the Admin Panel -> Applications and click on "Reload Application" for the changes to take effect.
 
 ### Setting Default Parameters
 
@@ -127,8 +139,8 @@ In the following example, a parameter `profiler` is defined for internal use, bu
 workflow:
   inputs:
     - id: input
-      description: IDs
-      type: local_file  
+      description: Samplesheet
+      type: file
     - id: profiler
       description: Profiler
       type: list
@@ -209,7 +221,13 @@ workflow:
   outputs:
     - id: outdir
       description: Output
-      type: local_folder
+      type: folder
+```
+
+The `cloudgene.yaml` file is hosted on GitHub. You can simply install the application with the following command:
+
+```yaml
+cloudgene install lukfor/cg-taxprofiler
 ```
 
 ## Conclusion
