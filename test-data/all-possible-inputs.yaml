@@ -15,11 +15,11 @@ workflow:
     
     - id: file
       description: Input-file
-      type: local-file
+      type: file
 
     - id: folder
       description: Input-folder
-      type: local-folder
+      type: folder
 
     - id: text
       description: Input-Text
@@ -48,6 +48,6 @@ workflow:
 
     - id: output
       description: OutputFile
-      type: local-file
+      type: file
       download: true
       temp: false

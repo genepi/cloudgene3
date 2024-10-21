@@ -49,9 +49,23 @@ public enum WdlParameterInputType {
 	}
 
 	public static WdlParameterInputType getEnum(String value) {
-		for (WdlParameterInputType v : values())
-			if (v.getValue().equalsIgnoreCase(value.replaceAll("-", "_")))
-				return v;
+		String cleanValue = value.replaceAll("-", "_");
+		for (WdlParameterInputType parameterInputType : values())
+			if (parameterInputType.getValue().equalsIgnoreCase(cleanValue))
+				return parameterInputType;
+
+		if (cleanValue.equalsIgnoreCase("file")) {
+			return LOCAL_FILE;
+		}
+
+		if (cleanValue.equalsIgnoreCase("folder")) {
+			return LOCAL_FOLDER;
+		}
+
+		if (cleanValue.equalsIgnoreCase("dataset")) {
+			return APP_LIST;
+		}
+
 		throw new IllegalArgumentException("Value '" + value + "' is not a valid type.");
 	}
 }

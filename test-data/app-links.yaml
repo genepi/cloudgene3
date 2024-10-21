@@ -5,7 +5,7 @@ workflow:
   inputs:
     - id: app
       description: Linked Application
-      type: app_list
+      type: dataset
       category: app-links-test
   steps:
     - name: print properties from selected app
