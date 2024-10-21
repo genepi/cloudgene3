@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tutorial-taxprofiler-pipeline-with-dataset-integration-using-cloudgene" class="md-skip">
+        <a href="#taxprofiler-pipeline-with-dataset-integration-using-cloudgene" class="md-skip">
           Skip to content
         </a>
       
@@ -729,9 +729,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#tutorial-taxprofiler-pipeline-with-dataset-integration-using-cloudgene" class="md-nav__link">
+  <a href="#taxprofiler-pipeline-with-dataset-integration-using-cloudgene" class="md-nav__link">
     <span class="md-ellipsis">
-      Tutorial: Taxprofiler Pipeline with Dataset Integration Using Cloudgene
+      Taxprofiler Pipeline with Dataset Integration Using Cloudgene
     </span>
   </a>
   
@@ -1320,9 +1320,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#tutorial-taxprofiler-pipeline-with-dataset-integration-using-cloudgene" class="md-nav__link">
+  <a href="#taxprofiler-pipeline-with-dataset-integration-using-cloudgene" class="md-nav__link">
     <span class="md-ellipsis">
-      Tutorial: Taxprofiler Pipeline with Dataset Integration Using Cloudgene
+      Taxprofiler Pipeline with Dataset Integration Using Cloudgene
     </span>
   </a>
   
@@ -1432,7 +1432,7 @@
 
   <h1>Datasets</h1>
 
-<h3 id="tutorial-taxprofiler-pipeline-with-dataset-integration-using-cloudgene">Tutorial: Taxprofiler Pipeline with Dataset Integration Using Cloudgene<a class="headerlink" href="#tutorial-taxprofiler-pipeline-with-dataset-integration-using-cloudgene" title="Permanent link">&para;</a></h3>
+<h3 id="taxprofiler-pipeline-with-dataset-integration-using-cloudgene">Taxprofiler Pipeline with Dataset Integration Using Cloudgene<a class="headerlink" href="#taxprofiler-pipeline-with-dataset-integration-using-cloudgene" title="Permanent link">&para;</a></h3>
 <p>In this tutorial, we will adapt the <code>taxprofiler</code> pipeline for taxonomic classification and profiling of metagenomic data using Cloudgene. The pipeline will be configured to integrate with datasets, allowing users to select specific datasets for their analysis while reducing input complexity. The Cloudgene application will be tailored for this use case, simplifying the pipeline's input parameters and linking datasets dynamically.</p>
 <hr />
 <h3 id="taxprofiler-application">Taxprofiler Application<a class="headerlink" href="#taxprofiler-application" title="Permanent link">&para;</a></h3>
@@ -1493,7 +1493,7 @@
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nt">category</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">taxprofiler_database</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nt">properties</span><span class="p">:</span>
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">database_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${CLOUDGENE_APP_LOCATION}/database_full_v1.2.csv</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nt">database_url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${CLOUDGENE_APP_LOCATION}/database_full_v1.2.csv&quot;</span>
 </code></pre></div>
 <p>Here, the <code>database_url</code> property points to the dataset file, allowing the main pipeline to retrieve this information when the user selects the dataset. The <code>category</code> field is used to group all dataset applications, making it easier to filter and display them within the <code>taxprofiler</code> pipeline interface.</p>
 <hr />
