@@ -119,7 +119,7 @@ public class JobAdminController {
 
 	@Get("/{id}/change-retire/{days}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public MessageResponse increaseRetireDate(Authentication authentication, String id, Integer days) {
+	public String increaseRetireDate(Authentication authentication, String id, Integer days) {
 
 		User admin = authenticationService.getUserByAuthentication(authentication);
 
@@ -129,7 +129,7 @@ public class JobAdminController {
 		log.info(String.format("Job: Extended retire date for job %s (by ADMIN user ID %s - email %s)", job.getId(),
 				admin.getId(), admin.getMail()));
 
-		return MessageResponse.success(message);
+		return message;
 
 	}
 
