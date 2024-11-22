@@ -73,6 +73,7 @@ database1
 The `cloudgene.yaml` file for each dataset application will define properties to share the dataset location with the main pipeline:
 
 ```yaml
+id: db1
 name: Database 1
 version: 1.0
 category: taxprofiler_database
