@@ -132,6 +132,10 @@ public class NextflowBinary {
 	}
 
 	public List<String> buildCommand() {
+		return buildCommand(true);
+	}
+
+	public List<String> buildCommand(boolean bash) {
 
 		List<String> nextflow = new Vector<String>();
 		nextflow.add("PATH=$PATH:/usr/local/bin");
@@ -201,14 +205,37 @@ public class NextflowBinary {
 		if (new File(timeline).exists()){
 			new File(timeline).delete();
 		}
-		
-		List<String> command = new Vector<String>();
-		command.add("/bin/bash");
-		command.add("-c");
-		command.add(join(nextflow));
 
-		return command;
+		if (bash) {
+			List<String> command = new Vector<String>();
+			command.add("/bin/bash");
+			command.add("-c");
+			command.add(join(nextflow));
+			return command;
+		} else {
+			return nextflow;
+		}
 
+	}
+
+	public List<File> getConfigFiles() {
+		return configFiles;
+	}
+
+	public void setConfigFiles(List<File> configFiles) {
+		this.configFiles = configFiles;
+	}
+
+	public File getParamsFile() {
+		return paramsFile;
+	}
+
+	public List<File> getEnvScripts() {
+		return envScripts;
+	}
+
+	public void setEnvScripts(List<File> envScripts) {
+		this.envScripts = envScripts;
 	}
 
 	private String join(List<String> array) {

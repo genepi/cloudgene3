@@ -12,14 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.esotericsoftware.yamlbeans.YamlConfig;
-import com.esotericsoftware.yamlbeans.YamlException;
 import com.esotericsoftware.yamlbeans.YamlReader;
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
 import cloudgene.mapred.apps.Application;
 import cloudgene.mapred.apps.ApplicationRepository;
 import cloudgene.mapred.jobs.Environment;
-import cloudgene.mapred.jobs.workspace.LocalWorkspace;
 import genepi.io.FileUtil;
 
 public class Settings {
@@ -49,6 +47,8 @@ public class Settings {
 	private List<Map<String, String>> errorHandlers = new Vector<Map<String, String>>();
 
 	private List<Map<String, String>> resources = new Vector<>();
+
+	private SSHJumper jumper = new SSHJumper();
 
 	private int autoRetireInterval = 5;
 
@@ -447,6 +447,13 @@ public class Settings {
 		this.externalWorkspace = externalWorkspace;
 	}
 
+	public SSHJumper getJumper() {
+		return jumper;
+	}
+
+	public void setJumper(SSHJumper jumper) {
+		this.jumper = jumper;
+	}
 	public String getExternalWorkspaceLocation() {
 		if (externalWorkspace == null) {
 			externalWorkspace = new HashMap<>();

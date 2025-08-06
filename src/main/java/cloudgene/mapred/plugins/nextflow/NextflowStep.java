@@ -155,8 +155,15 @@ public class NextflowStep extends CloudgeneStep {
 
 			File executionDir = new File(context.getLocalOutput());
 
+			List<String> command = null;
+			if (settings.getJumper().getHost().isEmpty()){
+				command = nextflow.buildCommand();
+			} else {
+				NextflowSSHWrapper nextflowSSHWrapper = new NextflowSSHWrapper( settings, workspace, nextflow);
+				command = nextflowSSHWrapper.buildCommand();
+			}
 			StringBuilder output = new StringBuilder();
-			boolean successful = executeCommand(nextflow.buildCommand(), context, output, executionDir);
+			boolean successful = executeCommand(command, context, output, executionDir);
 
 			if (!successful) {
 
