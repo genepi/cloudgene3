@@ -579,8 +579,6 @@ public class ApplicationRepository {
 	}
 
 	public String getAppDirectory(WdlApp application) {
-		//TODO: return correct path. local vs. ssh
-		//if (settings.)
 		if (settings.getJumper().getHost().isEmpty()) {
 			return application.getPath();
 		} else {
