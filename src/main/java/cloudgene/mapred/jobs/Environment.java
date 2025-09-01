@@ -16,7 +16,10 @@ public class Environment {
 
 	private Map<String, String> env = new HashMap<String, String>();
 
+	private Settings settings;
+
 	public Environment(Settings settings) {
+		this.settings = settings;
 		add("SERVICE_NAME", settings.getName());
 		add("SERVICE_URL", settings.getServerUrl() + settings.getBaseUrl());
 		add("CONTACT_EMAIL", settings.getAdminMail());
@@ -48,7 +51,7 @@ public class Environment {
 	}
 
 	public Environment addApplication(WdlApp application) {
-		String localFolder = application.getPath();
+		String localFolder = settings.getApplicationRepository().getAppDirectory(application);
 		add("APP_LOCATION", localFolder);
 		add("APP_ID", application.getId());
 		add("APP_NAME", application.getName());

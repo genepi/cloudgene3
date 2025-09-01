@@ -16,6 +16,7 @@ import cloudgene.mapred.core.User;
 import cloudgene.mapred.jobs.sdk.WorkflowContext;
 import cloudgene.mapred.util.MailUtil;
 import cloudgene.mapred.util.Settings;
+import cloudgene.mapred.wdl.WdlApp;
 import cloudgene.mapred.wdl.WdlParameterInputType;
 import genepi.io.FileUtil;
 
@@ -49,6 +50,8 @@ public class CloudgeneContext extends WorkflowContext {
 
 	private Map<String, Object> config;
 
+	private List<WdlApp> dependencies = new Vector<WdlApp>();
+
 	private int stepCounter = 0;
 
 	public CloudgeneContext(CloudgeneJob job) {
@@ -80,6 +83,8 @@ public class CloudgeneContext extends WorkflowContext {
 
 
 	public boolean resolveAppLinks() throws IOException {
+		
+		this.addDependency(job.getApp());
 
 		Settings settings = getSettings();
 		ApplicationRepository repository = settings.getApplicationRepository();
@@ -102,6 +107,9 @@ public class CloudgeneContext extends WorkflowContext {
 			if (linkedApp == null) {
 				throw new IOException("Application " + linkedAppId + " is not installed or wrong permissions.");
 			}
+
+			this.addDependency(linkedApp.getWdlApp());
+
 			// update environment variables
 			Environment environment = settings.buildEnvironment().addApplication(linkedApp.getWdlApp())
 					.addContext(this);
@@ -115,11 +123,19 @@ public class CloudgeneContext extends WorkflowContext {
 			}
 
 			setData(input.getName(), properties);
-
+			
 		}
 
 		return true;
 
+	}
+
+	private void addDependency(WdlApp app) {
+		dependencies.add(app);
+	}
+
+	public List<WdlApp> getDependencies() {
+		return dependencies;
 	}
 
 	public String getInput(String param) {

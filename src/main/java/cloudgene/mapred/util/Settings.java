@@ -97,7 +97,7 @@ public class Settings {
 
 	public Settings() {
 
-		repository = new ApplicationRepository();
+		repository = new ApplicationRepository(this);
 		repository.setAppsFolder(Configuration.getAppsDirectory());
 
 		// read default settings from env variables when set

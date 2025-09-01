@@ -4,8 +4,11 @@ import cloudgene.mapred.jobs.workspace.IWorkspace;
 import cloudgene.mapred.util.SSHJumper;
 import cloudgene.mapred.util.Settings;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -24,6 +27,23 @@ public class NextflowSSHWrapper {
 		this.workspace = workspace;
 	}
 
+	public List<String> stageDirectory(String directory, String target) throws IOException, InterruptedException {
+		List<String> command = new ArrayList<>();
+		command.add("sshpass");
+		command.add("rsync");
+		command.add("-avz");
+		command.add("--exclude=.git/");
+
+		// Ensure remote dirs exist before rsync
+		command.add("--rsync-path=mkdir -p " + target + " && rsync");
+
+		//command.add("--delete");
+		command.add(directory.endsWith("/") ? directory : directory + "/");
+		String completeTarget = settings.getJumper().getUser() + "@" +  settings.getJumper().getHost() + ":" + target;
+		command.add(completeTarget);
+		return command;
+	}
+
 	public List<String> buildCommand() throws IOException {
 
 		//Stage params file
@@ -36,8 +56,10 @@ public class NextflowSSHWrapper {
 		List<File> configFiles = new Vector<>();
 		int i = 0;
 		for (File file: binary.getConfigFiles()) {
-			String remoteConfigFile = workspace.uploadInput("config-" + (i++),  file);
-			configFiles.add(new File(remoteConfigFile));
+			if (file.exists()) {
+				String remoteConfigFile = workspace.uploadInput("config-" + (i++), file);
+				configFiles.add(new File(remoteConfigFile));
+			}
 		}
 		binary.setConfigFiles(configFiles);
 

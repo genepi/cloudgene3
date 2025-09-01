@@ -140,9 +140,9 @@ public class NextflowBinary {
 		List<String> nextflow = new Vector<String>();
 		nextflow.add("PATH=$PATH:/usr/local/bin");
 		for (File envScript: envScripts) {
-			if (envScript != null && envScript.exists()) {
+			//if (envScript != null && envScript.exists()) {
 				nextflow.add("source " + envScript.getAbsolutePath() + ";");
-			}
+			//}
 		}
 		nextflow.add(getBinary());
 		

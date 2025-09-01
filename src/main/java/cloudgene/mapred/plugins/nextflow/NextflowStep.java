@@ -12,15 +12,12 @@ import cloudgene.mapred.jobs.*;
 import cloudgene.mapred.plugins.PluginManager;
 import cloudgene.mapred.plugins.nextflow.report.CommandOutput;
 import cloudgene.mapred.util.MapValueParser;
-import cloudgene.mapred.wdl.WdlParameterInput;
-import cloudgene.mapred.wdl.WdlParameterInputType;
-import cloudgene.mapred.wdl.WdlParameterOutput;
+import cloudgene.mapred.wdl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.jobs.workspace.IWorkspace;
 import cloudgene.mapred.util.Settings;
-import cloudgene.mapred.wdl.WdlStep;
 import genepi.io.FileUtil;
 import groovy.json.JsonOutput;
 
@@ -56,9 +53,14 @@ public class NextflowStep extends CloudgeneStep {
 
 		String scriptPath = script;
 		if (!script.startsWith("/")) {
-			scriptPath = FileUtil.path(context.getWorkingDirectory(), script);
+			if (settings.getJumper().getHost().isEmpty()) {
+				scriptPath = FileUtil.path(context.getWorkingDirectory(), script);
+			}else {
+				String remote = settings.getApplicationRepository().getAppDirectory(context.getJob().getApp());
+				scriptPath = FileUtil.path(remote, script);
+			}
 		}
-		if (!new File(scriptPath).exists()) {
+		if (!new File(scriptPath).exists() && settings.getJumper().getHost().isEmpty()) {
 			context.log(
 					"Warning: Nextflow script '" + scriptPath + "' not found. Try to resolve it on github as '" + script + "'");
 			scriptPath = script;
@@ -106,10 +108,14 @@ public class NextflowStep extends CloudgeneStep {
 		nextflow.addConfig(appConfig);
 
 		String globalEnv = plugin.getNextflowEnv();
-		nextflow.addEnvScript(new File(globalEnv));
+		if (new File(globalEnv).exists()) {
+			nextflow.addEnvScript(new File(globalEnv));
+		}
 
 		String appEnv = FileUtil.path(appFolder, "nextflow.env");
-		nextflow.addEnvScript(new File(appEnv));
+		if (new File(appEnv).exists()) {
+			nextflow.addEnvScript(new File(appEnv));
+		}
 
 
 		// set work directory
@@ -160,6 +166,18 @@ public class NextflowStep extends CloudgeneStep {
 				command = nextflow.buildCommand();
 			} else {
 				NextflowSSHWrapper nextflowSSHWrapper = new NextflowSSHWrapper( settings, workspace, nextflow);
+				for (WdlApp app: context.getDependencies()) {
+					String remote = settings.getApplicationRepository().getAppDirectory(app);
+					context.log("Stage directory '" + app.getPath() + "' to '" + remote
+					 + "'");
+					List<String> stageCommand = nextflowSSHWrapper.stageDirectory(app.getPath(), remote);
+					StringBuilder output = new StringBuilder();
+					boolean successful = executeCommand(stageCommand, context, output, executionDir);
+					if (!successful) {
+						context.error("Staging directories failed.");
+						return false;
+					}
+				}
 				command = nextflowSSHWrapper.buildCommand();
 			}
 			StringBuilder output = new StringBuilder();

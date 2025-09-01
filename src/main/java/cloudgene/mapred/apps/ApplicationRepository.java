@@ -8,9 +8,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import cloudgene.mapred.jobs.workspace.IWorkspace;
 import cloudgene.mapred.plugins.IPlugin;
 import cloudgene.mapred.plugins.PluginManager;
-import cloudgene.mapred.util.Configuration;
+import cloudgene.mapred.util.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,10 +24,7 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import cloudgene.mapred.core.User;
 import cloudgene.mapred.database.util.DatabaseUpdater;
-import cloudgene.mapred.util.GitHubException;
-import cloudgene.mapred.util.GitHubUtil;
 import cloudgene.mapred.util.GitHubUtil.Repository;
-import cloudgene.mapred.util.S3Util;
 import cloudgene.mapred.wdl.WdlApp;
 import genepi.io.FileUtil;
 import net.lingala.zip4j.ZipFile;
@@ -35,6 +33,8 @@ import net.lingala.zip4j.exception.ZipException;
 public class ApplicationRepository {
 
 	private List<Application> apps;
+
+	private Settings settings;
 
 	private Map<String, Application> indexApps;
 
@@ -50,7 +50,8 @@ public class ApplicationRepository {
 
 	public static int DATASETS = 4;
 
-	public ApplicationRepository() {
+	public ApplicationRepository(Settings settings) {
+		this.settings = settings;
 		apps = new Vector<Application>();
 		reload();
 	}
@@ -577,4 +578,13 @@ public class ApplicationRepository {
 		return null;
 	}
 
+	public String getAppDirectory(WdlApp application) {
+		//TODO: return correct path. local vs. ssh
+		//if (settings.)
+		if (settings.getJumper().getHost().isEmpty()) {
+			return application.getPath();
+		} else {
+			return FileUtil.path(settings.getJumper().getWorkspace(), "apps", application.getId(), application.getVersion());
+		}
+	}
 }
