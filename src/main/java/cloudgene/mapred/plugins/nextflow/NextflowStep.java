@@ -108,11 +108,15 @@ public class NextflowStep extends CloudgeneStep {
 
 		// set global configuration
 		String globalConfig = plugin.getNextflowConfig();
-		nextflow.addConfig(globalConfig);
+		if (new File(globalConfig).exists()) {
+			nextflow.addConfig(globalConfig);
+		}
 
 		// set application specific configuration
 		String appConfig = FileUtil.path(appFolder, "nextflow.config");
-		nextflow.addConfig(appConfig);
+		if (new File(appConfig).exists()) {
+			nextflow.addConfig(appConfig);
+		}
 
 		String globalEnv = plugin.getNextflowEnv();
 		if (new File(globalEnv).exists()) {
