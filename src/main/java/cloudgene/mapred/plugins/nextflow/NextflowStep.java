@@ -80,7 +80,14 @@ public class NextflowStep extends CloudgeneStep {
 			}
 		}
 
-		NextflowBinary nextflow = NextflowBinary.build(settings);
+		NextflowBinary nextflow = null;
+		if (settings.getJumper().getHost().isEmpty()){
+			nextflow = NextflowBinary.build(settings);
+		} else {
+			//if on ssh server. Use binary in path. TODO: allow to set it manually. via nextflow.home in settings.
+			nextflow = new NextflowBinary("nextflow");
+		}
+
 		nextflow.setScript(scriptPath);
 		nextflow.setRevision(revision);
 

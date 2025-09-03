@@ -39,13 +39,15 @@ public class NextflowBinary {
 
 	private List<File> envScripts = new Vector<>();
 
+	private boolean checkInstallation = true;
+
 	public static NextflowBinary build(Settings settings) {
 		String binary = new BinaryFinder("nextflow").settings(settings, "nextflow", "home").env("NEXTFLOW_HOME")
 				.envPath().path("/usr/local/bin").find();
 		return new NextflowBinary(binary);
 	}
 
-	private NextflowBinary(String binary) {
+	public NextflowBinary(String binary) {
 		this.binary = binary;
 	}
 
@@ -53,7 +55,15 @@ public class NextflowBinary {
 		return binary;
 	}
 
+	public void setCheckInstallation(boolean checkInstallation) {
+		this.checkInstallation = checkInstallation;
+	}
+
 	public boolean isInstalled() {
+		if (!checkInstallation) {
+			//skip installation check
+			return true;
+		}
 		if (binary != null) {
 			String binary = getBinary();
 			return (new File(binary)).exists();

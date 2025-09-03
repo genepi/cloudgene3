@@ -29,7 +29,6 @@ public class NextflowSSHWrapper {
 
 	public List<String> stageDirectory(String directory, String target) throws IOException, InterruptedException {
 		List<String> command = new ArrayList<>();
-		command.add("sshpass");
 		command.add("rsync");
 		command.add("-avz");
 		command.add("--exclude=.git/");
@@ -83,7 +82,6 @@ public class NextflowSSHWrapper {
 		SSHJumper jumper = settings.getJumper();
 
 		// use sshpass to provide password, and ssh to run remote command
-		command.add("sshpass"); // TODO: optional
 		command.add("ssh");
 		command.add("-o");
 		command.add("StrictHostKeyChecking=no"); // TODO: optional
