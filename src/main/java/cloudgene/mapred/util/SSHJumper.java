@@ -6,8 +6,6 @@ public class SSHJumper {
 
     private String user = "";
 
-    private String password = null;
-
     private int port = 22;
 
     private String workspace = null;
@@ -28,14 +26,6 @@ public class SSHJumper {
         this.user = user;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getPort() {
         return port;
     }
@@ -50,5 +40,13 @@ public class SSHJumper {
 
     public void setWorkspace(String workspace) {
         this.workspace = workspace;
+    }
+
+    public String getUserAndHost() {
+        if (user.isEmpty()) {
+            return host;
+        } else {
+            return user + "@" + host;
+        }
     }
 }

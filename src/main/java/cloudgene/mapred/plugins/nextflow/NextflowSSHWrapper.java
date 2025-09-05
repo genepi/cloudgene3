@@ -32,13 +32,15 @@ public class NextflowSSHWrapper {
 		command.add("rsync");
 		command.add("-avz");
 		command.add("--exclude=.git/");
+		command.add("-e");
+		command.add("ssh -p " + settings.getJumper().getPort());
 
 		// Ensure remote dirs exist before rsync
 		command.add("--rsync-path=mkdir -p " + target + " && rsync");
 
 		//command.add("--delete");
 		command.add(directory.endsWith("/") ? directory : directory + "/");
-		String completeTarget = settings.getJumper().getUser() + "@" +  settings.getJumper().getHost() + ":" + target;
+		String completeTarget = settings.getJumper().getUserAndHost() + ":" + target;
 		command.add(completeTarget);
 		return command;
 	}
@@ -81,11 +83,10 @@ public class NextflowSSHWrapper {
 		List<String> command = new Vector<>();
 		SSHJumper jumper = settings.getJumper();
 
-		// use sshpass to provide password, and ssh to run remote command
 		command.add("ssh");
-		command.add("-o");
-		command.add("StrictHostKeyChecking=no"); // TODO: optional
-		command.add(jumper.getUser() + "@" + jumper.getHost());
+		command.add("-p");
+		command.add(String.valueOf(jumper.getPort()));
+		command.add(jumper.getUserAndHost());
 		command.add("bash -c \"" + fullCommand.replace("\"", "\\\"") + "\"");
 
 		return command;

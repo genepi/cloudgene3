@@ -17,18 +17,16 @@ public class SFTPWorkspace implements IWorkspace {
     private static final String TEMP_DIRECTORY = "temp";
     private String location;
     private String job;
-    private String host;
+    private String userAndHost;
     private int port;
-    private String username;
 
 
-    public SFTPWorkspace(SSHJumper jumper) { this(jumper.getHost(), jumper.getPort(), jumper.getUser(), jumper.getWorkspace()); }
+    public SFTPWorkspace(SSHJumper jumper) { this(jumper.getUserAndHost(), jumper.getPort(), jumper.getWorkspace()); }
 
 
-    public SFTPWorkspace(String host, int port, String username, String location) {
-        this.host = host;
+    public SFTPWorkspace(String userAndHost, int port, String location) {
+        this.userAndHost = userAndHost;
         this.port = port;
-        this.username = username;
         this.location = location;
     }
 
@@ -51,7 +49,7 @@ public class SFTPWorkspace implements IWorkspace {
     public String upload(String id, File file) throws IOException {
         String remotePath = location + "/" + job + "/" + id + "/";
         runSshCommand("mkdir -p " + remotePath);
-        runScpCommand(file.getAbsolutePath(), username + "@" + host + ":" +remotePath);
+        runScpCommand(file.getAbsolutePath(), userAndHost + ":" +remotePath);
         return remotePath + file.getName();
     }
     @Override
@@ -67,7 +65,7 @@ public class SFTPWorkspace implements IWorkspace {
         String relativePath = stripSftpPrefix(path);
         File tempFile = File.createTempFile("download", ".tmp");
         tempFile.deleteOnExit();
-        runScpCommand(username + "@" + host + ":" + relativePath, tempFile.getAbsolutePath());
+        runScpCommand(userAndHost + ":" + relativePath, tempFile.getAbsolutePath());
         return new FileInputStream(tempFile);
     }
     @Override
@@ -124,6 +122,11 @@ public class SFTPWorkspace implements IWorkspace {
     }
     @Override
     public List<Download> getDownloads(String url) throws IOException {
+
+        //TODO: rsync url with local folder.
+        //TODO: use logic from lcaolWorkspace to add downloads
+        //TODO: I need a link to localWorkspace.
+
         List<Download> downloads = new ArrayList<>();
         String output = runSshCommandWithOutput("find " + url + " -type f");
         String[] lines = output.split("\n");
@@ -137,7 +140,7 @@ public class SFTPWorkspace implements IWorkspace {
             }
             Download download = new Download();
             download.setName(relativeName);
-            download.setPath("sftp://" + host + ":" + port + line);
+            download.setPath("sftp://" + userAndHost + ":" + port + line);
             download.setSize(FileUtils.byteCountToDisplaySize(Long.parseLong(size)));
             download.setHash(hash);
             downloads.add(download);
@@ -170,10 +173,10 @@ public class SFTPWorkspace implements IWorkspace {
         runProcess(command);
     }
     private void runSshCommand(String cmd) throws IOException {
-        runProcess(Arrays.asList("ssh", "-p", String.valueOf(port), username + "@" + host, cmd));
+        runProcess(Arrays.asList("ssh", "-p", String.valueOf(port), userAndHost, cmd));
     }
     private String runSshCommandWithOutput(String cmd) throws IOException {
-        return runProcessWithOutput(Arrays.asList("ssh", "-p", String.valueOf(port), username + "@" + host, cmd));
+        return runProcessWithOutput(Arrays.asList("ssh", "-p", String.valueOf(port), userAndHost, cmd));
     }
     private void runProcess(List<String> command) throws IOException {
         ProcessBuilder pb = new ProcessBuilder(command);
