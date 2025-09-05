@@ -27,24 +27,6 @@ public class NextflowSSHWrapper {
 		this.workspace = workspace;
 	}
 
-	public List<String> stageDirectory(String directory, String target) throws IOException, InterruptedException {
-		List<String> command = new ArrayList<>();
-		command.add("rsync");
-		command.add("-avz");
-		command.add("--exclude=.git/");
-		command.add("-e");
-		command.add("ssh -p " + settings.getJumper().getPort());
-
-		// Ensure remote dirs exist before rsync
-		command.add("--rsync-path=mkdir -p " + target + " && rsync");
-
-		//command.add("--delete");
-		command.add(directory.endsWith("/") ? directory : directory + "/");
-		String completeTarget = settings.getJumper().getUserAndHost() + ":" + target;
-		command.add(completeTarget);
-		return command;
-	}
-
 	public List<String> buildCommand() throws IOException {
 
 		//Stage params file

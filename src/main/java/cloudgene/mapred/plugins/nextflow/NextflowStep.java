@@ -12,6 +12,7 @@ import cloudgene.mapred.jobs.*;
 import cloudgene.mapred.plugins.PluginManager;
 import cloudgene.mapred.plugins.nextflow.report.CommandOutput;
 import cloudgene.mapred.util.MapValueParser;
+import cloudgene.mapred.util.SSHJumper;
 import cloudgene.mapred.wdl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,15 +53,16 @@ public class NextflowStep extends CloudgeneStep {
 		}
 
 		String scriptPath = script;
+		SSHJumper jumper = settings.getJumper();
 		if (!script.startsWith("/")) {
-			if (settings.getJumper().getHost().isEmpty()) {
-				scriptPath = FileUtil.path(context.getWorkingDirectory(), script);
-			}else {
+			if (jumper.isEnabled()) {
 				String remote = settings.getApplicationRepository().getAppDirectory(context.getJob().getApp());
 				scriptPath = FileUtil.path(remote, script);
+			}else {
+				scriptPath = FileUtil.path(context.getWorkingDirectory(), script);
 			}
 		}
-		if (!new File(scriptPath).exists() && settings.getJumper().getHost().isEmpty()) {
+		if (!new File(scriptPath).exists() && !jumper.isEnabled()) {
 			context.log(
 					"Warning: Nextflow script '" + scriptPath + "' not found. Try to resolve it on github as '" + script + "'");
 			scriptPath = script;
@@ -81,11 +83,11 @@ public class NextflowStep extends CloudgeneStep {
 		}
 
 		NextflowBinary nextflow = null;
-		if (settings.getJumper().getHost().isEmpty()){
-			nextflow = NextflowBinary.build(settings);
-		} else {
+		if (jumper.isEnabled()){
 			//if on ssh server. Use binary in path. TODO: allow to set it manually. via nextflow.home in settings.
 			nextflow = new NextflowBinary("nextflow");
+		} else {
+			nextflow = NextflowBinary.build(settings);
 		}
 
 		nextflow.setScript(scriptPath);
@@ -173,23 +175,22 @@ public class NextflowStep extends CloudgeneStep {
 			File executionDir = new File(context.getLocalOutput());
 
 			List<String> command = null;
-			if (settings.getJumper().getHost().isEmpty()){
-				command = nextflow.buildCommand();
-			} else {
+			if (jumper.isEnabled()){
 				NextflowSSHWrapper nextflowSSHWrapper = new NextflowSSHWrapper( settings, workspace, nextflow);
 				for (WdlApp app: context.getDependencies()) {
 					String remote = settings.getApplicationRepository().getAppDirectory(app);
-					context.log("Stage directory '" + app.getPath() + "' to '" + remote
-					 + "'");
-					List<String> stageCommand = nextflowSSHWrapper.stageDirectory(app.getPath(), remote);
+					context.log("Stage directory '" + app.getPath() + "' to '" + remote + "'");
+					List<String> stageCommand = jumper.rsync(app.getPath(), remote);
 					StringBuilder output = new StringBuilder();
 					boolean successful = executeCommand(stageCommand, context, output, executionDir);
 					if (!successful) {
-						context.error("Staging directories failed.");
+						context.error("Staging directories failed.\n" + output);
 						return false;
 					}
 				}
 				command = nextflowSSHWrapper.buildCommand();
+			} else {
+				command = nextflow.buildCommand();
 			}
 			StringBuilder output = new StringBuilder();
 			boolean successful = executeCommand(command, context, output, executionDir);
