@@ -1,25 +1,26 @@
 package cloudgene.mapred.jobs.workspace;
 import cloudgene.mapred.jobs.Download;
-import cloudgene.mapred.util.HashUtil;
+import cloudgene.mapred.util.Settings;
 import genepi.io.FileUtil;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.*;
 import cloudgene.mapred.util.SSHJumper;
 
-public class SFTPWorkspace implements IWorkspace {
-    private static final Logger log = LoggerFactory.getLogger(SFTPWorkspace.class);
+public class SshWorkspace implements IWorkspace {
+    private static final Logger log = LoggerFactory.getLogger(SshWorkspace.class);
     private static final String OUTPUT_DIRECTORY = "outputs";
     private static final String INPUT_DIRECTORY = "input";
     private static final String LOGS_DIRECTORY = "logs";
     private static final String TEMP_DIRECTORY = "temp";
     private String job;
     private SSHJumper jumper;
+    private LocalWorkspace localWorkspace;
 
-    public SFTPWorkspace(SSHJumper jumper) {
-        this.jumper = jumper;
+    public SshWorkspace(Settings settings) {
+        this.jumper = settings.getJumper();
+        localWorkspace = new LocalWorkspace(settings);
     }
 
     @Override
@@ -30,6 +31,7 @@ public class SFTPWorkspace implements IWorkspace {
     @Override
     public void setJob(String job) {
         this.job = job;
+        localWorkspace.setJob(job);
     }
 
     @Override
@@ -37,6 +39,7 @@ public class SFTPWorkspace implements IWorkspace {
         if (job == null || jumper.getWorkspace() == null) {
             throw new IOException("SSH workspace setup failed. Missing job or location.");
         }
+        localWorkspace.setup();
     }
 
     @Override
@@ -54,7 +57,8 @@ public class SFTPWorkspace implements IWorkspace {
 
     @Override
     public String uploadLog(File file) throws IOException {
-        return upload(LOGS_DIRECTORY, file);
+        // no upload to ssh needed, save in local workspace
+        return localWorkspace.uploadLog(file);
     }
 
     @Override
@@ -68,9 +72,8 @@ public class SFTPWorkspace implements IWorkspace {
 
     @Override
     public String downloadLog(String name) throws IOException {
-        try (InputStream is = download(jumper.getWorkspace() + "/" + job + "/" + LOGS_DIRECTORY + "/" + name)) {
-            return FileUtil.readFileAsString(is);
-        }
+        // Log files are in local workspace..
+        return localWorkspace.downloadLog(name);
     }
 
     @Override
@@ -90,8 +93,10 @@ public class SFTPWorkspace implements IWorkspace {
 
     @Override
     public void cleanup(String job) throws IOException {
+        //TODO:  deleteFolder(jumper.getWorkspace() + "/" + job);?
         deleteFolder(jumper.getWorkspace() + "/" + job + "/" + TEMP_DIRECTORY);
         deleteFolder(jumper.getWorkspace() + "/" + job + "/" + INPUT_DIRECTORY);
+        localWorkspace.cleanup(job);
     }
 
     private void deleteFolder(String path) throws IOException {
@@ -131,30 +136,16 @@ public class SFTPWorkspace implements IWorkspace {
 
     @Override
     public List<Download> getDownloads(String url) throws IOException {
-
-        //TODO: rsync url with local folder.
-        //TODO: use logic from lcaolWorkspace to add downloads
-        //TODO: I need a link to localWorkspace.
-
-        List<Download> downloads = new ArrayList<>();
-        String output = jumper.runSsh("find " + url + " -type f");
-        String[] lines = output.split("\n");
-        for (String line : lines) {
-            if (line.trim().isEmpty()) continue;
-            String size = jumper.runSsh("stat -c%s " + line).trim();
-            String hash = HashUtil.getSha256(line + size + (Math.random() * 100000));
-            String relativeName = line.substring(url.length());
-            if (relativeName.startsWith("/")) {
-                relativeName = relativeName.substring(1);
-            }
-            Download download = new Download();
-            download.setName(relativeName);
-            download.setPath("sftp://" + jumper.getHost() + ":" + jumper.getPort() + line);
-            download.setSize(FileUtils.byteCountToDisplaySize(Long.parseLong(size)));
-            download.setHash(hash);
-            downloads.add(download);
+        //TODO: outputs folder needed? merge logs when directly in job-id?
+        String localFolder = localWorkspace.createFolder("outputs");
+        try {
+            jumper.download(url, localFolder );
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            throw new IOException(e);
         }
-        return downloads;
+        String name = FileUtil.getFilename(url);
+        return localWorkspace.getDownloads(FileUtil.path(localFolder, name));
     }
 
     @Override

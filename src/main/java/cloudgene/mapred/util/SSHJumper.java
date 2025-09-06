@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SSHJumper {
@@ -15,6 +16,8 @@ public class SSHJumper {
     private int port = 22;
 
     private String workspace = null;
+
+    private String localWorkspace = "lukas";
 
     public String getHost() {
         return host;
@@ -46,6 +49,14 @@ public class SSHJumper {
 
     public void setWorkspace(String workspace) {
         this.workspace = workspace;
+    }
+
+    public void setLocalWorkspace(String localWorkspace) {
+        this.localWorkspace = localWorkspace;
+    }
+
+    public String getLocalWorkspace() {
+        return localWorkspace;
     }
 
     public String getUserAndHost() {
@@ -101,9 +112,22 @@ public class SSHJumper {
 
         //command.add("--delete");
         command.add(directory.endsWith("/") ? directory : directory + "/");
-        String completeTarget = getUserAndHost() + ":" + target;
-        command.add(completeTarget);
+        command.add(getUserAndHost() + ":" + target);
+
         return command;
+    }
+
+    public String download(String directory, String target) throws IOException, InterruptedException {
+        List<String> command = new ArrayList<>();
+        command.add("rsync");
+        command.add("-avz");
+        command.add("--exclude=.git/");
+        command.add("-e");
+        command.add("ssh -p " + getPort());
+        //command.add("--delete");
+        command.add(getUserAndHost() + ":" + directory);
+        command.add(target);
+        return run(command);
     }
 
     private String run(List<String> command) throws IOException {

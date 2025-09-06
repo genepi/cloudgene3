@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Vector;
 
+import cloudgene.mapred.util.Settings;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +43,8 @@ public class S3Workspace implements IWorkspace {
 
 	private String job;
 
-	public S3Workspace(String location) {
-		this.location = location;
+	public S3Workspace(Settings settings) {
+		this.location = settings.getExternalWorkspaceLocation();
 	}
 
 	@Override

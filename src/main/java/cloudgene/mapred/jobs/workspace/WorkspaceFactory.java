@@ -3,7 +3,6 @@ package cloudgene.mapred.jobs.workspace;
 import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.util.Settings;
-import cloudgene.mapred.util.SSHJumper;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -20,20 +19,18 @@ public class WorkspaceFactory {
 		String type = settings.getExternalWorkspaceType();
 
 		if (type == null) {
-			return new LocalWorkspace(settings.getLocalWorkspace());
+			return new LocalWorkspace(settings);
 		}
 
 		if (type.equalsIgnoreCase("S3")) {
-			String bucket = settings.getExternalWorkspaceLocation();
-			return new S3Workspace(bucket);
+			return new S3Workspace(settings);
 		}
 
 		if (type.equalsIgnoreCase("SSH")) {
-			SSHJumper jumper = settings.getJumper();
-			return new SFTPWorkspace(jumper);
+			return new SshWorkspace(settings);
 		}
 
-		return new LocalWorkspace(settings.getLocalWorkspace());
+		return new LocalWorkspace(settings);
 
 	}
 
@@ -46,16 +43,14 @@ public class WorkspaceFactory {
 		}
 
 		if (url.startsWith("s3://")) {
-			String bucket = settings.getExternalWorkspaceLocation();
-			return new S3Workspace(bucket);
+			return new S3Workspace(settings);
 		}
 
-		if (url.startsWith("sftp://")) {
-			SSHJumper jumper = settings.getJumper();
-			return new SFTPWorkspace(jumper);
+		if (url.startsWith("ssh://")) {
+			return new SshWorkspace(settings);
 		}
 
-		return new LocalWorkspace(settings.getLocalWorkspace());
+		return new LocalWorkspace(settings);
 
 	}
 

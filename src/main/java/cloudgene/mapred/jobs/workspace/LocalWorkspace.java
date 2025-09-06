@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Vector;
 
+import cloudgene.mapred.util.Settings;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +32,8 @@ public class LocalWorkspace implements IWorkspace {
 
 	private String workspace;
 
-	public LocalWorkspace(String location) {
-		this.location = absolute(location);
+	public LocalWorkspace(Settings settings) {
+		this.location = absolute(settings.getLocalWorkspace());
 	}
 
 	@Override
