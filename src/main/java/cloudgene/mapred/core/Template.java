@@ -22,7 +22,7 @@ public class Template {
 	public static final String USER_EMAIL_DESCRIPTION = "USER_EMAIL_DESCRIPTION";
 
 	public static final String USER_WITHOUT_EMAIL_DESCRIPTION = "USER_WITHOUT_EMAIL_DESCRIPTION";
-	
+
 	public static final Template[] SNIPPETS = new Template[] {
 
 			new Template(MAINTENANCE_MESSAGE,
@@ -32,20 +32,29 @@ public class Template {
 					"<p>powered by <a href=\"https://www.cloudgene.io\">Cloudgene</a></p>"),
 
 			new Template(REGISTER_MAIL,
-					"Dear %s,\nThis email has been sent automatically by the \"%s\" system to confirm that your profile has now been registered.\n\n"
-							+ "To confirm your email address, please click on this activation link %s"),
+			"""
+				Dear %s,
+				This email has been sent automatically by the "%s" system to confirm that your profile has now been registered.
+
+				To confirm your email address, please click on this activation link %s"""),
 
 			new Template(RETIRE_JOB_MAIL,
-					"Dear %s,\nYour job retires in %s days! All imputation results will be deleted at that time.\n\n"
-							+ "Please ensure that you have downloaded all results from https://imputationserver.sph.umich.edu/start.html#!jobs/%s"),
+			"""
+				Dear %s,
+				Your job retires in %s days! All imputation results will be deleted at that time.
+
+				Please ensure that you have downloaded all results from https://imputationserver.sph.umich.edu/start.html#!jobs/%s"""),
 
 			new Template(RECOVERY_MAIL,
-					"Dear %s,\nThis email has been sent automatically by the \"%s\" system.\n\n"
-							+ "To reset your password, please click on this link %s. "),
+			"""
+				Dear %s,
+				This email has been sent automatically by the "%s" system.
+
+				To reset your password, please click on this link %s."""),
 
 			new Template(FOOTER_SUBMIT_JOB, ""),
-			
-			new Template(TERMS, "I will not attempt to re-identify or contact research participants.<br>" + 
+
+			new Template(TERMS, "I will not attempt to re-identify or contact research participants.<br>" +
 					"I will report any inadvertent data release, security breach or other data management incident of which I become aware."),
 
 			new Template(USER_EMAIL_DESCRIPTION, "Receive email notifications when jobs are completed."),
