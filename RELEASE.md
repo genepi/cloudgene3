@@ -21,7 +21,7 @@ Update version according Sematic Versioning:
 
 We track our current version in
 - `pom.xml`
-- `src/main/java/cloudgene/mapred/Main.java`
+- `src/main/java/cloudgene/mapred/server/Application.java`
 - `src/main/html/webapp/package.json`.
 
 Set the new version without the `v` prefix.
