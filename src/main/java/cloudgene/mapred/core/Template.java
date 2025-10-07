@@ -29,7 +29,7 @@ public class Template {
 					"Sorry, our service is currently under maintenance. Imputation Server is expected to be down until <b>Tuesday 08:00 AM EDT</b>."),
 
 			new Template(FOOTER,
-					"<p>powered by <a href=\"http://cloudgene.uibk.ac.at\">Cloudgene</a></p>"),
+					"<p>powered by <a href=\"https://www.cloudgene.io\">Cloudgene</a></p>"),
 
 			new Template(REGISTER_MAIL,
 					"Dear %s,\nThis email has been sent automatically by the \"%s\" system to confirm that your profile has now been registered.\n\n"
