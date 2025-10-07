@@ -90,7 +90,9 @@ public class JobController {
 		String userAgent = request.getHeaders().get(HttpHeaders.USER_AGENT);
 
 		long start = System.currentTimeMillis();
+
 		File folder = application.getSettings().getTempFolder("upload_");
+		folder.deleteOnExit();
 
 		log.debug("Start submit process and parse multipart body. Folder for request: " + folder.getAbsolutePath());
 

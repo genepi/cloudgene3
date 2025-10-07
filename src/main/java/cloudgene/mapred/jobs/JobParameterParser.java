@@ -96,6 +96,8 @@ public class JobParameterParser {
                 if (input.getWriteFile() != null && !input.getWriteFile().trim().isEmpty()) {
 
                     File file = Files.createTempFile("upload_", input.getWriteFile()).toFile();
+                    file.deleteOnExit();
+
                     try {
                         FileUtil.writeStringBufferToFile(file.getAbsolutePath(), new StringBuffer(cleanedValue));
                         String target = workspace.uploadInput(key, file);
