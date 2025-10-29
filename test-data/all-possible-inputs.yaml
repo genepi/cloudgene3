@@ -21,6 +21,11 @@ workflow:
       description: Input-folder
       type: folder
 
+    - id: folder-glob
+      description: Input folder with glob pattern
+      type: folder
+      pattern: "*.txt"
+
     - id: text
       description: Input-Text
       type: text
