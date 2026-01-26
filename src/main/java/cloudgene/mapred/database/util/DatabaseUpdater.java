@@ -302,7 +302,13 @@ public class DatabaseUpdater {
 
 	public void executeSQLFile(String sqlContent, String version) throws SQLException {
 
-		if (sqlContent.length() > 0) {
+		String cleanedSQL = sqlContent
+				.replaceAll("(?s)/\\*.*?\\*/", "") // remove block comments
+				.replaceAll("(?m)^\\s*--.*?$", "") // remove full line comments
+				.replaceAll("(?m)(?<=\\s)--.*?$", "") // remove inline comments after SQL
+				.trim();
+
+		if (!cleanedSQL.isEmpty()) {
 			Connection connection;
 			connection = connector.getDataSource().getConnection();
 			PreparedStatement ps = connection.prepareStatement(sqlContent);

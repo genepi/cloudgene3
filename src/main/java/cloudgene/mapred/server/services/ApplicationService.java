@@ -166,11 +166,11 @@ public class ApplicationService {
 
 		try {
 
-			Application app = repository.install(url);
+			List<Application> apps = repository.install(url);
 			application.getSettings().save();
 
-			if (app != null) {
-				return app;
+			if (!apps.isEmpty()) {
+				return apps.get(0);
 			} else {
 				throw new JsonHttpStatusException(HttpStatus.BAD_REQUEST, APPLICATION_NOT_INSTALLED_NO_WORKFLOW);
 			}

@@ -4,13 +4,16 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import cloudgene.mapred.plugins.IPlugin;
+import cloudgene.mapred.plugins.PluginManager;
 import cloudgene.mapred.util.Configuration;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +31,6 @@ import cloudgene.mapred.wdl.WdlApp;
 import genepi.io.FileUtil;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
-import net.lingala.zip4j.model.FileHeader;
 
 public class ApplicationRepository {
 
@@ -85,8 +87,8 @@ public class ApplicationRepository {
 			indexApps.put(app.getId(), app);
 
 		}
-		
-		Collections.sort(apps);		
+
+		Collections.sort(apps);
 		log.info("Loaded " + apps.size() + " applications.");
 	}
 
@@ -196,12 +198,33 @@ public class ApplicationRepository {
 		reload();
 	}
 
-	public Application install(String url) throws IOException, GitHubException {
+	public void updateConfig(Application app, Map<String, String> config) throws IOException {
 
+		WdlApp wdlApp = app.getWdlApp();
+
+		if (config == null) {
+			return;
+		}
+
+		for (IPlugin plugin: PluginManager.getInstance().getPlugins()) {
+			Map<String, String> updatedConfig = plugin.getConfig(wdlApp);
+			if (updatedConfig == null) {
+				continue;
+			}
+			for (String key: config.keySet()){
+				updatedConfig.put(key, config.get(key));
+			}
+			plugin.updateConfig(wdlApp, updatedConfig);
+		}
+
+	}
+
+	public List<Application> install(String url) throws IOException, GitHubException {
+
+		List<Application> applications = new ArrayList<>();
 		Application application = null;
-
 		if (url.startsWith("http://") || url.startsWith("https://")) {
-			application = installFromUrl(url);
+			return  installFromUrl(url);
 		} else if (url.startsWith("s3://")) {
 			application = installFromS3(url);
 		} else if (url.startsWith("github://")) {
@@ -241,14 +264,17 @@ public class ApplicationRepository {
 
 			}
 		}
-
-		return application;
+		if (application != null) {
+			applications.add(application);
+		}
+		return applications;
 
 	}
 
-	public Application installFromUrl(String url) throws IOException {
-        if (!url.endsWith(".zip")) {
-            return null;
+	public List<Application> installFromUrl(String url) throws IOException, GitHubException {
+
+		if (!url.endsWith(".zip")) {
+			return installFromUrlRepository(url);
         }
 
 		// download file from url
@@ -256,8 +282,69 @@ public class ApplicationRepository {
         FileUtils.copyURLToFile(new URL(url), zipFile);
         Application application = installFromZipFile(zipFile.getAbsolutePath());
         zipFile.delete();
-        return application;
+		List<Application> applications = new Vector<Application>();
+		applications.add(application);
+        return applications;
     }
+
+	public List<Application> installFromUrlRepository(String url) throws IOException, GitHubException {
+		Pattern pattern = Pattern.compile("@([^/\\?]*)");
+		Matcher matcher = pattern.matcher(url);
+		String version = "latest";
+		if (matcher.find()) {
+			version = matcher.group(1);
+			url = url.replace(matcher.group(0), "");
+		}
+		String filename = File.createTempFile("repo", ".json").getAbsolutePath();
+		FileUtils.copyURLToFile(new URL(url), new File(filename));
+		return installFromRepository(filename, version);
+	}
+
+	public List<Application> installFromRepository(String file, String version) throws IOException, GitHubException {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode root = mapper.readTree(new File(file));
+		String type = root.path("type").asText();
+		JsonNode releases = root.path("releases");
+
+		if (!releases.isArray() || releases.size() == 0) {
+			throw new IOException("No releases found.");
+		}
+
+		JsonNode release = getVersion(releases, version);
+		if (release == null ) {
+			throw new IOException("Version " + version + " not found.");
+		}
+		switch (type) {
+			case "application": {
+				String url = release.path("url").asText();
+				System.out.println("Installing application from " + url + "...");
+				return install(url);
+			}
+			case "pack": {
+				JsonNode content = release.path("content");
+				if (content.isArray()) {
+					List<Application> applications = new Vector<Application>();
+					for (JsonNode item : content) {
+						String itemUrl = item.path("url").asText();
+						System.out.println("Installing application from " + itemUrl + "...");
+						List<Application> installedApplications = install(itemUrl);
+						if (item.has("config") && item.hasNonNull("config")){
+							Map<String, String> config = mapper.convertValue(item.get("config"), new TypeReference<Map<String, String>>() {});
+							for (Application application: installedApplications) {
+								System.out.println("Configure application " + application.getId());
+								updateConfig(application, config);
+							}
+						}
+						applications.addAll(installedApplications);
+					}
+					return applications;
+				}
+				throw new IOException("Property 'content' is not an array.");
+			}
+			default:
+				throw new IOException("Unknown repository type: " + type);
+		}
+	}
 
 	public Application installFromS3(String url) throws IOException {
 		// download file from s3 bucket
@@ -273,7 +360,8 @@ public class ApplicationRepository {
 		FileUtil.deleteDirectory(appPath);
 		FileUtil.createDirectory(appPath);
 
-		String baseKey = S3Util.getKey(url);
+		S3Util.UrlParts urlParts = S3Util.getParts(url);
+		String baseKey = urlParts.key();
 
 		ObjectListing listing = S3Util.listObjects(url);
 
@@ -334,21 +422,19 @@ public class ApplicationRepository {
 		FileUtils.copyURLToFile(new URL(url), zipFile);
 
 		String zipFilename = zipFile.getAbsolutePath();
-		if (repository.getDirectory() != null) {
-			// extract only sub dir
-			Application application = installFromZipFile(zipFilename, "^.*/" + repository.getDirectory() + ".*");
-			zipFile.delete();
-			return application;
-
-		} else {
-			Application application = installFromZipFile(zipFilename);
-			zipFile.delete();
-			return application;
-		}
+		Application application = installFromZipFile(zipFilename, repository.getYaml());
+		zipFile.delete();
+		return application;
 
 	}
 
 	public Application installFromZipFile(String zipFilename) throws IOException {
+
+		return installFromZipFile(zipFilename, null);
+	}
+
+
+	public Application installFromZipFile(String zipFilename, String yamlFilename) throws IOException {
 
 		// extract in apps folder
 		String appPath = FileUtil.path(appsFolder, "archive");
@@ -363,34 +449,7 @@ public class ApplicationRepository {
 		}
 
 		try {
-			return installFromDirectory(appPath, true);
-		} finally {
-			FileUtil.deleteDirectory(appPath);
-		}
-
-	}
-
-	public Application installFromZipFile(String zipFilename, String subFolder) throws IOException {
-
-		String appPath = FileUtil.path(appsFolder, "archive");
-		FileUtil.deleteDirectory(appPath);
-		FileUtil.createDirectory(appPath);
-		try {
-			ZipFile file = new ZipFile(zipFilename);
-			for (Object header : file.getFileHeaders()) {
-				FileHeader fileHeader = (FileHeader) header;
-				String name = fileHeader.getFileName();
-				if (name.matches(subFolder)) {
-					file.extractFile(fileHeader, appPath);
-				}
-			}
-			file.close();
-		} catch (ZipException e) {
-			throw new IOException(e);
-		}
-
-		try {
-			return installFromDirectory(appPath, true);
+			return installFromDirectory(appPath, true, yamlFilename);
 		} finally {
 			FileUtil.deleteDirectory(appPath);
 		}
@@ -398,26 +457,26 @@ public class ApplicationRepository {
 	}
 
 	public Application installFromDirectory(String path, boolean moveToApps) throws IOException {
+		return installFromDirectory(path, moveToApps, null);
+	}
 
-		String cloudgeneFilename = FileUtil.path(path, "cloudgene.yaml");
+	public Application installFromDirectory(String path, boolean moveToApps, String customYaml) throws IOException {
+
+		String name = "cloudgene.yaml";
+		if (customYaml != null) {
+			name = customYaml;
+		}
+
+		String cloudgeneFilename = FileUtil.path(path, name);
 		if (new File(cloudgeneFilename).exists()) {
 			Application application = installFromYaml(cloudgeneFilename, moveToApps);
-			if (application != null) {
-				return application;
+				if (application != null) {
+					return application;
 			}
 		}
 
-		cloudgeneFilename = FileUtil.path(path, "cloudgene.yml");
-		if (new File(cloudgeneFilename).exists()) {
-			Application application = installFromYaml(cloudgeneFilename, moveToApps);
-			if (application != null) {
-				return application;
-			}
-		}
-
-		// find all cloudgene workflows (use filename as id)
+		//No cloudgene.yaml found. try all other yaml files.
 		String[] files = FileUtil.getFiles(path, "*.yaml");
-
 		for (String filename : files) {
 			Application application = installFromYaml(filename, moveToApps);
 			if (application != null) {
@@ -425,9 +484,9 @@ public class ApplicationRepository {
 			}
 		}
 
-		// search in subfolders
+		// search in subfolders. e.g. github zip extracts all in a subfolder.
 		for (String directory : getDirectories(path)) {
-			Application application = installFromDirectory(directory, moveToApps);
+			Application application = installFromDirectory(directory, moveToApps, customYaml);
 			if (application != null) {
 				return application;
 			}
@@ -533,6 +592,18 @@ public class ApplicationRepository {
 			return false;
 		}
 		return application.isEnabled() && application.isLoaded() && !application.hasSyntaxError();
+	}
+
+	public static JsonNode getVersion(JsonNode releases, String version) {
+		if ("latest".equalsIgnoreCase(version)) {
+			return releases.get(0);
+		}
+		for (JsonNode release : releases) {
+			if (release.has("version") && release.get("version").asText().equals(version)) {
+				return release;
+			}
+		}
+		return null;
 	}
 
 }
