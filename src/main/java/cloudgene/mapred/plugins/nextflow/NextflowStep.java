@@ -176,7 +176,7 @@ public class NextflowStep extends CloudgeneStep {
 				if (killed) {
 					context.error("Pipeline execution canceled.");
 				} else {
-					context.error("Pipeline execution failed. If no errors are detailed above, please try again in a few hours. If problems persist, do not hesitate to contact us at crisprbeasy@cerc-genomic-medicine.ca");
+					context.error("Pipeline execution failed.");
 					Object stdout = step.get("stdout");
 					if (stdout != null && stdout.toString().equalsIgnoreCase("true")) {
 						context.error(output.toString());

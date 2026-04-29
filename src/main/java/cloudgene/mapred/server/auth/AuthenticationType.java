@@ -2,6 +2,6 @@ package cloudgene.mapred.server.auth;
 
 public enum AuthenticationType {
 
-	ACCESS_TOKEN, ALL_TOKENS
+	ACCESS_TOKEN, API_TOKEN, ALL_TOKENS
 	
 }

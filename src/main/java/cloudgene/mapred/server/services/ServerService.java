@@ -67,27 +67,8 @@ public class ServerService {
 			authClients.add(client.getName());
 		}
 		data.putPOJO("oauth", authClients);
-			if (user == null)  {
-			ApplicationRepository repository = application.getSettings().getApplicationRepository();
-			List<cloudgene.mapred.apps.Application> apps = repository.getAllByUser(user, ApplicationRepository.APPS);
-			data.putPOJO("apps", apps);
 
-			List<ObjectNode> appsJson = new Vector<ObjectNode>();
-
-			for (cloudgene.mapred.apps.Application app : apps) {
-				ObjectNode appJson = mapper.createObjectNode();
-				appJson.put("id", app.getId());
-				appJson.put("name", app.getWdlApp().getName());
-				appJson.put("version", app.getWdlApp().getVersion());
-				if (app.getWdlApp().getRelease() == null) {
-					appsJson.add(appJson);
-				}
-			}
-
-			data.putPOJO("apps", appsJson);
-			data.put("loggedIn", false);
-		}
-		else if (user.isAdmin()) {
+		if (user != null) {
 			ObjectNode userJson = mapper.createObjectNode();
 			userJson.put("username", user.getUsername());
 			userJson.put("mail", user.getMail());
@@ -111,9 +92,9 @@ public class ServerService {
 				if (app.getWdlApp().getRelease() == null) {
 					appsJson.add(appJson);
 				} else if (app.getWdlApp().getRelease().equals("deprecated")) {
-										deprecatedAppsJson.add(appJson);
+					deprecatedAppsJson.add(appJson);
 				} else if (app.getWdlApp().getRelease().equals("experimental")) {
-										experimentalAppsJson.add(appJson);
+					experimentalAppsJson.add(appJson);
 				} else {
 					appsJson.add(appJson);
 				}
@@ -125,33 +106,9 @@ public class ServerService {
 			data.put("loggedIn", true);
 
 		} else {
-			ObjectNode userJson = mapper.createObjectNode();
-			userJson.put("username", user.getUsername());
-			userJson.put("mail", user.getMail());
-			userJson.put("admin", user.isAdmin());
-			userJson.put("name", user.getFullName());
-			data.set("user", userJson);
-
-			ApplicationRepository repository = application.getSettings().getApplicationRepository();
-			List<cloudgene.mapred.apps.Application> apps = repository.getAllByUser(user, ApplicationRepository.APPS);
-			data.putPOJO("apps", apps);
-
-			List<ObjectNode> appsJson = new Vector<ObjectNode>();
-
-			for (cloudgene.mapred.apps.Application app : apps) {
-				ObjectNode appJson = mapper.createObjectNode();
-				appJson.put("id", app.getId());
-				appJson.put("name", app.getWdlApp().getName());
-				appJson.put("version", app.getWdlApp().getVersion());
-				if (app.getWdlApp().getRelease() == null) {
-					appsJson.add(appJson);
-				} 
-			}
-
-			data.putPOJO("apps", appsJson);
-			data.put("loggedIn", true);
-		} 
-
+			data.putPOJO("apps", new Vector<ObjectNode>());
+			data.put("loggedIn", false);
+		}
 
 		data.putPOJO("navigation", application.getSettings().getNavigation());
 		if (application.getSettings().isMaintenance()) {

@@ -7,6 +7,7 @@ import cloudgene.mapred.plugins.IPlugin;
 import cloudgene.mapred.plugins.PluginManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import cloudgene.mapred.apps.Application;
 import cloudgene.mapred.apps.ApplicationRepository;
 import cloudgene.mapred.core.User;
@@ -32,8 +33,10 @@ public class ApplicationService {
 	protected cloudgene.mapred.server.Application application;
 
 	public Application getById(String appId) {
+
 		ApplicationRepository repository = application.getSettings().getApplicationRepository();
 		Application app = repository.getById(appId);
+
 		if (app == null) {
 			throw new JsonHttpStatusException(HttpStatus.NOT_FOUND, String.format(APPLICATION_NOT_FOUND, appId));
 		}
@@ -166,11 +169,11 @@ public class ApplicationService {
 
 		try {
 
-			Application app = repository.install(url);
+			List<Application> apps = repository.install(url);
 			application.getSettings().save();
 
-			if (app != null) {
-				return app;
+			if (!apps.isEmpty()) {
+				return apps.get(0);
 			} else {
 				throw new JsonHttpStatusException(HttpStatus.BAD_REQUEST, APPLICATION_NOT_INSTALLED_NO_WORKFLOW);
 			}

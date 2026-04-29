@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 import cloudgene.mapred.util.GlobUtil;
+import cloudgene.mapred.util.Settings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +39,7 @@ public class CloudgeneJob extends AbstractJob {
 	public CloudgeneJob(User user, String id, WdlApp app, Map<String, String> params) {
 		this.app = app;
 		setId(id);
-		log.warn("set_id_cloudgenejob");
 		setUser(user);
-		log.warn("set_user");
 		workingDirectory = app.getPath();
 
 		// init parameters
@@ -55,7 +54,7 @@ public class CloudgeneJob extends AbstractJob {
 
 			inputParams.add(newInput);
 		}
-		log.warn("outputParams_cloudgene_job");
+
 		outputParams = new Vector<CloudgeneParameterOutput>();
 		for (WdlParameterOutput output : app.getWorkflow().getOutputs()) {
 			CloudgeneParameterOutput newOutput = new CloudgeneParameterOutput(output);
@@ -64,10 +63,8 @@ public class CloudgeneJob extends AbstractJob {
 			outputParams.add(newOutput);
 			outputParamsIndex.put(output.getId(), newOutput);
 		}
-		log.warn("initLogOutput");
 
 		initLogOutput();
-		log.warn("finish clougene+job");
 
 	}
 
@@ -133,7 +130,6 @@ public class CloudgeneJob extends AbstractJob {
 				param.setValue(folder);
 				log.info("[Job {}] Set output folder '{}' to '{}'", getId(), param.getName(), param.getValue());
 				break;
-
 			case WEBPAGE:
 				String webpageFolder = workspace.createFolder(param.getName());
 				param.setValue(webpageFolder);
@@ -228,6 +224,13 @@ public class CloudgeneJob extends AbstractJob {
 
 	@Override
 	public boolean cleanUp() {
+
+		Settings settings = getSettings();
+		boolean shouldCleanUp = settings.getWorkspaceCleanup();
+		if (!shouldCleanUp) {
+			log.info("[Job {}] Skipping cleanup.", getId());
+			return false;
+		}
 
 		log.info("[Job {}] Cleaning up...", getId());
 

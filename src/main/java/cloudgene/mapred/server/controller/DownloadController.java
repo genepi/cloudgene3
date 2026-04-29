@@ -41,6 +41,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+
 @Controller
 public class DownloadController {
 
@@ -157,7 +158,7 @@ public class DownloadController {
 	}
 
 	@Get("/api/v2/jobs/{jobId}/chunks/{filename}")
-	@Secured(SecurityRule.IS_ANONYMOUS)
+	@Secured(SecurityRule.IS_AUTHENTICATED)
 	public File downloadChunk(Authentication authentication, String jobId, String filename) {
 
 		User user = authenticationService.getUserByAuthentication(authentication, AuthenticationType.ALL_TOKENS);
@@ -170,7 +171,6 @@ public class DownloadController {
 		return new File(resultFile);
 
 	}
-
 	@Get("/api/v2/jobs/{jobId}/webpage/{hash}/{path:.+}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	public MutableHttpResponse<InputStream> serveWebpageFile(String jobId, String hash, String path)
@@ -277,5 +277,4 @@ public class DownloadController {
 		}
 		return "application/octet-stream";
 	}
-
 }

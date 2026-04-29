@@ -3,6 +3,7 @@ package cloudgene.mapred.cli;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -66,17 +67,17 @@ public class CloneApplications extends BaseTool {
 				}
 				String url = entry.get("url").toString();
 
-				Application application = null;
-
 				System.out.println("Installing application " + url + "...");
 				
 				try {
+					List<Application> applications = repository.install(url);
 
-					application = repository.install(url);
-
-					if (application != null) {
+					if (!applications.isEmpty()) {
 						settings.save();
-						printlnInGreen("[OK] Application installed: \n");
+						for (Application application: applications) {
+							printlnInGreen("[OK] Application '" + application.getWdlApp().getName() + "' installed.");
+						}
+						System.out.println();
 					} else {
 						printlnInRed("[ERROR] No valid Application found in repo '" + url + "'\n");
 						return 1;

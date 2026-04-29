@@ -23,16 +23,9 @@ import io.micronaut.security.event.LoginSuccessfulEvent;
 import io.micronaut.security.token.bearer.AccessRefreshTokenLoginHandler;
 import jakarta.inject.Inject;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import java.util.Collections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 @Controller
 public class LoginController {
-
-	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
 	@Inject
 	protected AccessRefreshTokenLoginHandler loginHandler;
@@ -48,31 +41,19 @@ public class LoginController {
 	@SingleResult
 	public Publisher<MutableHttpResponse<?>> login(@Valid @Body UsernamePasswordCredentials usernamePasswordCredentials,
 			HttpRequest<?> request) {
-    	String source = request.getParameters().get("source");
-    	String username = usernamePasswordCredentials.getUsername();
-    	if ((source == "UI") && (username.equals("Public"))){
-    		log.info(username +"_PUBLIC_"+ source);
-			return Mono.just(HttpResponse
-    					.status(HttpStatus.UNAUTHORIZED) // Set HTTP status code
-    					.body(Collections.singletonMap("message", "This username is always invalid"))); // Include the error message
-    	}
-    	log.info("" + username );
-    	String passworde = usernamePasswordCredentials.getPassword();
+
 		return Flux.from(authenticator.authenticate(request, usernamePasswordCredentials))
 				.map(authenticationResponse -> {
 					if (authenticationResponse.isAuthenticated()
 							&& authenticationResponse.getAuthentication().isPresent()) {
 						Authentication authentication = authenticationResponse.getAuthentication().get();
 						eventPublisher.publishEvent(new LoginSuccessfulEvent(authentication));
-						log.warn("Auth");
 						return loginHandler.loginSuccess(authentication, request);
 					} else {
 						eventPublisher.publishEvent(new LoginFailedEvent(authenticationResponse));
-						log.warn("NotAuth");
 						return loginHandler.loginFailed(authenticationResponse, request);
 					}
-				}).defaultIfEmpty(
-					HttpResponse.status(HttpStatus.UNAUTHORIZED));
+				}).defaultIfEmpty(HttpResponse.status(HttpStatus.UNAUTHORIZED));
 	}
 
 }

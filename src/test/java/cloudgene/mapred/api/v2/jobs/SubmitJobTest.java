@@ -18,13 +18,9 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import jakarta.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @MicronautTest
 public class SubmitJobTest {
-
-	private static final Logger log = LoggerFactory.getLogger(SubmitJobTest.class);
 
 	@Inject
 	TestApplication application;
@@ -32,15 +28,13 @@ public class SubmitJobTest {
 	@Inject
 	CloudgeneClientRestAssured client;
 
-	//@Test
-	//public void testSubmitWithoutLogin() {
-	//	log.warn("--------------------------------------------------------superceeded by anonymous login ------------------------------------");
-	//
-//
-	//	RestAssured.given().multiPart("input", "input-file").when().post("/api/v2/jobs/submit/all-possible-inputs")
-	//			.then().statusCode(401);
+	@Test
+	public void testSubmitWithoutLogin() {
 
-//	}
+		RestAssured.given().multiPart("input", "input-file").when().post("/api/v2/jobs/submit/all-possible-inputs")
+				.then().statusCode(401);
+
+	}
 
 	@Test
 	public void testSubmitBlockedInMaintenance() {

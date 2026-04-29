@@ -6,15 +6,8 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 
-import cloudgene.mapred.plugins.PluginManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @Prototype
 public class CloudgeneClientRestAssured {
-
-
-	private static final Logger log = LoggerFactory.getLogger(CloudgeneClientRestAssured.class);
 
 	public static int POLL_INTERVAL_MS = 500;
 
@@ -22,14 +15,12 @@ public class CloudgeneClientRestAssured {
 
 		Response response = RestAssured.given().formParams("username", username, "password", password).when()
 				.post("/login").thenReturn();
-		log.warn("login_test_restassured");
 		response.then().statusCode(200);
-		log.warn(response.body().jsonPath().getString("access_token"));
 		return new Header("X-Auth-Token", response.body().jsonPath().getString("access_token"));
 	}
 
 	public Header loginAsPublicUser() {
-		return login("publicly", "publicly");
+		return login("public", "public");
 	}
 
 	public void waitForJob(String id, Header accessToken) {

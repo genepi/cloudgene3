@@ -62,10 +62,10 @@
 				<!-- Label -->
 
 				{{#switch(type)}}
-
-				 	<div class="multi-collapse collapse show" id="{{collapseAdd(id)}}">
+					<div class="multi-collapse collapse show" id="{{collapseAdd(id)}}">
 
 					<div class="form-group form-row" style="{{#is(visible, false)}}display:none{{/is}}">
+
 
 					{{#case("label")}}
 						{{../controls_label(.)}}
@@ -143,7 +143,6 @@
 
 			</div>
 			</div>
-
 		{{/default}}
 	{{/switch}}
 {{/each}}

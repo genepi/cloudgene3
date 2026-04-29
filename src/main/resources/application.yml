@@ -10,39 +10,39 @@ micronaut:
       access-logger:
         enabled: true
         logger-name: my-access-logger
-        log-format: common
+        log-format: common    
   security:
-    authentication: bearer
-    intercept-url-map:
-      - pattern: /api/**
-        access:
-          - isAnonymous()
-      - pattern: /static/**
-        access:
-          - isAnonymous()
-      - pattern: /**
-        access:
-          - isAnonymous()
-    token:
-      bearer:
-        header-name: "X-Auth-Token"
-        prefix: ""
-      generator:
-        access-token:
-          expiration: 86400
-      jwt:
-        signatures:
-          secret:
-            generator:
-              secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}"'
-    redirect:
-      enabled: false
-
-    endpoints:
-      login:
+      authentication: bearer
+      intercept-url-map:
+        - pattern : /api/**
+          access:
+            - isAuthenticated()
+        - pattern : /static/**
+          access:
+            - isAnonymous()
+        - pattern : /**
+          access:
+            - isAnonymous()
+      token:
+        bearer:
+          header-name: "X-Auth-Token"
+          prefix: ""
+        generator:
+          access-token:
+            expiration: 86400
+        jwt:
+          signatures:
+            secret:
+              generator:
+                secret: '"${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}"'
+      redirect:
         enabled: false
-      logout:
-        get-allowed: true
+
+      endpoints:
+        login:
+           enabled: false
+        logout:
+           get-allowed: true
 
   router:
     static-resources:
@@ -59,15 +59,6 @@ micronaut:
           - classpath:/pages
   views:
     folder: webapp
-  logger:
-    levels:
-      root: TRACE # Set the root level to TRACE to capture all logs
-      io.micronaut: TRACE # Micronaut framework logs
-      cloudgene.mapred: TRACE # Your application's namespace
-      cloudgene.mapred.server.services: TRACE
-      cloudgene.mapred.server.controller: TRACE
-      cloudgene.mapred.server.auth: TRACE
-      cloudgene.mapred.jobs: TRACE
   serde:
     serialization:
       inclusion: ALWAYS

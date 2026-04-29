@@ -1,11 +1,3 @@
- <script>
-function topFunction() {
-  document.body.scrollTop = 0; // For Safari
-  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-} 
-</script> 
-
-<div id="Top"></div>
 <nav class="navbar navbar-expand-md fixed-top {{foreground}}" style="background: {{background}};">
   <div class="container d-flex justify-content-between">
 
@@ -27,14 +19,14 @@ function topFunction() {
              {{#apps}}
               <a class="dropdown-item" href="#!run/{{id}}">{{name}} <small class="text-muted">{{version}}</small></a>
              {{/apps}}
-             {{#is(user.admin, true)}}
+             {{^is(experimentalApps.length, 0)}}
                 <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header">Experimental</h6>
                 {{#experimentalApps}}
                   <a class="dropdown-item " href="#!run/{{id}}">{{name}}</a>
                 {{/experimentalApps}}
              {{/is}}
-             {{#if(user)}}
+             {{^is(deprecatedApps.length, 0)}}
                 <div class="dropdown-divider"></div>
                 <h6 class="dropdown-header">Deprecated</h6>
                 {{#deprecatedApps}}
@@ -56,14 +48,10 @@ function topFunction() {
 
        {{#navigation}}
         {{#if(link)}}
-	  <li class="nav-item">
-    		{{#if (startsWith link serverUrl)}}
-      		<a class="nav-link" href="{{link}}">{{name}} </a>
-    	  {{else}}
-      	<a class="nav-link" href="{{link}}" target="_blank">{{name}} <img src="https://cerc-genomic-medicine.ca/external-link.svg" alt="External Link" style="width: 20px; height: 20px; margin-left: 5px;"> </a>
-    	{{/if}}
-  </li>        
-{{else}}
+        <li class="nav-item">
+          <a class="nav-link" href="{{link}}"> {{name}}</a>
+        </li>
+        {{else}}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="{{id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{name}}</a>
           <div class="dropdown-menu" aria-labelledby="{{id}}">
@@ -95,15 +83,10 @@ function topFunction() {
          </li>
        {{else}}
          <li class="nav-item">
-
-        <a class="nav-link" href="#!pages/register">
-            <span>Sign up</span>
-        </a>
+           <a class="nav-link" href="#!pages/register">Sign up</a>
          </li>
          <li class="nav-item">
-           <a class="nav-link" href="#!pages/login">
-            <span>Login <i class="fas fa-user"></i> </span>
-            </a>
+           <a class="nav-link" href="#!pages/login">Login</a>
          </li>
        {{/if}}
      </ul>
@@ -125,7 +108,7 @@ function topFunction() {
 <footer class="text-muted" style="border-top: 1px solid #dee2e6;">
   <div class="container">
     <p class="float-right">
-      <small><a href="javascript:void(0)" onclick="topFunction()">Back to top</a></small>
+      <small><a href="#">Back to top</a></small>
     </p>
     <p><small>{{{footer}}}</small></p>
   </div>

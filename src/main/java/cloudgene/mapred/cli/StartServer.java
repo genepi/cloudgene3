@@ -117,7 +117,7 @@ public class StartServer extends Tool {
 			}
 
 			System.out.println();
-			System.out.println("Server is running");
+			System.out.println("Server is running on port " + port);
 			System.out.println();
 			System.out.println("Please press ctrl-c to stop.");
 			while (true) {

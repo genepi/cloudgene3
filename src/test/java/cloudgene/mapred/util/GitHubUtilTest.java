@@ -27,31 +27,31 @@ public class GitHubUtilTest {
 		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples");
 		assertEquals("genepi", repo.getUser());
 		assertEquals("cloudgene-examples", repo.getRepo());
-		assertEquals(null, repo.getDirectory());
+		assertEquals(null, repo.getYaml());
 		assertEquals(null, repo.getTag());
 
 		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples/fastqc");
 		assertEquals("genepi", repo.getUser());
 		assertEquals("cloudgene-examples", repo.getRepo());
-		assertEquals("fastqc", repo.getDirectory());
+		assertEquals("fastqc", repo.getYaml());
 		assertEquals(null, repo.getTag());
 
 		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples@1.1.0");
 		assertEquals("genepi", repo.getUser());
 		assertEquals("cloudgene-examples", repo.getRepo());
-		assertEquals(null, repo.getDirectory());
+		assertEquals(null, repo.getYaml());
 		assertEquals("1.1.0", repo.getTag());
 
-		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples/fastqc@1.1.0");
+		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples/fastqc.yaml@1.1.0");
 		assertEquals("genepi", repo.getUser());
 		assertEquals("cloudgene-examples", repo.getRepo());
-		assertEquals("fastqc", repo.getDirectory());
+		assertEquals("fastqc.yaml", repo.getYaml());
 		assertEquals("1.1.0", repo.getTag());
 
-		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples/ngs/fastqc@1.1.0");
+		repo = GitHubUtil.parseShorthand("genepi/cloudgene-examples/ngs/fastqc.yaml@1.1.0");
 		assertEquals("genepi", repo.getUser());
 		assertEquals("cloudgene-examples", repo.getRepo());
-		assertEquals("ngs/fastqc", repo.getDirectory());
+		assertEquals("ngs/fastqc.yaml", repo.getYaml());
 		assertEquals("1.1.0", repo.getTag());
 	}
 
@@ -73,7 +73,7 @@ public class GitHubUtilTest {
 		repository = new Repository();
 		repository.setUser("genepi");
 		repository.setRepo("imputationserver");
-		repository.setDirectory("subdir/subdir2");
+		repository.setYaml("subdir/subdir2");
 		repository.setTag("1.0.2");
 		assertEquals("https://api.github.com/repos/genepi/imputationserver/zipball/1.0.2",
 				GitHubUtil.buildUrlFromRepository(repository));

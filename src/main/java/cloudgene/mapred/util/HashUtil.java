@@ -9,13 +9,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.reactivestreams.Publisher;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class HashUtil {
-
-	private static Logger log = LoggerFactory.getLogger(HashUtil.class);
 
 	public static String getActivationHash(User user) {
 		return HashUtil.getSha256(System.currentTimeMillis() + "_" + Math.round(2000));
@@ -51,7 +45,6 @@ public class HashUtil {
 	/** Check if a provided candidate password is the same as an existing hash */
 	public static boolean checkPassword(String candidate, String hash) {
 		String hashedCandidate = getMD5(candidate);
-		log.warn(candidate + " == " + hashedCandidate + " == " + hash);
 		return BCrypt.checkpw(hashedCandidate, hash);
 	}
 }

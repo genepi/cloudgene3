@@ -86,6 +86,8 @@ public class Settings {
 
 	private String port = "8082";
 
+	private boolean workspaceCleanup = true;
+
 	private List<String> counters = new Vector<String>();
 
 	public static final String DEFAULT_SECURITY_KEY = "default-key-change-me-immediately";
@@ -426,6 +428,10 @@ public class Settings {
 	public String getPort() {
 		return port;
 	}
+
+	public void setWorkspaceCleanup(boolean workspaceCleanup) { this.workspaceCleanup = workspaceCleanup; }
+
+	public boolean getWorkspaceCleanup() { return workspaceCleanup; }
 
 	public void setShowLogs(boolean showLogs) {
 		this.showLogs = showLogs;

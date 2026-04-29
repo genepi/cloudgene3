@@ -26,7 +26,9 @@ public abstract class BaseTool extends Tool {
 			settings = Settings.load();
 			repository = settings.getApplicationRepository();
 		} catch (Exception e) {
-			printError(e.getMessage());
+			printError("Failed to load settings; exiting application. Reason:");
+			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

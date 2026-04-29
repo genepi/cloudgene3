@@ -21,12 +21,18 @@ public class User {
 
 	private String activationKey = null;
 
+	private String apiToken = "";
+
 	private Date lastLogin;
 
 	private Date lockedUntil;
 
 	private int loginAttempts;
+
+	private Date apiTokenExpiresOn = null;
 	
+	private boolean accessedByApi = false;
+
 	public static final String ROLE_SEPARATOR = ",";
 
 	public static final String ROLE_ADMIN = "admin";
@@ -138,6 +144,13 @@ public class User {
 		this.activationKey = activationKey;
 	}
 
+	public void setApiToken(String apiToken) {
+		this.apiToken = apiToken;
+	}
+
+	public String getApiToken() {
+		return apiToken;
+	}
 
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
@@ -162,6 +175,15 @@ public class User {
 	public int getLoginAttempts() {
 		return loginAttempts;
 	}
+
+	public void setApiTokenExpiresOn(Date apiTokenExpiresOn) {
+		this.apiTokenExpiresOn = apiTokenExpiresOn;
+	}
+
+	public Date getApiTokenExpiresOn() {
+		return apiTokenExpiresOn;
+	}
+
 	public static String checkUsername(String username) {
 
 		if (username == null || username.isEmpty()) {
@@ -181,6 +203,14 @@ public class User {
 
 	}
 	
+	public void setAccessedByApi(boolean accessedByApi) {
+		this.accessedByApi = accessedByApi;
+	}
+	
+	public boolean isAccessedByApi() {
+		return accessedByApi;
+	}
+
 	public static String checkPassword(String password, String confirmPassword) {
 
 		if (password == null || confirmPassword == null || password.isEmpty() || !password.equals(confirmPassword)) {

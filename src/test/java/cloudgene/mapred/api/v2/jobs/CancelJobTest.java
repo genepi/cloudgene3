@@ -27,7 +27,6 @@ public class CancelJobTest {
 		String app = "long-sleep";
 
 		Header accessToken = client.loginAsPublicUser();
-		System.out.println("Access Token: " + accessToken.getName() + " = " + accessToken.getValue());
 
 		// submit job
 		String id = RestAssured.given().header(accessToken).and().multiPart("input", "dummy").when()
@@ -56,13 +55,13 @@ public class CancelJobTest {
 				.body("success", equalTo(false)).and().body("message", equalTo("Job " + id + " not found."));
 
 	}
-// --------------------------- Superceded by annonymous login allowed ---------------------------------
-//	@Test
-//	public void testCancelWithoutLogin() {
-//
-//		String id = "some-random-id";
-//		RestAssured.when().get("/api/v2/jobs/{id}/cancel", id).then().statusCode(401);
-//
-//	}
+
+	@Test
+	public void testCancelWithoutLogin() {
+
+		String id = "some-random-id";
+		RestAssured.when().get("/api/v2/jobs/{id}/cancel", id).then().statusCode(401);
+
+	}
 
 }
