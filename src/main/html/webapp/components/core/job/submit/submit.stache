@@ -59,13 +59,20 @@
 		{{/case}}
 		{{#default()}}
 
-			<div class="form-group form-row" style="{{#is(visible, false)}}display:none{{/is}}">
 				<!-- Label -->
 
 				{{#switch(type)}}
 
+				 	<div class="multi-collapse collapse show" id="{{collapseAdd(id)}}">
+
+					<div class="form-group form-row" style="{{#is(visible, false)}}display:none{{/is}}">
+
 					{{#case("label")}}
 						{{../controls_label(.)}}
+					{{/case}}
+
+					{{#case("collapse_switch")}}
+						{{../controls_collapse_switch(.)}}
 					{{/case}}
 
 					{{#case("list")}}
@@ -134,6 +141,7 @@
 
 				{{/switch}}
 
+			</div>
 			</div>
 
 		{{/default}}

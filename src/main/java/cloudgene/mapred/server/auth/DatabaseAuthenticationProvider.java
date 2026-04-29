@@ -80,7 +80,7 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider<Ht
 						user.setLoginAttempts(0);
 					}
 				}
-
+				log.info(loginPassword +"+" + user.getPassword());
 				if (HashUtil.checkPassword(loginPassword, user.getPassword())) {
 
 					user.setLoginAttempts(0);
@@ -116,13 +116,13 @@ public class DatabaseAuthenticationProvider implements AuthenticationProvider<Ht
 					}
 					dao.update(user);
 
-					log.warn(String.format("Authorization failure: Invalid password for username: %s", loginUsername));
+					log.warn(String.format("Authorization failure: Invalid password for username:2 %s", loginUsername));
 
 					emitter.error(AuthenticationResponse.exception(MESSAGE_LOGIN_FAILED));
 					return;
 				}
 			} else {
-				log.warn(String.format("Authorization failure: unknown username: %s", loginUsername));
+				log.warn(String.format("Authorization failure: unknown username3: %s", loginUsername));
 				emitter.error(AuthenticationResponse.exception(MESSAGE_LOGIN_FAILED));
 				return;
 			}

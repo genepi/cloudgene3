@@ -121,7 +121,7 @@ public class JobController {
 				try {
 
 					blockInMaintenanceMode(user);
-					log.warn("maintenance");
+					
 
 
 					AbstractJob job = jobService.submitJob(app, form, user, userAgent);
@@ -238,6 +238,7 @@ public class JobController {
 
 	private void blockInMaintenanceMode(@Nullable User user) {
 		if (application.getSettings().isMaintenance() && user != null && !user.isAdmin()) {
+			log.warn("maintenance");
 			throw new JsonHttpStatusException(HttpStatus.SERVICE_UNAVAILABLE,
 					"This functionality is currently under maintenance.");
 		}

@@ -21,6 +21,8 @@ public enum WdlParameterInputType {
 
 	INFO("info"),
 
+	COLLAPSE_SWITCH("collapse_switch"),
+
 	AGBCHECKBOX("agbcheckbox"),
 
 	TERMS_CHECKBOX("terms_checkbox"),
@@ -32,6 +34,7 @@ public enum WdlParameterInputType {
 	SEPARATOR("separator"),
 
 	TEXTAREA("textarea");
+
 
 	private String value;
 

@@ -33,6 +33,10 @@ footer p {
   opacity: 0.6 !important;
 }
 
+.collapse-switch-btn.active {
+  pointer-events: none;
+}
+
 .status-xs {
   height: 40px !important;
   padding-top: 0px !important;
@@ -328,4 +332,3 @@ footer p {
 .ansi-bright-white-bg {
   background-color: #fff;
 }
-

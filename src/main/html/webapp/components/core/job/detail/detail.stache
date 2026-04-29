@@ -89,11 +89,20 @@
 		{{/is}}
 		{{#job.canShowLog}}
 		<li class="nav-item">
-			<a class="nav-link {{#is(tab, 'logs')}}active{{/is}}" href="#!jobs/{{job.id}}/logs">
+			<a class="nav-link {{#is(../tab, 'logs')}}active{{/is}}" href="#!jobs/{{../job.id}}/logs">
 				Logs
 			</a>
 		</li>
 		{{/job.canShowLog}}
+		{{#job.hasWebpageOutput}}
+		{{#each(job.webpageOutputParams)}}
+		<li class="nav-item">
+			<a class="nav-link {{#is(scope.root.tab, 'webpage')}}active{{/is}}" href="#!jobs/{{scope.root.job.id}}/webpage">
+				{{description}}
+			</a>
+		</li>
+		{{/each}}
+		{{/job.hasWebpageOutput}}
 		</ul>
 
 	<script type="text/javascript">
@@ -140,6 +149,10 @@
 
 		{{#is(tab, 'logs')}}
 			<div class="tab-pane active log-pane" id="tab-logs"></div>
+		{{/is}}
+
+		{{#is(tab, 'webpage')}}
+			<div class="tab-pane active" id="tab-webpage"></div>
 		{{/is}}
 
 	</div>

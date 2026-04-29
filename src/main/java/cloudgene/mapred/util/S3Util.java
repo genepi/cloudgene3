@@ -15,8 +15,6 @@ import com.amazonaws.services.s3.transfer.Upload;
 
 public class S3Util {
 
-	public record UrlParts(String bucket, String key) {};
-
 	private static AmazonS3 s3;
 
 	private static TransferManager tm;
@@ -36,89 +34,143 @@ public class S3Util {
 		return tm;
 	}
 
-	public static UrlParts getParts(String url) {
-		if (!url.startsWith("s3://")) {
-			throw new IllegalArgumentException("S3 URLs must start with 's3://'; found: '" + url + "'");
-		}
-		url = url.replaceAll("s3://", "");
-
-		String[] rawParts = url.split("/", 2);
-
-		if (rawParts.length != 2) {
-			throw new IllegalArgumentException("S3 URLs must contain at least one forward slash (/) separating the bucket from the key; found: '" + url + "'");
-		}
-
-		return new UrlParts(rawParts[0], rawParts[1]);
-	}
-
 	public static boolean isValidS3Url(String url) {
-		try {
-			getParts(url);
-		} catch (IllegalArgumentException e) {
+		if (url.startsWith("s3://")) {
+			String temp = url.replaceAll("s3://", "");
+			String[] tiles = temp.split("/", 2);
+			if (tiles.length == 2) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
 			return false;
 		}
-		return true;
+
+	}
+
+	public static String getBucket(String url) {
+		if (url.startsWith("s3://")) {
+			String temp = url.replaceAll("s3://", "");
+			String[] tiles = temp.split("/", 2);
+			if (tiles.length == 2) {
+				return tiles[0];
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+
+	public static String getKey(String url) {
+		if (url.startsWith("s3://")) {
+			String temp = url.replaceAll("s3://", "");
+			String[] tiles = temp.split("/", 2);
+			if (tiles.length == 2) {
+				return tiles[1];
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+
 	}
 
 	public static void copyToFile(String url, File file) throws IOException {
-		UrlParts urlParts = getParts(url);
-		copyToFile(urlParts.bucket(), urlParts.key(), file);
+		if (isValidS3Url(url)) {
+			String bucket = getBucket(url);
+			String key = getKey(url);
+			copyToFile(bucket, key, file);
+		} else {
+			throw new IOException("Url '" + url + "' is not a valid S3 bucket.");
+		}
 	}
 
 	public static void copyToFile(String bucket, String key, File file) throws IOException {
+
 		TransferManager tm = getTransferManager();
 		Download download = tm.download(bucket, key, file);
-
 		try {
 			download.waitForCompletion();
 		} catch (InterruptedException e) {
 			throw new IOException(e);
 		}
+
 	}
 
 	public static void copyToS3(File file, String url) throws IOException {
-		UrlParts urlParts = getParts(url);
-		copyToS3(file, urlParts.bucket(), urlParts.key());
+		if (isValidS3Url(url)) {
+			String bucket = getBucket(url);
+			String key = getKey(url);
+			copyToS3(file, bucket, key);
+		} else {
+			throw new IOException("Url '" + url + "' is not a valid S3 bucket.");
+		}
 	}
 
 	public static void copyToS3(String content, String url) throws IOException {
-		UrlParts urlParts = getParts(url);
-		copyToS3(content, urlParts.bucket(), urlParts.key());
+		if (isValidS3Url(url)) {
+			String bucket = getBucket(url);
+			String key = getKey(url);
+			copyToS3(content, bucket, key);
+		} else {
+			throw new IOException("Url '" + url + "' is not a valid S3 bucket.");
+		}
 	}
 
 	public static void copyToS3(File file, String bucket, String key) throws IOException {
+
 		TransferManager tm = getTransferManager();
 		Upload upload = tm.upload(bucket, key, file);
-
 		try {
 			upload.waitForCompletion();
 		} catch (InterruptedException e) {
 			throw new IOException(e);
 		}
+
 	}
 
 	public static void copyToS3(String content, String bucket, String key) throws IOException {
+
 		AmazonS3 s3 = getAmazonS3();
 		s3.putObject(bucket, key, content);
+
 	}
 
 	public static ObjectListing listObjects(String url) throws IOException {
-		UrlParts urlParts = getParts(url);
-		AmazonS3 s3 = getAmazonS3();
-		ObjectListing objects = s3.listObjects(urlParts.bucket(), urlParts.key());
-		return objects;
-	}
 
+		AmazonS3 s3 = getAmazonS3();
+
+		if (isValidS3Url(url)) {
+
+			String bucket = getBucket(url);
+			String key = getKey(url);
+
+			ObjectListing objects = s3.listObjects(bucket, key);
+
+			return objects;
+		} else {
+			throw new IOException("Url '" + url + "' is not a valid S3 bucket.");
+		}
+
+	}
+	
 	public static void deleteFolder(String url) {
-		UrlParts urlParts = getParts(url);
+
+		String bucket = S3Util.getBucket(url);
+		String key = S3Util.getKey(url);
+
 		AmazonS3 s3 = S3Util.getAmazonS3();
 
-		ListObjectsRequest listObjectsRequest = new ListObjectsRequest().withBucketName(urlParts.bucket()).withPrefix(urlParts.key());
+		ListObjectsRequest listObjectsRequest = new ListObjectsRequest().withBucketName(bucket).withPrefix(key);
+
 		ObjectListing objectListing = s3.listObjects(listObjectsRequest);
 
 		while (true) {
 			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-				s3.deleteObject(urlParts.bucket(), objectSummary.getKey());
+				s3.deleteObject(bucket, objectSummary.getKey());
 			}
 			if (objectListing.isTruncated()) {
 				objectListing = s3.listNextBatchOfObjects(objectListing);
@@ -126,5 +178,7 @@ public class S3Util {
 				break;
 			}
 		}
+
 	}
+
 }

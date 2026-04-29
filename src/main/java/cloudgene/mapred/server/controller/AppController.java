@@ -30,6 +30,8 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class AppController {
 
+	private static final Logger log = LoggerFactory.getLogger(AppController.class);
+
 
 	@Inject
 	protected cloudgene.mapred.server.Application application;
@@ -43,11 +45,13 @@ public class AppController {
 	@Get("/api/v2/server/apps/{appId}")
 	@Secured(SecurityRule.IS_ANONYMOUS)
 	public WdlAppResponse getApp(String appId) {
+		log.warn("GETAPP" + appId);
 		Application app = applicationService.getById(appId);
 		applicationService.checkRequirements(app);
 		ApplicationRepository repository = applicationService.getRepository();
 		List<Application> apps = repository.getAllApps(ApplicationRepository.APPS_AND_DATASETS);
 		WdlAppResponse response = WdlAppResponse.build(app.getWdlApp(), apps);
+		log.warn("result ### " + response.getName());
 		response.setS3Workspace(application.getSettings().getExternalWorkspaceType().equalsIgnoreCase("S3")
 				&& application.getSettings().getExternalWorkspaceLocation().isEmpty());
 		String footer = this.application.getTemplate(Template.FOOTER_SUBMIT_JOB);

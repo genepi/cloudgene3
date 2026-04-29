@@ -49,6 +49,7 @@ public class ParameterOutputResponse {
 		response.setTree(paramsOut.getTree());
 		response.setJobId(paramsOut.getJobId());
 		response.setHash(paramsOut.getHash());
+		response.setType(paramsOut.getType());
 
 		List<DownloadResponse> responses = DownloadResponse.build(paramsOut.getFiles());
 		response.setDownloadResponses(responses);

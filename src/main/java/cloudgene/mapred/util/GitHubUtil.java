@@ -24,7 +24,7 @@ public class GitHubUtil {
 
 		private String tag;
 
-		private String yaml = null;
+		private String directory;
 
 		public String getUser() {
 			return user;
@@ -50,12 +50,12 @@ public class GitHubUtil {
 			this.tag = tag;
 		}
 
-		public String getYaml() {
-			return yaml;
+		public String getDirectory() {
+			return directory;
 		}
 
-		public void setYaml(String yaml) {
-			this.yaml = yaml;
+		public void setDirectory(String directory) {
+			this.directory = directory;
 		}
 
 	}
@@ -72,7 +72,7 @@ public class GitHubUtil {
 		repo.setUser(tiles[0]);
 		repo.setRepo(tiles[1]);
 		if (tiles.length > 2) {
-			repo.setYaml(tiles[2]);
+			repo.setDirectory(tiles[2]);
 		}
 
 		if (tiles2.length == 2) {

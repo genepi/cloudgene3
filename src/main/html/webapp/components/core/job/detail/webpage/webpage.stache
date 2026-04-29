@@ -1,0 +1,8 @@
+{{#if webpageParam}}
+<iframe src="/api/v2/jobs/{{job.id}}/webpage/{{webpageParam.hash}}/index.html"
+	style="width: 100%; border: none; min-height: 600px;"
+	onload="resizeIframe(this)">
+</iframe>
+{{else}}
+<i>No webpage output available.</i>
+{{/if}}

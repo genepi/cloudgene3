@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Vector;
 
 import com.esotericsoftware.yamlbeans.YamlException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import cloudgene.mapred.apps.Application;
 import cloudgene.mapred.core.User;
@@ -19,6 +22,7 @@ import io.micronaut.context.annotation.Context;
 
 @Context
 public class TestApplication extends cloudgene.mapred.server.Application {
+	private static Logger log = LoggerFactory.getLogger(TestApplication.class);
 
 	static {
 		try {
@@ -199,11 +203,12 @@ public class TestApplication extends cloudgene.mapred.server.Application {
 			dao.insert(user);
 		}
 
-		User userPublic = dao.findByUsername("public");
+		User userPublic = dao.findByUsername("publicly");
 		if (userPublic == null) {
+			log.info("####################### USER PUBLIC NULL ########################");
 			userPublic = new User();
-			userPublic.setUsername("public");
-			password = HashUtil.hashPassword("public");
+			userPublic.setUsername("publicly");
+			password = HashUtil.hashPassword("publicly");
 			userPublic.setPassword(password);
 			userPublic.setRoles(new String[] { "public" });
 			dao.insert(userPublic);

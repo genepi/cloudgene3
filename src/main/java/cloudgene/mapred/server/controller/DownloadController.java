@@ -1,6 +1,7 @@
 package cloudgene.mapred.server.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -21,8 +22,11 @@ import cloudgene.mapred.server.auth.AuthenticationType;
 import cloudgene.mapred.server.exceptions.JsonHttpStatusException;
 import cloudgene.mapred.server.services.DownloadService;
 import cloudgene.mapred.server.services.JobService;
+import cloudgene.mapred.wdl.WdlParameterOutputType;
 import genepi.io.FileUtil;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
@@ -30,6 +34,12 @@ import io.micronaut.security.annotation.Secured;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRule;
 import jakarta.inject.Inject;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class DownloadController {
@@ -159,6 +169,113 @@ public class DownloadController {
 
 		return new File(resultFile);
 
+	}
+
+	@Get("/api/v2/jobs/{jobId}/webpage/{hash}/{path:.+}")
+	@Secured(SecurityRule.IS_ANONYMOUS)
+	public MutableHttpResponse<InputStream> serveWebpageFile(String jobId, String hash, String path)
+			throws IOException {
+
+		ParameterDao parameterDao = new ParameterDao(application.getDatabase());
+		CloudgeneParameterOutput param = parameterDao.findByHash(hash);
+
+		if (param == null) {
+			throw new JsonHttpStatusException(HttpStatus.NOT_FOUND, "Webpage output not found.");
+		}
+
+		if (param.getType() != WdlParameterOutputType.WEBPAGE) {
+			throw new JsonHttpStatusException(HttpStatus.FORBIDDEN, "Output is not a webpage type.");
+		}
+
+		if (!jobId.equals(param.getJobId())) {
+			throw new JsonHttpStatusException(HttpStatus.FORBIDDEN, "Access denied.");
+		}
+
+		// Resolve the file path and prevent directory traversal
+		String outputFolder = FileUtil.path(application.getSettings().getLocalWorkspace(), jobId, param.getName());
+		Path basePath = Paths.get(outputFolder).normalize();
+		Path filePath = basePath.resolve(path).normalize();
+
+		if (!filePath.startsWith(basePath)) {
+			throw new JsonHttpStatusException(HttpStatus.FORBIDDEN, "Access denied.");
+		}
+
+		File file = filePath.toFile();
+		if (!file.exists() || !file.isFile()) {
+			// If index.html not ready yet, serve a placeholder page
+			if (path.equals("index.html")) {
+				String placeholder = "<!DOCTYPE html><html><head><meta charset=\"utf-8\">"
+						+ "<meta http-equiv=\"refresh\" content=\"10\">"
+						+ "<style>body{font-family:sans-serif;display:flex;justify-content:center;"
+						+ "align-items:center;min-height:60vh;color:#555;}"
+						+ ".container{text-align:center;}"
+						+ ".spinner{border:4px solid #eee;border-top:4px solid #007bff;"
+						+ "border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;"
+						+ "margin:0 auto 20px;}"
+						+ "@keyframes spin{to{transform:rotate(360deg);}}"
+						+ "</style></head><body><div class=\"container\">"
+						+ "<div class=\"spinner\"></div>"
+						+ "<h3>Webpage output is not yet available</h3>"
+						+ "<p>The job is still running. This page will refresh automatically.</p>"
+						+ "</div></body></html>";
+				byte[] bytes = placeholder.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+				return HttpResponse.<InputStream>ok(new java.io.ByteArrayInputStream(bytes))
+						.contentType(MediaType.of("text/html"))
+						.contentLength(bytes.length);
+			}
+			throw new JsonHttpStatusException(HttpStatus.NOT_FOUND, "File not found: " + path);
+		}
+
+		String contentType = getContentType(filePath);
+
+		log.info("Job: Serving webpage file '{}' for job {}", path, jobId);
+		return HttpResponse.<InputStream>ok(new FileInputStream(file))
+				.contentType(MediaType.of(contentType))
+				.contentLength(file.length());
+	}
+
+	private static final Map<String, String> MIME_TYPES = new HashMap<>();
+	static {
+		MIME_TYPES.put("html", "text/html");
+		MIME_TYPES.put("htm", "text/html");
+		MIME_TYPES.put("css", "text/css");
+		MIME_TYPES.put("js", "application/javascript");
+		MIME_TYPES.put("json", "application/json");
+		MIME_TYPES.put("png", "image/png");
+		MIME_TYPES.put("jpg", "image/jpeg");
+		MIME_TYPES.put("jpeg", "image/jpeg");
+		MIME_TYPES.put("gif", "image/gif");
+		MIME_TYPES.put("svg", "image/svg+xml");
+		MIME_TYPES.put("ico", "image/x-icon");
+		MIME_TYPES.put("woff", "font/woff");
+		MIME_TYPES.put("woff2", "font/woff2");
+		MIME_TYPES.put("ttf", "font/ttf");
+		MIME_TYPES.put("csv", "text/csv");
+		MIME_TYPES.put("tsv", "text/tab-separated-values");
+		MIME_TYPES.put("txt", "text/plain");
+		MIME_TYPES.put("xml", "application/xml");
+		MIME_TYPES.put("pdf", "application/pdf");
+	}
+
+	private String getContentType(Path filePath) {
+		String filename = filePath.getFileName().toString();
+		int dotIndex = filename.lastIndexOf('.');
+		if (dotIndex > 0) {
+			String ext = filename.substring(dotIndex + 1).toLowerCase();
+			String mime = MIME_TYPES.get(ext);
+			if (mime != null) {
+				return mime;
+			}
+		}
+		try {
+			String probed = Files.probeContentType(filePath);
+			if (probed != null) {
+				return probed;
+			}
+		} catch (IOException e) {
+			// fall through
+		}
+		return "application/octet-stream";
 	}
 
 }

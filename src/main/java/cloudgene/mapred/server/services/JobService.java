@@ -72,10 +72,10 @@ public class JobService {
 		}
 
 		AbstractJob job = getById(id);
-		log.warn("" + (!job.getUser().getUsername().equals("public")));
+		log.warn("" + (!job.getUser().getUsername().equals("Public")));
 
 		// admin has access to all jobs. Other users only to their own jobs.
-		if ((!user.isAdmin() && job.getUser() != null && job.getUser().getId() != user.getId()) && !job.getUser().getUsername().equals("public") ) {
+		if ((!user.isAdmin() && job.getUser() != null && job.getUser().getId() != user.getId()) && !job.getUser().getUsername().equals("Public") ) {
 			throw new JsonHttpStatusException(HttpStatus.FORBIDDEN, "Access denied.");
 		}
 
@@ -96,16 +96,20 @@ public class JobService {
 		ApplicationRepository repository = settings.getApplicationRepository();
 		cloudgene.mapred.apps.Application application ;
 		if (user != null){
+			log.warn("not usernull");
 			application = repository.getByIdAndUser(appId, user);
 		} else {
+			log.warn("user null");
 			application = repository.getById(appId);			
 		}
 
 		if (application == null) {
+			log.warn("appnull");
 			throw new JsonHttpStatusException(HttpStatus.NOT_FOUND, "Application '" + appId + "' not found.");
 		}
 		WdlApp app = application.getWdlApp();
 		if (app.getWorkflow() == null) {
+			log.warn("workflownull");
 			throw new JsonHttpStatusException(HttpStatus.NOT_FOUND,
 					"Application '" + appId + "' has no workflow section.");
 		}

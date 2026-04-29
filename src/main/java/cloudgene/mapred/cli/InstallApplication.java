@@ -1,10 +1,7 @@
 package cloudgene.mapred.cli;
 
 import cloudgene.mapred.apps.Application;
-import cloudgene.mapred.plugins.PluginManager;
 import cloudgene.mapred.util.GitHubException;
-
-import java.util.List;
 
 public class InstallApplication extends BaseTool {
 
@@ -32,18 +29,13 @@ public class InstallApplication extends BaseTool {
 
 		try {
 
-			PluginManager pluginManager = PluginManager.getInstance();
-			pluginManager.initPlugins(settings);
-
 			System.out.println("Installing application " + url + "...");
 
-			List<Application> applications = repository.install(url);
+			Application application = repository.install(url);
 
-			if (!applications.isEmpty()) {
+			if (application != null) {
 				settings.save();
-				for (Application application: applications) {
-					printlnInGreen("[OK] Application '" + application.getWdlApp().getName() + "' installed.");
-				}
+				printlnInGreen("[OK] Application '" + application.getWdlApp().getName() + "' installed.");
 				System.out.println();
 				return 0;
 			} else {

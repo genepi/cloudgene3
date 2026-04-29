@@ -21,6 +21,7 @@ import templateFolderPattern from "./controls/folder-pattern.stache";
 import templateTermsCheckbox from "./controls/terms-checkbox.stache";
 import templateText from "./controls/text.stache";
 import templateTextarea from "./controls/textarea.stache";
+import templateCollapseSwitch from "./controls/collapse_switch.stache";
 
 export default Control.extend({
   init: function (element, options) {
@@ -47,10 +48,29 @@ export default Control.extend({
             controls_terms_checkbox: templateTermsCheckbox,
             controls_textarea: templateTextarea,
             controls_select_binded: templateSelectBinded,
+            controls_collapse_switch: templateCollapseSwitch,
           }),
         );
         $(element).fadeIn();
         $("select").change();
+        $('.btn-group[data-toggle="buttons"]').button();
+        // Initialize collapse switches to default state
+        $(".collapse-switch-btn.active").each(function () {
+          var $button = $(this);
+          var targetId = $button.data("target");
+          var collapseGroup = $button.data("collapse-group");
+
+          // Hide all OTHER collapses in this group (not the current one)
+          $('[data-collapse-group="' + collapseGroup + '"]')
+            .not($button)
+            .each(function () {
+              var otherTarget = $(this).data("target");
+              $(otherTarget).collapse("hide");
+            });
+
+          // Show the active button's target
+          $(targetId).collapse("show");
+        });
       },
       function (response) {
         new ErrorPage(element, response);
@@ -58,14 +78,54 @@ export default Control.extend({
     );
   },
 
+  ".collapse-switch-btn click": function (button) {
+    var $button = $(button);
+
+    var inputId = $button.data("input-id");
+    var value = $button.data("value");
+    var collapseGroup = $button.data("collapse-group");
+    var targetId = $button.data("target");
+
+    // Update the hidden input
+    $("#" + inputId).val(value);
+
+    // Update active state and aria-expanded on buttons in this group
+    $button
+      .siblings(".collapse-switch-btn")
+      .removeClass("active")
+      .attr("aria-expanded", "false");
+    $button.addClass("active").attr("aria-expanded", "true");
+    // Close all other collapses in this group
+    $('[data-collapse-group="' + collapseGroup + '"]')
+      .not($button)
+      .each(function () {
+        var otherTarget = $(this).data("target");
+        $(otherTarget).collapse("hide");
+      });
+
+    // Open the target collapse
+    $(targetId).collapse("show");
+  },
+
   "#parameters submit": function (form, event) {
     event.preventDefault();
 
-    // check required parameters.
-    if (form.checkValidity() === false) {
-      form.classList.add("was-validated");
-      return false;
-    }
+  // Temporarily strip `required` from inputs inside collapsed sections
+  // so they don't block validation, but still get submitted.
+  var $hiddenRequired = $(form)
+    .find(".multi-collapse:not(.show)")
+    .find("[required]");
+  $hiddenRequired.removeAttr("required");
+
+  var isValid = form.checkValidity();
+
+  // Restore required immediately after checking
+  $hiddenRequired.attr("required", "");
+
+  if (!isValid) {
+    form.classList.add("was-validated");
+    return false;
+  }
 
     //show upload dialog
     var uploadDialog = bootbox.dialog({

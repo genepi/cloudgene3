@@ -1,7 +1,9 @@
 package cloudgene.mapred.wdl;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum WdlParameterOutputType {
-	LOCAL_FOLDER("local_folder"), LOCAL_FILE("local_file");
+	LOCAL_FOLDER("local_folder"), LOCAL_FILE("local_file"), WEBPAGE("webpage");
 
 	private String value;
 
@@ -9,6 +11,7 @@ public enum WdlParameterOutputType {
 		this.value = value;
 	}
 
+	@JsonValue
 	public String getValue() {
 		return value;
 	}

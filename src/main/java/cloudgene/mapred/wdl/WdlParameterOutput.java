@@ -91,11 +91,15 @@ public class WdlParameterOutput implements WdlParameter {
 	}
 
 	public boolean isFileOrFolder() {
-		return (typeEnum == WdlParameterOutputType.LOCAL_FILE || typeEnum == WdlParameterOutputType.LOCAL_FOLDER);
+		return (typeEnum == WdlParameterOutputType.LOCAL_FILE || typeEnum == WdlParameterOutputType.LOCAL_FOLDER || typeEnum == WdlParameterOutputType.WEBPAGE);
 	}
 
 	public boolean isFolder() {
-		return (typeEnum == WdlParameterOutputType.LOCAL_FOLDER);
+		return (typeEnum == WdlParameterOutputType.LOCAL_FOLDER || typeEnum == WdlParameterOutputType.WEBPAGE);
+	}
+
+	public boolean isWebpage() {
+		return (typeEnum == WdlParameterOutputType.WEBPAGE);
 	}
 
 	public List<String> getIncludes() {

@@ -16,9 +16,13 @@ import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @MicronautTest
 public class DeleteJobTest {
+
+	private static final Logger log = LoggerFactory.getLogger(DeleteJobTest.class);
 
 	@Inject
 	TestApplication application;
@@ -35,6 +39,7 @@ public class DeleteJobTest {
 		String id = RestAssured.given().header(accessToken).and().multiPart("inputtext", "lukas_text").when()
 				.post("/api/v2/jobs/submit/write-text-to-file").then().statusCode(200).and().extract().jsonPath()
 				.getString("id");
+		log.info("testIfDeleteJobCleansUpWorkspace submit " + id);
 
 		// wait until submitted job is complete
 		client.waitForJob(id, accessToken);
@@ -45,6 +50,7 @@ public class DeleteJobTest {
 		// get details
 		Response response = RestAssured.given().header(accessToken).when().get("/api/v2/jobs/" + id).thenReturn();
 		response.then().statusCode(200).and().body("state", equalTo(AbstractJob.STATE_SUCCESS));
+		log.info("testIfDeleteJobCleansUpWorkspace response");
 
 		// get file details
 		String name = response.jsonPath().getString("outputParams[0].files[0].name");
@@ -55,20 +61,27 @@ public class DeleteJobTest {
 				.statusCode(200).and().body(equalTo("lukas_text"));
 
 		// delete job with wrong permissions
-		RestAssured.when().delete("/api/v2/jobs/" + id).then().statusCode(401);
+		log.info("testIfDeleteJobCleansUpWorkspace delete wrong permission");
+		RestAssured.when().delete("/api/v2/jobs/" + id).then().statusCode(403); // Auto login mod
+
 
 		// delete job with wrong id
+		log.info("testIfDeleteJobCleansUpWorkspace delete wrong id");
 		RestAssured.given().header(accessToken).when().delete("/api/v2/jobs/blabla").then().statusCode(404);
 
+
 		// delete job
+		log.info("testIfDeleteJobCleansUpWorkspace delete job");
 		RestAssured.given().header(accessToken).when().delete("/api/v2/jobs/" + id).then().statusCode(200);
 
 		// check if all data are deleted
+		log.info("testIfDeleteJobCleansUpWorkspace delete test");
 		assertFalse(new File(FileUtil.path(application.getSettings().getLocalWorkspace(), id)).exists());
 
 		// TODO: same on hdfs
 
 		// check if job was deleted from database (return 404)
+		log.info("testIfDeleteJobCleansUpWorkspace delete database");
 		RestAssured.given().header(accessToken).when().get("/api/v2/jobs/" + id).then().statusCode(404);
 	}
 

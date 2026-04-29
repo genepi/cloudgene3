@@ -1,4 +1,5 @@
 package cloudgene.mapred.api.v2.admin;
+import cloudgene.mapred.util.CloudgeneClientRestAssured;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;

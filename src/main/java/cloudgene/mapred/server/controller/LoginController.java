@@ -50,24 +50,29 @@ public class LoginController {
 			HttpRequest<?> request) {
     	String source = request.getParameters().get("source");
     	String username = usernamePasswordCredentials.getUsername();
-    	if ((source == "UI") && (username == "Public")){
+    	if ((source == "UI") && (username.equals("Public"))){
+    		log.info(username +"_PUBLIC_"+ source);
 			return Mono.just(HttpResponse
     					.status(HttpStatus.UNAUTHORIZED) // Set HTTP status code
     					.body(Collections.singletonMap("message", "This username is always invalid"))); // Include the error message
     	}
     	log.info("" + username );
+    	String passworde = usernamePasswordCredentials.getPassword();
 		return Flux.from(authenticator.authenticate(request, usernamePasswordCredentials))
 				.map(authenticationResponse -> {
 					if (authenticationResponse.isAuthenticated()
 							&& authenticationResponse.getAuthentication().isPresent()) {
 						Authentication authentication = authenticationResponse.getAuthentication().get();
 						eventPublisher.publishEvent(new LoginSuccessfulEvent(authentication));
+						log.warn("Auth");
 						return loginHandler.loginSuccess(authentication, request);
 					} else {
 						eventPublisher.publishEvent(new LoginFailedEvent(authenticationResponse));
+						log.warn("NotAuth");
 						return loginHandler.loginFailed(authenticationResponse, request);
 					}
-				}).defaultIfEmpty(HttpResponse.status(HttpStatus.UNAUTHORIZED));
+				}).defaultIfEmpty(
+					HttpResponse.status(HttpStatus.UNAUTHORIZED));
 	}
 
 }
