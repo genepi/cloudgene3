@@ -1,4 +1,5 @@
 {{#job.outputParams}}
+  {{^is(type, 'WEBPAGE')}}
 
     <div class="list-group">
 
@@ -22,7 +23,7 @@
       </div>
     </div>
     <br>
-
+{{/is}}
 {{else}}
   <i>This folder is empty.</i>
 {{/job.outputParams}}

@@ -233,7 +233,8 @@ public class WdlParameterInputResponse {
 
 		if (input.getTypeAsEnum() == WdlParameterInputType.LIST
 				|| input.getTypeAsEnum() == WdlParameterInputType.CHECKBOX
-				|| input.getTypeAsEnum() == WdlParameterInputType.RADIO) {
+				|| input.getTypeAsEnum() == WdlParameterInputType.RADIO
+				|| input.getTypeAsEnum() == WdlParameterInputType.COLLAPSE_SWITCH) {
 			Map<String, String> values = input.getValues();
 			List<String> keys = new ArrayList<String>(values.keySet());
 			Collections.sort(keys);

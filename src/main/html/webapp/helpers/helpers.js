@@ -164,3 +164,33 @@ stache.registerHelper('div', function(a, b, options) {
     return 0;
   }
 });
+
+stache.registerHelper("replace", function (str, search, replacement) {
+  return str.replace(new RegExp(search, "g"), replacement);
+});
+
+stache.registerHelper("HashtagCollapse", function (value) {
+  if (value == "") {
+    return "";
+  } else {
+    return value
+      .split(" ")
+      .map(function (word) {
+        return "#" + word + "-collapse";
+      })
+      .join(", ");
+  }
+});
+
+stache.registerHelper("collapseAdd", function (value) {
+  if (value == "") {
+    return "";
+  } else {
+    return value
+      .split(" ")
+      .map(function (word) {
+        return word + "-collapse";
+      })
+      .join(" ");
+  }
+});

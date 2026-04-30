@@ -130,6 +130,11 @@ public class CloudgeneJob extends AbstractJob {
 				param.setValue(folder);
 				log.info("[Job {}] Set output folder '{}' to '{}'", getId(), param.getName(), param.getValue());
 				break;
+			case WEBPAGE:
+				String webpageFolder = workspace.createFolder(param.getName());
+				param.setValue(webpageFolder);
+				log.info("[Job {}] Set webpage output folder '{}' to '{}'", getId(), param.getName(), param.getValue());
+				break;
 			}
 
 		}

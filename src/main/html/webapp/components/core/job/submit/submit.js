@@ -21,7 +21,7 @@ import templateFolderPattern from './controls/folder-pattern.stache';
 import templateTermsCheckbox from './controls/terms-checkbox.stache';
 import templateText from './controls/text.stache';
 import templateTextarea from './controls/textarea.stache';
-
+import templateCollapseSwitch from './controls/collapse_switch.stache';
 
 export default Control.extend({
 
@@ -99,10 +99,12 @@ export default Control.extend({
       $(form).ajaxSubmit({
         dataType: 'json',
 
-        headers: {
-          "X-CSRF-Token": csrfToken,
-          "X-Auth-Token": accessToken,
-        },
+        headers: localStorage.getItem("cloudgene")
+          ? {
+              "X-CSRF-Token": data.csrf,
+              "X-Auth-Token": data.token,
+            }
+          : null,
 
         success: function(answer) {
 

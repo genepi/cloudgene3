@@ -1,3 +1,4 @@
+
 <div class="page-header">
 	<div class="py-1 container">
 		<!--
@@ -13,9 +14,17 @@
   		</ol>
 		</nav>
 		-->
+		{{#is(job.username,'public')}}
+
+				<div class="job-header d-flex justify-content-start align-items-center">
+			<div>
+				<h4> &#9888; Jobs submitted anonymously are only reachable through the direct website link. &#9888; </h4>
+			</div>
+			</div>
+									{{/is}}
+
 		<div class="job-header d-flex justify-content-start align-items-center">
 			<span class="status badge badge-{{job.stateAsClass}}"><i class="{{job.stateAsImage}}"></i></span>
-
 			<div>
 				<h2>{{job.longName}}</h2>
 				<small class="text-muted"><i class="fas fa-clock"></i> {{prettyDate(job.submittedOn}}&nbsp;&nbsp;<i class="fas fa-hourglass"></i> {{prettyTime(job.executionTime)}}&nbsp;&nbsp;<i class="fas fa-user"></i> {{job.username}}&nbsp;&nbsp;<i class="fas fa-tag"></i> {{job.application}}</small>
@@ -80,11 +89,20 @@
 		{{/is}}
 		{{#job.canShowLog}}
 		<li class="nav-item">
-			<a class="nav-link {{#is(tab, 'logs')}}active{{/is}}" href="#!jobs/{{job.id}}/logs">
+			<a class="nav-link {{#is(../tab, 'logs')}}active{{/is}}" href="#!jobs/{{../job.id}}/logs">
 				Logs
 			</a>
 		</li>
 		{{/job.canShowLog}}
+		{{#job.hasWebpageOutput}}
+		{{#each(job.webpageOutputParams)}}
+		<li class="nav-item">
+			<a class="nav-link {{#is(scope.root.tab, 'webpage')}}active{{/is}}" href="#!jobs/{{scope.root.job.id}}/webpage">
+				{{description}}
+			</a>
+		</li>
+		{{/each}}
+		{{/job.hasWebpageOutput}}
 		</ul>
 
 	<script type="text/javascript">
@@ -131,6 +149,10 @@
 
 		{{#is(tab, 'logs')}}
 			<div class="tab-pane active log-pane" id="tab-logs"></div>
+		{{/is}}
+
+		{{#is(tab, 'webpage')}}
+			<div class="tab-pane active" id="tab-webpage"></div>
 		{{/is}}
 
 	</div>

@@ -1,0 +1,40 @@
+<div class="col-sm-2">
+  <label for="{{id}}" class="col-form-label">{{{description}}}</label>
+  {{#if(help)}}
+    &nbsp;<a href="{{help}}" target="_blank"><i class="far fa-question-circle"></i></a>
+  {{/if}}
+</div>
+
+<div class="col-sm-3">
+  <div class="btn-group btn-group-toggle mb-3" data-collapse-group="{{id}}">
+    {{#values}}
+      <button
+        type="button"
+        class='btn btn-secondary collapse-switch-btn {{#is(key, ../value)}}active{{/is}}'
+        data-toggle="button"
+        data-target="{{HashtagCollapse(value)}}"
+        data-value="{{key}}"
+        data-input-id="{{../id}}"
+        data-collapse-group="{{../id}}"
+        aria-expanded="false"
+        aria-controls="{{collapseAdd(value)}}" >
+        {{replace(key, '_', ' ')}}
+      </button>
+    {{/values}}
+  </div>
+
+  <input
+    type="hidden"
+    name="{{id}}"
+    id="{{id}}"
+    value="{{value}}"
+    {{#is(required, true)}}required{{/is}}
+  >
+
+  {{#if(details)}}
+    <small class="form-text text-muted">{{details}}</small>
+  {{/if}}
+  <div class="invalid-feedback">
+    This parameter is required.
+  </div>
+</div>
