@@ -4,6 +4,7 @@ import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.database.util.IRowMapper;
 import cloudgene.mapred.database.util.JdbcDataAccessObject;
 import cloudgene.mapred.jobs.AbstractJob;
+import cloudgene.mapred.jobs.JobValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,6 @@ public class JobValueDao extends JdbcDataAccessObject {
 		sql.append("values (?,?,?)");
 
 		try {
-
 			Object[] params = new Object[3];
 			params[0] = name;
 			params[1] = job.getId();
@@ -35,7 +35,6 @@ public class JobValueDao extends JdbcDataAccessObject {
 			update(sql.toString(), params);
 
 			log.debug("insert value successful.");
-
 		} catch (SQLException e) {
 			log.error("insert value failed.", e);
 			return false;
@@ -46,21 +45,17 @@ public class JobValueDao extends JdbcDataAccessObject {
 
 	@SuppressWarnings("unchecked")
 	public List<JobValue> getAll() {
-
 		StringBuilder sql = new StringBuilder();
 		sql.append("select name, `value`, count(*) as n ");
 		sql.append("from job_values ");
 		sql.append("group by name, `value` ");
 		sql.append("order by name, `value` ");
 
-		List<JobValue> result = new Vector<JobValue>();
+		List<JobValue> result = new Vector<>();
 
 		try {
-
 			result = query(sql.toString(), new ValueMapper());
-
-			log.debug("find counters successful. results: " + result);
-
+			log.debug("find counters successful. results: {}", result);
 			return result;
 		} catch (SQLException e) {
 			log.error("find all counters failed", e);
@@ -69,49 +64,13 @@ public class JobValueDao extends JdbcDataAccessObject {
 		return result;
 	}
 
-	public class JobValue {
-
-		private String name;
-		private String value;
-		private int count;
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setCount(int count) {
-			this.count = count;
-		}
-
-		public int getCount() {
-			return count;
-		}
-
-	}
-
-	class ValueMapper implements IRowMapper {
-
+	static class ValueMapper implements IRowMapper {
 		@Override
 		public Object mapRow(ResultSet rs, int row) throws SQLException {
-			JobValue jobValue = new JobValue();
-			jobValue.setName(rs.getString("name"));
-			jobValue.setValue(rs.getString("value"));
-			jobValue.setCount(rs.getInt("n"));
-			return jobValue;
+			return new JobValue(
+					rs.getString("name"),
+					rs.getString("value"),
+					rs.getInt("n"));
 		}
-
 	}
-
 }
