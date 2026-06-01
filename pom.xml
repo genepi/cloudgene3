@@ -37,16 +37,15 @@
 	</developers>
 
 	<properties>
-		<hadoop.version>2.6.0-cdh5.16.1</hadoop.version>
 		<node.version>v10.4.0</node.version>
 		<npm.version>6.4.1</npm.version>
 		<webapp>${basedir}/src/main/html/webapp</webapp>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<packaging>jar</packaging>
-		<jdk.version>17</jdk.version>
-		<release.version>17</release.version>
-		<java.version>17</java.version>
+		<jdk.version>21</jdk.version>
+		<release.version>21</release.version>
+		<java.version>21</java.version>
 		<micronaut.version>4.7.6</micronaut.version>
 		<micronaut.runtime>netty</micronaut.runtime>
 		<exec.mainClass>cloudgene.mapred.CommandLineInterface</exec.mainClass>
