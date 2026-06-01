@@ -6,7 +6,7 @@ import java.util.Map;
 
 import cloudgene.mapred.util.Configuration;
 import genepi.io.FileUtil;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import ch.qos.logback.classic.util.ContextInitializer;
 import cloudgene.mapred.server.Application;
@@ -17,13 +17,11 @@ import io.micronaut.runtime.Micronaut;
 
 public class StartServer extends Tool {
 
-	public static final String CONFIG_DIRECTORY = Configuration.getConfigDirectory();
+	private static final String CONFIG_DIRECTORY = Configuration.getConfigDirectory();
+	private static final String SECURITY_FILENAME = FileUtil.path(CONFIG_DIRECTORY, "security.yaml");
+	private static final String SERVER_FILENAME = FileUtil.path(CONFIG_DIRECTORY, "server.yaml");
 
-	public static final String SECURITY_FILENAME = FileUtil.path(CONFIG_DIRECTORY, "security.yaml");
-
-	public static final String SERVER_FILENAME = FileUtil.path(CONFIG_DIRECTORY, "server.yaml");
-
-	private String[] args;
+	private final String[] args;
 
 	public StartServer(String[] args) {
 		super(args);
@@ -36,8 +34,10 @@ public class StartServer extends Tool {
 	}
 
 	@Override
-	public int run() {
+	public void init() {}
 
+	@Override
+	public int run() {
 		if (isFlagSet("verbose")) {
 			System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "logback-verbose.xml");
 		} else if (new File("webapp").exists()) {
@@ -46,9 +46,7 @@ public class StartServer extends Tool {
 			System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, "logback-dev.xml");
 		}
 
-
 		try {
-
 			// load setting.yaml. contains applications, server configuration, ...
 			Application.settings = Settings.load();
 
@@ -62,7 +60,7 @@ public class StartServer extends Tool {
 
 			String secretKey = Application.settings.getSecretKey();
 			if (secretKey == null || secretKey.isEmpty() || secretKey.equals(Settings.DEFAULT_SECURITY_KEY)) {
-				secretKey = RandomStringUtils.randomAlphabetic(64);
+				secretKey = RandomStringUtils.secure().nextAlphabetic(64);
 				Application.settings.setSecretKey(secretKey);
 				Application.settings.save();
 			}
@@ -91,35 +89,29 @@ public class StartServer extends Tool {
 				System.setProperty("micronaut.config.files", customConfigurationFiles);
 			}
 
-
 			String baseUrl = Application.settings.getBaseUrl();
 			if (!baseUrl.trim().isEmpty()) {
-				if (!baseUrl.startsWith("/") || baseUrl.endsWith("/")){
+				if (!baseUrl.startsWith("/") || baseUrl.endsWith("/")) {
 					System.out.println("Error: baseUrl has wrong format. Example: \"/path\" or \"/path/subpath\".");
 					System.exit(1);
 				}
 				properties.put("micronaut.server.context-path", baseUrl);
-			} else {
-
 			}
 
 			if (new File("webapp").exists()) {
-
 				Micronaut.build(args).mainClass(Application.class).properties(properties).start();
-
 			} else {
-
 				System.out.println("Start in DEVELOPMENT mode");
 
 				Micronaut.build(args).mainClass(Application.class).properties(properties)
 						.defaultEnvironments(Environment.DEVELOPMENT).start();
-
 			}
 
 			System.out.println();
 			System.out.println("Server is running on port " + port);
 			System.out.println();
 			System.out.println("Please press ctrl-c to stop.");
+
 			while (true) {
 				Thread.sleep(5000000);
 			}
@@ -128,10 +120,4 @@ public class StartServer extends Tool {
 			return 1;
 		}
 	}
-
-	@Override
-	public void init() {
-
-	}
-
 }
