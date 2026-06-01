@@ -1,4 +1,6 @@
-package cloudgene.mapred.database.util;
+package cloudgene.mapred.database.updates;
+
+import cloudgene.mapred.database.util.Database;
 
 public interface IUpdateListener {
 

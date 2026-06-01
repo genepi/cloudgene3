@@ -22,7 +22,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.util.DatabaseUpdater;
+import cloudgene.mapred.database.updates.DatabaseUpdater;
 import cloudgene.mapred.util.GitHubException;
 import cloudgene.mapred.util.GitHubUtil;
 import cloudgene.mapred.util.GitHubUtil.Repository;

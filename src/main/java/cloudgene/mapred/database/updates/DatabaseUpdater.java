@@ -1,6 +1,7 @@
-package cloudgene.mapred.database.util;
+package cloudgene.mapred.database.updates;
 
 import cloudgene.mapred.database.connector.DatabaseConnector;
+import cloudgene.mapred.database.util.Database;
 import genepi.io.FileUtil;
 
 import java.io.BufferedReader;
