@@ -1,0 +1,6 @@
+id: no-workflow
+name: NoWorkflow
+description:  This application is missing the 'workflow' section. It should load fine but fail when we try to submit a job.
+version: 1.0.1
+website: http://cloudgene.uibk.ac.at
+category: cloudgene
