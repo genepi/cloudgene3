@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2009-2016 Lukas Forer and Sebastian Schönherr
- *  
+ *
  * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by 
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *  
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *  
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -43,17 +43,11 @@ public class DatabaseUpdater {
 	protected static final Logger log = LoggerFactory.getLogger(DatabaseUpdater.class);
 
 	private DatabaseConnector connector;
-
 	private Database database;
-
 	private String oldVersion;
-
 	private String currentVersion;
-
 	private String filename;
-
 	private InputStream updateFileAsStream;
-
 	private boolean needUpdate = false;
 
 	private Map<String, IUpdateListener> listeners = new HashMap<String, IUpdateListener>();
@@ -126,7 +120,6 @@ public class DatabaseUpdater {
 
 	public boolean update() {
 		if (needUpdate) {
-
 			log.info("Updating database from " + oldVersion + " to " + currentVersion + "...");
 
 			try {
@@ -151,17 +144,22 @@ public class DatabaseUpdater {
 		}
 
 		return true;
-
 	}
 
 	public boolean needUpdate() {
 		return needUpdate;
 	}
 
+	public String getCurrentVersion() {
+		return currentVersion;
+	}
+
+	public String getOldVersion() {
+		return oldVersion;
+	}
+
 	public void writeVersion(String newVersion) {
-
 		try {
-
 			if (!isVersionTableAvailable(database)) {
 				createVersionTable(database);
 			}
@@ -186,27 +184,17 @@ public class DatabaseUpdater {
 	}
 
 	public String readVersion(String versionFile) {
-
 		File file = new File(versionFile);
 
 		if (file.exists()) {
-
 			try {
-
 				return readFileAsString(versionFile);
-
 			} catch (Exception e) {
-
 				return "0.0.0";
-
 			}
-
 		} else {
-
 			return "0.0.0";
-
 		}
-
 	}
 
 	public String readVersionDB() {
@@ -230,6 +218,7 @@ public class DatabaseUpdater {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+
 		return version;
 	}
 
@@ -298,7 +287,6 @@ public class DatabaseUpdater {
 		in.close();
 
 		return builder.toString();
-
 	}
 
 	public void executeSQLFile(String sqlContent, String version) throws SQLException {
@@ -318,7 +306,6 @@ public class DatabaseUpdater {
 			log.info("DB SQL Update " + version + " finished");
 			writeVersion(version);
 		}
-
 	}
 
 	public static int compareVersion(String version1, String version2) {
@@ -334,11 +321,8 @@ public class DatabaseUpdater {
 			int number2 = Integer.parseInt(tiles2[i].trim());
 
 			if (number1 != number2) {
-
 				return number1 > number2 ? 1 : -1;
-
 			}
-
 		}
 
 		if (parts1.length > 1) {
@@ -354,7 +338,6 @@ public class DatabaseUpdater {
 		}
 
 		return 0;
-
 	}
 
 	public boolean isVersionTableAvailable(Database database) {
@@ -383,5 +366,4 @@ public class DatabaseUpdater {
 			e.printStackTrace();
 		}
 	}
-
 }

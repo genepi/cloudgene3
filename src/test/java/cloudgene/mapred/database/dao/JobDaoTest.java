@@ -20,27 +20,23 @@ public class JobDaoTest {
 
 	@Inject
 	TestApplication application;
-	
-	public static int DAYS_MS = 24 * 60 * 60 * 1000;
 
-	public static int DAYS_SECONDS = 24 * 60 * 60;
+	public static long DAYS_MS = 24 * 60 * 60 * 1000;
 
 	@Test
 	public void testFindAllOlderThan() throws Exception {
-
 		// add 3 old jobs and one new
 
 		Database database = application.getDatabase();
-
 		UserDao userDao = new UserDao(database);
-		User user = userDao.findByUsername("admin");
-
 		JobDao jobDao = new JobDao(database);
+
+		User user = userDao.findByUsername("admin");
 
 		CloudgeneJob job1 = new CloudgeneJob();
 		job1.setId("old-dummy-job-1-" + System.currentTimeMillis());
 		job1.setName("old-dummy-job-1" + System.currentTimeMillis());
-		job1.setState(CloudgeneJob.STATE_SUCCESS);
+		job1.setState(AbstractJob.STATE_SUCCESS);
 		job1.setSubmittedOn(System.currentTimeMillis() - (8 * DAYS_MS));
 		job1.setEndTime(System.currentTimeMillis() - (7 * DAYS_MS));
 		job1.setUser(user);
@@ -51,7 +47,7 @@ public class JobDaoTest {
 		CloudgeneJob job2 = new CloudgeneJob();
 		job2.setId("old-dummy-job-2" + System.currentTimeMillis());
 		job2.setName("old-dummy-job-2" + System.currentTimeMillis());
-		job2.setState(CloudgeneJob.STATE_SUCCESS);
+		job2.setState(AbstractJob.STATE_SUCCESS);
 		job2.setSubmittedOn(System.currentTimeMillis() - (10 * DAYS_MS));
 		job2.setEndTime(System.currentTimeMillis() - (9 * DAYS_MS));
 		job2.setUser(user);
@@ -62,7 +58,7 @@ public class JobDaoTest {
 		CloudgeneJob job3 = new CloudgeneJob();
 		job3.setId("old-dummy-job-3" + System.currentTimeMillis());
 		job3.setName("old-dummy-job-3" + System.currentTimeMillis());
-		job3.setState(CloudgeneJob.STATE_SUCCESS);
+		job3.setState(AbstractJob.STATE_SUCCESS);
 		job3.setSubmittedOn(System.currentTimeMillis() - (9 * DAYS_MS));
 		job3.setEndTime(System.currentTimeMillis() - (8 * DAYS_MS));
 		job3.setUser(user);
@@ -73,7 +69,7 @@ public class JobDaoTest {
 		CloudgeneJob job4 = new CloudgeneJob();
 		job4.setId("old-dummy-job-4" + System.currentTimeMillis());
 		job4.setName("old-dummy-job-4" + System.currentTimeMillis());
-		job4.setState(CloudgeneJob.STATE_SUCCESS);
+		job4.setState(AbstractJob.STATE_SUCCESS);
 		job4.setSubmittedOn(System.currentTimeMillis() - (3 * DAYS_MS));
 		job4.setEndTime(System.currentTimeMillis() - (2 * DAYS_MS));
 		job4.setUser(user);
@@ -85,7 +81,7 @@ public class JobDaoTest {
 
 		List<AbstractJob> jobsOlder5Days = jobDao.findAllOlderThan(
 				System.currentTimeMillis() - 5 * DAYS_MS,
-				CloudgeneJob.STATE_SUCCESS);
+				AbstractJob.STATE_SUCCESS);
 
 		jobDao.delete(job1);
 		jobDao.delete(job2);
@@ -93,12 +89,10 @@ public class JobDaoTest {
 		jobDao.delete(job4);
 
 		assertEquals(3, jobsOlder5Days.size());
-
 	}
 
 	@Test
-	public void testFindAllByState() throws Exception {
-
+	public void testFindAllByState() {
 		Database database = application.getDatabase();
 
 		UserDao userDao = new UserDao(database);
@@ -109,18 +103,18 @@ public class JobDaoTest {
 		CloudgeneJob jobr = new CloudgeneJob();
 		jobr.setId("old-dummy-running-job-1-" + System.currentTimeMillis());
 		jobr.setName("old-dummy-running-job-1" + System.currentTimeMillis());
-		jobr.setState(CloudgeneJob.STATE_RUNNING);
+		jobr.setState(AbstractJob.STATE_RUNNING);
 		jobr.setSubmittedOn(System.currentTimeMillis() - (8 * DAYS_MS));
 		jobr.setEndTime(0);
 		jobr.setUser(user);
 		jobr.setApplication("appplication");
 		jobr.setApplicationId("appplication-id");
 		jobDao.insert(jobr);
-		
+
 		CloudgeneJob job1 = new CloudgeneJob();
 		job1.setId("old-dummy-job-1-" + System.currentTimeMillis());
 		job1.setName("old-dummy-job-1" + System.currentTimeMillis());
-		job1.setState(CloudgeneJob.STATE_FAILED);
+		job1.setState(AbstractJob.STATE_FAILED);
 		job1.setSubmittedOn(System.currentTimeMillis() - (8 * DAYS_MS));
 		job1.setEndTime(System.currentTimeMillis() - (7 * DAYS_MS));
 		job1.setUser(user);
@@ -131,7 +125,7 @@ public class JobDaoTest {
 		CloudgeneJob job2 = new CloudgeneJob();
 		job2.setId("old-dummy-job-2" + System.currentTimeMillis());
 		job2.setName("old-dummy-job-2" + System.currentTimeMillis());
-		job2.setState(CloudgeneJob.STATE_FAILED);
+		job2.setState(AbstractJob.STATE_FAILED);
 		job2.setSubmittedOn(System.currentTimeMillis() - (10 * DAYS_MS));
 		job2.setEndTime(System.currentTimeMillis() - (9 * DAYS_MS));
 		job2.setUser(user);
@@ -142,7 +136,7 @@ public class JobDaoTest {
 		CloudgeneJob job3 = new CloudgeneJob();
 		job3.setId("old-dummy-job-3" + System.currentTimeMillis());
 		job3.setName("old-dummy-job-3" + System.currentTimeMillis());
-		job3.setState(CloudgeneJob.STATE_FAILED);
+		job3.setState(AbstractJob.STATE_FAILED);
 		job3.setSubmittedOn(System.currentTimeMillis() - (9 * DAYS_MS));
 		job3.setEndTime(System.currentTimeMillis() - (8 * DAYS_MS));
 		job3.setUser(user);
@@ -153,7 +147,7 @@ public class JobDaoTest {
 		CloudgeneJob job4 = new CloudgeneJob();
 		job4.setId("old-dummy-job-4" + System.currentTimeMillis());
 		job4.setName("old-dummy-job-4" + System.currentTimeMillis());
-		job4.setState(CloudgeneJob.STATE_SUCCESS);
+		job4.setState(AbstractJob.STATE_SUCCESS);
 		job4.setSubmittedOn(System.currentTimeMillis() - (3 * DAYS_MS));
 		job4.setEndTime(System.currentTimeMillis() - (2 * DAYS_MS));
 		job4.setUser(user);
@@ -163,19 +157,15 @@ public class JobDaoTest {
 
 		assertTrue(jobDao.findAll().size() > 3);
 
-		List<AbstractJob> failedJobs = jobDao
-				.findAllByState(CloudgeneJob.STATE_FAILED);
-		List<AbstractJob> succeedJobs = jobDao
-				.findAllByState(CloudgeneJob.STATE_SUCCESS);
+		List<AbstractJob> failedJobs = jobDao.findAllByState(AbstractJob.STATE_FAILED);
+		List<AbstractJob> succeedJobs = jobDao.findAllByState(AbstractJob.STATE_SUCCESS);
 
 		jobDao.delete(job1);
 		jobDao.delete(job2);
 		jobDao.delete(job3);
 		jobDao.delete(job4);
 
-		assertTrue(failedJobs.size()  >= 3 );
-		assertTrue(succeedJobs.size()  >= 1);
-		
+		assertTrue(failedJobs.size() >= 3);
+		assertTrue(succeedJobs.size() >= 1);
 	}
-
 }
