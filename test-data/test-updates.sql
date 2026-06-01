@@ -1,0 +1,15 @@
+-- 0.0.1
+
+CREATE TABLE `user` (
+    id   INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+-- 0.0.2
+
+-- 0.1.0
+
+CREATE TABLE job (
+    id         VARCHAR(100) NOT NULL PRIMARY KEY,
+    user_id    INTEGER NOT NULL REFERENCES `user`(id) ON DELETE CASCADE
+);
