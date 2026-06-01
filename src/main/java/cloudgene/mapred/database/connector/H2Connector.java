@@ -15,7 +15,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package cloudgene.mapred.database.util.h2;
+package cloudgene.mapred.database.connector;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
@@ -35,7 +35,6 @@ import org.apache.commons.dbutils.DbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cloudgene.mapred.database.util.DatabaseConnector;
 import genepi.io.FileUtil;
 
 public class H2Connector implements DatabaseConnector {

@@ -17,6 +17,7 @@
 
 package cloudgene.mapred.database.util;
 
+import cloudgene.mapred.database.connector.DatabaseConnector;
 import genepi.io.FileUtil;
 
 import java.io.BufferedReader;

@@ -1,9 +1,6 @@
-package cloudgene.mapred.database.util;
+package cloudgene.mapred.database.connector;
 
 import java.util.Map;
-
-import cloudgene.mapred.database.util.h2.H2Connector;
-import cloudgene.mapred.database.util.mysql.MySqlConnector;
 
 public class DatabaseConnectorFactory {
 

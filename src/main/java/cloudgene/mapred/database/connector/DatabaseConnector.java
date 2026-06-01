@@ -15,7 +15,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package cloudgene.mapred.database.util;
+package cloudgene.mapred.database.connector;
 
 import java.io.IOException;
 import java.io.InputStream;
