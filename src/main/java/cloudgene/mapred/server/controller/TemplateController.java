@@ -4,7 +4,7 @@ import java.util.List;
 
 import cloudgene.mapred.core.Template;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.TemplateDao;
+import cloudgene.mapred.database.dao.TemplateDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.auth.AuthenticationService;
 import io.micronaut.http.HttpStatus;

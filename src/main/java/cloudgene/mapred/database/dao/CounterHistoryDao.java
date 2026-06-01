@@ -1,4 +1,4 @@
-package cloudgene.mapred.database;
+package cloudgene.mapred.database.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package cloudgene.mapred.database;
+package cloudgene.mapred.database.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

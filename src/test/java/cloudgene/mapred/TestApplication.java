@@ -9,7 +9,7 @@ import com.esotericsoftware.yamlbeans.YamlException;
 
 import cloudgene.mapred.apps.Application;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.util.HashUtil;
 import cloudgene.mapred.util.Settings;

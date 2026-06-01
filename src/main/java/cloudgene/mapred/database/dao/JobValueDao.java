@@ -1,4 +1,4 @@
-package cloudgene.mapred.database;
+package cloudgene.mapred.database.dao;
 
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.database.util.IRowMapper;

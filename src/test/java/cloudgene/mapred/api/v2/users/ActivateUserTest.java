@@ -17,7 +17,7 @@ import com.dumbster.smtp.SmtpMessage;
 
 import cloudgene.mapred.TestApplication;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.util.TestMailServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;

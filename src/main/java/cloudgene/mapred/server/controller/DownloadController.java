@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.DownloadDao;
-import cloudgene.mapred.database.ParameterDao;
+import cloudgene.mapred.database.dao.DownloadDao;
+import cloudgene.mapred.database.dao.ParameterDao;
 import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.jobs.CloudgeneParameterOutput;
 import cloudgene.mapred.jobs.Download;

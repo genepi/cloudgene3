@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import cloudgene.mapred.TestApplication;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.jobs.sdk.WorkflowContext;
 import cloudgene.mapred.jobs.workspace.WorkspaceFactory;
 import cloudgene.mapred.util.Settings;

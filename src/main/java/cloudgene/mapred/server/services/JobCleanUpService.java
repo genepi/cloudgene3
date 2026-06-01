@@ -6,8 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.core.Template;
-import cloudgene.mapred.database.JobDao;
-import cloudgene.mapred.database.ParameterDao;
+import cloudgene.mapred.database.dao.JobDao;
+import cloudgene.mapred.database.dao.ParameterDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.jobs.workspace.WorkspaceFactory;

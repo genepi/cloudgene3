@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.core.ApiToken;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.auth.AuthenticationService;
 import cloudgene.mapred.server.responses.ApiTokenResponse;

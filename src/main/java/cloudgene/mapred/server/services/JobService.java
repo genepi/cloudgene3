@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import cloudgene.mapred.database.ParameterDao;
+import cloudgene.mapred.database.dao.ParameterDao;
 import cloudgene.mapred.jobs.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.apps.ApplicationRepository;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.DownloadDao;
-import cloudgene.mapred.database.JobDao;
+import cloudgene.mapred.database.dao.DownloadDao;
+import cloudgene.mapred.database.dao.JobDao;
 import cloudgene.mapred.jobs.workspace.IWorkspace;
 import cloudgene.mapred.jobs.workspace.WorkspaceFactory;
 import cloudgene.mapred.server.Application;

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.TestInstance;
 
 import cloudgene.mapred.TestApplication;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.util.CloudgeneClientRestAssured;
 import cloudgene.mapred.util.HashUtil;

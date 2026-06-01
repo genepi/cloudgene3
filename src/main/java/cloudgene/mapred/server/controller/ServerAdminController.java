@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.CounterHistoryDao;
+import cloudgene.mapred.database.dao.CounterHistoryDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.auth.AuthenticationService;
 import cloudgene.mapred.server.responses.NextflowConfigResponse;

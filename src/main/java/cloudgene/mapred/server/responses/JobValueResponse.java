@@ -1,6 +1,6 @@
 package cloudgene.mapred.server.responses;
 
-import cloudgene.mapred.database.JobValueDao;
+import cloudgene.mapred.database.dao.JobValueDao;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 
 import java.util.List;

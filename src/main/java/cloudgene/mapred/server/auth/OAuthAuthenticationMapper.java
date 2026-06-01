@@ -6,13 +6,11 @@ import java.util.Date;
 import org.apache.commons.lang.RandomStringUtils;
 import org.reactivestreams.Publisher;
 
-import cloudgene.mapred.core.Template;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.services.UserService;
 import cloudgene.mapred.util.HashUtil;
-import cloudgene.mapred.util.MailUtil;
 import io.micronaut.context.annotation.Replaces;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;

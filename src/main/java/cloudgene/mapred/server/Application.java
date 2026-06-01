@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.jobs.engine.handler.IJobErrorHandler;
 import cloudgene.mapred.jobs.engine.handler.JobErrorHandlerFactory;
 import cloudgene.mapred.util.Configuration;
@@ -15,7 +14,7 @@ import io.micronaut.runtime.event.annotation.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cloudgene.mapred.database.TemplateDao;
+import cloudgene.mapred.database.dao.TemplateDao;
 import cloudgene.mapred.database.updates.BcryptHashUpdate;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.database.util.DatabaseConnector;
