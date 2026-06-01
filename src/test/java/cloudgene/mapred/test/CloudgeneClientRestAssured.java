@@ -1,4 +1,4 @@
-package cloudgene.mapred.util;
+package cloudgene.mapred.test;
 
 import cloudgene.mapred.jobs.AbstractJob;
 import io.micronaut.context.annotation.Prototype;

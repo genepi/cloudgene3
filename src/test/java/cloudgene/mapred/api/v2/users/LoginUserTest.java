@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.core.User;
 import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;

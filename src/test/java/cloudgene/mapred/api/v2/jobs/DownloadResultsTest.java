@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.jobs.AbstractJob;
-import cloudgene.mapred.util.CloudgeneClientRestAssured;
+import cloudgene.mapred.test.CloudgeneClientRestAssured;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;

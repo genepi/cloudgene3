@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.core.User;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.jobs.AbstractJob;

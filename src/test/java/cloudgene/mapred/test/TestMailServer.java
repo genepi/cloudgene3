@@ -1,4 +1,4 @@
-package cloudgene.mapred.util;
+package cloudgene.mapred.test;
 
 import java.util.ArrayList;
 import java.util.Iterator;

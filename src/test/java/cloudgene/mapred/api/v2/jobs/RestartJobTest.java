@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import cloudgene.mapred.TestApplication;
-import cloudgene.mapred.jobs.AbstractJob;
+import cloudgene.mapred.test.TestApplication;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 

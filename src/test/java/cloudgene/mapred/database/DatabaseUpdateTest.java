@@ -6,7 +6,7 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.database.util.DatabaseUpdater;
 import cloudgene.mapred.server.Application;

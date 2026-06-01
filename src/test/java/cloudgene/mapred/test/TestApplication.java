@@ -1,4 +1,4 @@
-package cloudgene.mapred;
+package cloudgene.mapred.test;
 
 import java.io.FileNotFoundException;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.util.HashUtil;
 import cloudgene.mapred.util.Settings;
-import cloudgene.mapred.util.TestMailServer;
 import genepi.io.FileUtil;
 import io.micronaut.context.annotation.Context;
 
