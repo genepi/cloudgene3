@@ -1,11 +1,10 @@
 package cloudgene.mapred.test;
 
-import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.Vector;
-
-import com.esotericsoftware.yamlbeans.YamlException;
 
 import cloudgene.mapred.apps.Application;
 import cloudgene.mapred.core.User;
@@ -15,27 +14,29 @@ import cloudgene.mapred.util.HashUtil;
 import cloudgene.mapred.util.Settings;
 import genepi.io.FileUtil;
 import io.micronaut.context.annotation.Context;
+import io.micronaut.context.annotation.Replaces;
+import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.env.Environment;
+import jakarta.inject.Inject;
 
 @Context
+@Replaces(cloudgene.mapred.server.Application.class)
+@Requires(env = Environment.TEST)
 public class TestApplication extends cloudgene.mapred.server.Application {
 
-	static {
-		try {
-			TestApplication.settings = loadSettings();
-		} catch (FileNotFoundException | YamlException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public TestApplication() throws Exception {
-		super();
+	@Inject // Use this constructor for dependency injection.
+	public TestApplication() throws SQLException {
+		super(loadSettings("primary"));
 	}
 
-	protected static Settings loadSettings() throws FileNotFoundException, YamlException {
-		
+	public TestApplication(Settings settings) throws SQLException {
+		super(settings);
+	}
+
+	public static Settings loadSettings(String prefix) {
 		Settings settings = new Settings();
 
-		HashMap<String, String> mail = new HashMap<String, String>();
+		HashMap<String, String> mail = new HashMap<>();
 		mail.put("smtp", "localhost");
 		mail.put("port", TestMailServer.PORT + "");
 		mail.put("user", "");
@@ -46,9 +47,9 @@ public class TestApplication extends cloudgene.mapred.server.Application {
 		// delete old database
 		FileUtil.deleteDirectory("test-database");
 
-		HashMap<String, String> database = new HashMap<String, String>();
+		HashMap<String, String> database = new HashMap<>();
 		database.put("driver", "h2");
-		database.put("database", "./test-database/mapred");
+		database.put("database", "./test-database/mapred-" + prefix + "-" + UUID.randomUUID());
 		database.put("user", "mapred");
 		database.put("password", "mapred");
 		settings.setDatabase(database);
@@ -152,46 +153,67 @@ public class TestApplication extends cloudgene.mapred.server.Application {
 
 	@Override
 	protected void afterDatabaseConnection(Database database) {
-
-		String username = "admin";
-		String password = "admin1978";
-
-		// insert user admin
 		UserDao dao = new UserDao(database);
-		User adminUser = dao.findByUsername(username);
-		if (adminUser == null) {
-			adminUser = new User();
-			adminUser.setUsername(username);
-			password = HashUtil.hashPassword(password);
-			adminUser.setPassword(password);
-			adminUser.makeAdmin();
-			dao.insert(adminUser);
-		}
 
-		String usernameUser = "user";
-		String passwordUser = "admin1978";
+		addUser(
+				dao,
+				"admin",
+				"admin1978",
+				null,
+				null,
+				true,
+				null);
 
-		// insert user admin
-		User user = dao.findByUsername(usernameUser);
-		if (user == null) {
-			user = new User();
-			user.setUsername(usernameUser);
-			password = HashUtil.hashPassword(passwordUser);
-			user.setPassword(passwordUser);
-			user.setRoles(new String[] { "public" });
-			dao.insert(user);
-		}
+		addUser(
+				dao,
+				"user",
+				"admin1978",
+				"User User",
+				"user@example.com",
+				false,
+				new String[] { "public" });
 
-		User userPublic = dao.findByUsername("public");
-		if (userPublic == null) {
-			userPublic = new User();
-			userPublic.setUsername("public");
-			password = HashUtil.hashPassword("public");
-			userPublic.setPassword(password);
-			userPublic.setRoles(new String[] { "public" });
-			dao.insert(userPublic);
-		}
-
+		addUser(
+				dao,
+				"public",
+				"public-password",
+				null,
+				null,
+				false,
+				new String[] { "public" });
 	}
 
+	private void addUser(
+			UserDao dao,
+			String username,
+			String password,
+			String fullName,
+			String mail,
+			boolean isAdmin,
+			String[] roles) {
+
+		User user = dao.findByUsername(username);
+
+		if (user == null) {
+			user = new User();
+
+			// Mandatory
+			user.setUsername(username);
+			user.setPassword(HashUtil.hashPassword(password));
+
+			// Optional
+			user.setFullName(fullName);
+			user.setMail(mail);
+
+			if (roles != null) {
+				user.setRoles(roles);
+			}
+
+			if (isAdmin) {
+				user.makeAdmin();
+			}
+
+			dao.insert(user);
+		}
+	}
 }
