@@ -32,7 +32,7 @@ public class ChangeGroupTest {
 	CloudgeneClientRestAssured client;
 
 	@BeforeAll
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		TestMailServer.getInstance().start();
 
 		// insert two dummy users
@@ -47,12 +47,10 @@ public class ChangeGroupTest {
 		testUser3.setActive(true);
 		testUser3.setPassword(HashUtil.hashPassword("oldpassword"));
 		userDao.insert(testUser3);
-
 	}
 
 	@Test
 	public void testWithWrongCredentials() {
-
 		Header accessToken = client.login("username-group-test", "oldpassword");
 
 		Database database = application.getDatabase();
@@ -60,20 +58,24 @@ public class ChangeGroupTest {
 
 		User oldUser = userDao.findByUsername("username-group-test");
 
-		RestAssured.given().header(accessToken).and().formParam("username", "username-group-test").and()
-				.formParam("role", "user,newgroup,test").when().post("/api/v2/admin/users/changegroup").then()
+		RestAssured
+				.given()
+				.header(accessToken)
+				.formParam("username", "username-group-test")
+				.formParam("role", "user,newgroup,test")
+				.when()
+				.post("/api/v2/admin/users/changegroup")
+				.then()
 				.statusCode(403);
 
 		User newUser = userDao.findByUsername("username-group-test");
 		// check if user in database is still the same
 		assertEquals(String.join(User.ROLE_SEPARATOR, oldUser.getRoles()),
 				String.join(User.ROLE_SEPARATOR, newUser.getRoles()));
-
 	}
 
 	@Test
 	public void testWithAdminCredentials() {
-
 		Database database = application.getDatabase();
 		UserDao userDao = new UserDao(database);
 
@@ -91,12 +93,20 @@ public class ChangeGroupTest {
 		Header accessToken = client.login("admin", "admin1978");
 
 		// update group
-		RestAssured.given().header(accessToken).and().formParam("username", "username-group-test").and()
-				.formParam("role", "user,newgroup,test").when().post("/api/v2/admin/users/changegroup").then()
-				.statusCode(200).body("username", equalTo("username-group-test")).and()
+		RestAssured
+				.given()
+				.header(accessToken)
+				.formParam("username", "username-group-test")
+				.formParam("role", "user,newgroup,test")
+				.when()
+				.post("/api/v2/admin/users/changegroup")
+				.then()
+				.statusCode(200)
+				.body("username", equalTo("username-group-test"))
 				.body("role", equalTo("user,newgroup,test"));
 
 		User newUser = userDao.findByUsername("username-group-test");
+
 		// check update
 		assertEquals("user,newgroup,test", String.join(User.ROLE_SEPARATOR, newUser.getRoles()));
 
@@ -110,7 +120,5 @@ public class ChangeGroupTest {
 		// revert changes
 		newUser.setRoles(oldUser.getRoles());
 		userDao.update(newUser);
-
 	}
-
 }
