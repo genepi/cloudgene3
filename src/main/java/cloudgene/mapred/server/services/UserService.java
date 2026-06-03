@@ -184,13 +184,14 @@ public class UserService {
 		if (!application.getSettings().isEmailRequired()) {
 			if ((newUser.getMail() == null || newUser.getMail().isEmpty()) && user.hasRole(DEFAULT_ROLE)) {
 				newUser.replaceRole(DEFAULT_ROLE, DEFAULT_ANONYMOUS_ROLE);
-				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ANONYMOUS_ROLE, newUser.getUsername(),
-						newUser.getId()));
+				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ANONYMOUS_ROLE,
+						newUser.getUsername(), newUser.getId()));
 				roleMessage += "<br><br>Your account has been <b>downgraded</b>.<br>To apply these changes, please log out and log back in.";
-			} else if ((newUser.getMail() != null && !newUser.getMail().isEmpty()) && user.hasRole(DEFAULT_ANONYMOUS_ROLE)) {
+			} else if ((newUser.getMail() != null && !newUser.getMail().isEmpty())
+					&& user.hasRole(DEFAULT_ANONYMOUS_ROLE)) {
 				newUser.replaceRole(DEFAULT_ANONYMOUS_ROLE, DEFAULT_ROLE);
-				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ROLE, newUser.getUsername(),
-						newUser.getId()));
+				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ROLE,
+						newUser.getUsername(), newUser.getId()));
 				roleMessage += "<br><br>Your account has been <b>upgraded</b>.<br>To apply these changes, please log out and log back in.";
 			}
 		}
@@ -307,7 +308,7 @@ public class UserService {
 			} else {
 
 				// create activation token
-				key = HashUtil.getActivationHash(user);
+				key = HashUtil.getSecureHash();
 				user.setActivationCode(key);
 				dao.update(user);
 			}
@@ -323,7 +324,7 @@ public class UserService {
 			String body = application.getTemplate(Template.RECOVERY_MAIL, user.getFullName(), app, link);
 
 			try {
-				if (user.getMail()!= null && !user.getMail().isEmpty()) {
+				if (user.getMail() != null && !user.getMail().isEmpty()) {
 
 					log.info(String.format("Password reset link requested for user '%s'", username));
 
@@ -374,7 +375,7 @@ public class UserService {
 			}
 		}
 
-		String[] roles = new String[] { mailProvided ? DEFAULT_ROLE : DEFAULT_ANONYMOUS_ROLE};
+		String[] roles = new String[] { mailProvided ? DEFAULT_ROLE : DEFAULT_ANONYMOUS_ROLE };
 
 		// check password
 		error = User.checkPassword(new_password, confirm_new_password);
@@ -405,7 +406,7 @@ public class UserService {
 
 			if (application.getSettings().getMail() != null && mailProvided) {
 
-				String activationKey = HashUtil.getActivationHash(newUser);
+				String activationKey = HashUtil.getSecureHash();
 				newUser.setActive(false);
 				newUser.setActivationCode(activationKey);
 

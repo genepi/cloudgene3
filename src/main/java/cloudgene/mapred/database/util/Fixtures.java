@@ -25,17 +25,16 @@ public class Fixtures {
 		if (user == null) {
 			user = new User();
 			user.setUsername(USERNAME);
-			PASSWORD = HashUtil.hashPassword(PASSWORD);
-			user.setPassword(PASSWORD);
+			user.setPassword(HashUtil.hashPassword(PASSWORD));
 			user.makeAdmin();
 
 			dao.insert(user);
 			log.info("User " + USERNAME + " created.");
-		} else {	
-			
+		} else {
+
 			log.info("User " + USERNAME + " already exists.");
-			
-			if (!user.isAdmin()){
+
+			if (!user.isAdmin()) {
 				user.makeAdmin();
 				dao.update(user);
 				log.info("User " + USERNAME + " has admin rights now.");
