@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.File;
 
+import cloudgene.mapred.jobs.AbstractJob;
 import org.junit.jupiter.api.Test;
 
 import cloudgene.mapred.test.TestApplication;
-import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.test.CloudgeneClientRestAssured;
 import genepi.io.FileUtil;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -28,48 +28,83 @@ public class DeleteJobTest {
 
 	@Test
 	public void testIfDeleteJobCleansUpWorkspace() throws InterruptedException {
-
 		Header accessToken = client.loginAsPublicUser();
 
 		// submit job
-		String id = RestAssured.given().header(accessToken).and().multiPart("inputtext", "lukas_text").when()
-				.post("/api/v2/jobs/submit/write-text-to-file").then().statusCode(200).and().extract().jsonPath()
-				.getString("id");
+		String id = RestAssured
+				.given()
+				.header(accessToken)
+				.multiPart("inputtext", "lukas_text")
+				.when()
+				.post("/api/v2/jobs/submit/write-text-to-file")
+				.then()
+				.statusCode(200)
+				.extract().jsonPath().getString("id");
 
 		// wait until submitted job is complete
 		client.waitForJob(id, accessToken);
 
-		// TODO: check why file is not available without this sleep
-		Thread.sleep(5000);
-
 		// get details
-		Response response = RestAssured.given().header(accessToken).when().get("/api/v2/jobs/" + id).thenReturn();
-		response.then().statusCode(200).and().body("state", equalTo(AbstractJob.STATE_SUCCESS));
+		Response response = RestAssured
+				.given()
+				.header(accessToken)
+				.when()
+				.get("/api/v2/jobs/" + id)
+				.thenReturn();
+
+		response.then()
+				.statusCode(200)
+				.body("state", equalTo(AbstractJob.STATE_SUCCESS));
 
 		// get file details
 		String name = response.jsonPath().getString("outputParams[0].files[0].name");
 		String hash = response.jsonPath().getString("outputParams[0].files[0].hash");
 
 		// download file and check content
-		RestAssured.given().header(accessToken).when().get("/downloads/" + id + "/" + hash + "/" + name).then()
-				.statusCode(200).and().body(equalTo("lukas_text"));
+		RestAssured
+				.given()
+				.header(accessToken)
+				.when()
+				.get("/downloads/" + id + "/" + hash + "/" + name)
+				.then()
+				.statusCode(200)
+				.body(equalTo("lukas_text"));
 
 		// delete job with wrong permissions
-		RestAssured.when().delete("/api/v2/jobs/" + id).then().statusCode(401);
+		RestAssured
+				.when()
+				.delete("/api/v2/jobs/" + id)
+				.then()
+				.statusCode(401);
 
 		// delete job with wrong id
-		RestAssured.given().header(accessToken).when().delete("/api/v2/jobs/blabla").then().statusCode(404);
+		RestAssured
+				.given()
+				.header(accessToken)
+				.when()
+				.delete("/api/v2/jobs/blabla")
+				.then()
+				.statusCode(404);
 
 		// delete job
-		RestAssured.given().header(accessToken).when().delete("/api/v2/jobs/" + id).then().statusCode(200);
+		RestAssured
+				.given()
+				.header(accessToken)
+				.when()
+				.delete("/api/v2/jobs/" + id)
+				.then()
+				.statusCode(200);
 
 		// check if all data are deleted
 		assertFalse(new File(FileUtil.path(application.getSettings().getLocalWorkspace(), id)).exists());
 
-		// TODO: same on hdfs
-
 		// check if job was deleted from database (return 404)
-		RestAssured.given().header(accessToken).when().get("/api/v2/jobs/" + id).then().statusCode(404);
+		RestAssured
+				.given()
+				.header(accessToken)
+				.when()
+				.get("/api/v2/jobs/" + id)
+				.then()
+				.statusCode(404);
 	}
-
 }
