@@ -26,7 +26,6 @@ import cloudgene.mapred.util.Settings;
 import cloudgene.mapred.wdl.WdlApp;
 import genepi.io.FileUtil;
 import io.micronaut.http.HttpStatus;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -34,11 +33,13 @@ public class JobService {
 
 	private static final Logger log = LoggerFactory.getLogger(JobService.class);
 
-	@Inject
 	protected Application application;
-
-	@Inject
 	protected WorkspaceFactory workspaceFactory;
+
+	public JobService(Application application, WorkspaceFactory workspaceFactory) {
+		this.application = application;
+		this.workspaceFactory = workspaceFactory;
+	}
 
 	public AbstractJob getById(String id) {
 
@@ -114,7 +115,6 @@ public class JobService {
 		IWorkspace workspace = workspaceFactory.getDefault();
 
 		try {
-
 			// setup workspace
 			workspace.setJob(id);
 			workspace.setup();
@@ -149,14 +149,12 @@ public class JobService {
 		engine.submit(job);
 
 		return job;
-
 	}
 
 	public Page<AbstractJob> getAllByUserAndPage(User user, Integer page, int pageSize) {
 
 		int offset = 0;
 		if (page != null) {
-
 			offset = page;
 			if (offset < 1) {
 				offset = 1;
@@ -177,11 +175,10 @@ public class JobService {
 			jobs = dao.findAllByUser(user);
 			page = 1;
 			pageSize = count;
-
 		}
 
 		// if job is running, use in memory instance
-		List<AbstractJob> finalJobs = new Vector<AbstractJob>();
+		List<AbstractJob> finalJobs = new Vector<>();
 		for (AbstractJob job : jobs) {
 			AbstractJob runningJob = application.getWorkflowEngine().getJobById(job.getId());
 			if (runningJob != null) {
@@ -189,7 +186,6 @@ public class JobService {
 			} else {
 				finalJobs.add(job);
 			}
-
 		}
 
 		Page<AbstractJob> result = new Page<AbstractJob>();
@@ -199,7 +195,6 @@ public class JobService {
 		result.setData(finalJobs);
 
 		return result;
-
 	}
 
 	public AbstractJob delete(AbstractJob job) {
@@ -237,7 +232,6 @@ public class JobService {
 	}
 
 	public AbstractJob restart(AbstractJob job) {
-
 		Settings settings = application.getSettings();
 
 		if (job.getState() != AbstractJob.STATE_DEAD) {
@@ -255,7 +249,6 @@ public class JobService {
 		cloudgene.mapred.apps.Application application = repository.getByIdAndUser(appId, job.getUser());
 		if (application == null) {
 			throw new JsonHttpStatusException(HttpStatus.NOT_FOUND, "Application '" + appId + "' not found.");
-
 		}
 
 		IWorkspace workspace = workspaceFactory.getDefault();
@@ -274,13 +267,12 @@ public class JobService {
 		this.application.getWorkflowEngine().restart(job);
 
 		return job;
-
 	}
 
 	public int reset(AbstractJob job, int maxDownloads) {
-
 		DownloadDao downloadDao = new DownloadDao(application.getDatabase());
 		int count = 0;
+
 		for (CloudgeneParameterOutput param : job.getOutputParams()) {
 			if (param.isDownload()) {
 				List<Download> downloads = param.getFiles();
@@ -290,12 +282,10 @@ public class JobService {
 					downloadDao.update(download);
 					count++;
 				}
-
 			}
 		}
 
 		return count;
-
 	}
 
 	public AbstractJob changePriority(AbstractJob job, long priority) {
@@ -314,7 +304,6 @@ public class JobService {
 		}
 
 		try {
-
 			// delete local directory and hdfs directory
 			String localOutput = FileUtil.path(settings.getLocalWorkspace(), job.getId());
 			FileUtil.deleteDirectory(localOutput);
@@ -339,7 +328,6 @@ public class JobService {
 		} catch (Exception e) {
 			return "Retire " + job.getId() + " failed.";
 		}
-
 	}
 
 	public String increaseRetireDate(AbstractJob job, int days) {
@@ -349,7 +337,6 @@ public class JobService {
 				|| job.getState() == AbstractJob.STATE_FAILED_AND_NOTIFICATION_SEND) {
 
 			try {
-
 				job.setDeletedOn(job.getDeletedOn() + (days * 24 * 60 * 60 * 1000));
 
 				dao.update(job);
@@ -360,11 +347,9 @@ public class JobService {
 
 				return "Update delete date for job " + job.getId() + " failed.";
 			}
-
 		} else {
 			return "Job " + job.getId() + " has wrong state for this operation.";
 		}
-
 	}
 
 	public String createId() {
@@ -374,7 +359,6 @@ public class JobService {
 
 
 	public List<AbstractJob> getJobs(String state) {
-
 		List<AbstractJob> jobs = new Vector<AbstractJob>();
 
 		WorkflowEngine engine = application.getWorkflowEngine();
@@ -383,36 +367,32 @@ public class JobService {
 		if (state != null) {
 			switch (state) {
 
-			case "running-ltq":
+				case "running-ltq":
+					jobs = engine.getAllJobsInLongTimeQueue();
+					break;
 
-				jobs = engine.getAllJobsInLongTimeQueue();
-				break;
+				case "running-stq":
+					// TODO: remove!
+					jobs = new Vector<AbstractJob>();
+					break;
 
-			case "running-stq":
-
-				// TODO: remove!
-				jobs = new Vector<AbstractJob>();
-				break;
-
-			case "current":
-
-				jobs = dao.findAllNotRetiredJobs();
-				List<AbstractJob> toRemove = new Vector<AbstractJob>();
-				for (AbstractJob job : jobs) {
-					if (engine.isInQueue(job)) {
-						toRemove.add(job);
+				case "current":
+					jobs = dao.findAllNotRetiredJobs();
+					List<AbstractJob> toRemove = new Vector<AbstractJob>();
+					for (AbstractJob job : jobs) {
+						if (engine.isInQueue(job)) {
+							toRemove.add(job);
+						}
 					}
-				}
-				jobs.removeAll(toRemove);
-				break;
+					jobs.removeAll(toRemove);
+					break;
 
-			case "retired":
-
-				jobs = dao.findAllByState(AbstractJob.STATE_RETIRED);
-				break;
-
+				case "retired":
+					jobs = dao.findAllByState(AbstractJob.STATE_RETIRED);
+					break;
 			}
 		}
+
 		return jobs;
 	}
 
@@ -425,5 +405,4 @@ public class JobService {
 			return workspace.downloadLog(name);
 		}
 	}
-
 }

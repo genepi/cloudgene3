@@ -16,62 +16,43 @@ import cloudgene.mapred.util.HashUtil;
 import cloudgene.mapred.util.MailUtil;
 import cloudgene.mapred.util.Page;
 import io.micronaut.http.HttpStatus;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
 public class UserService {
 
-	private static Logger log = LoggerFactory.getLogger(UserService.class);
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
 	public static final String MESSAGE_USER_NOT_FOUND = "User %s not found.";
-
 	private static final String MESSAGE_USER_PROFILE_DELETE = "User profile successfully delete.";
-
 	private static final String MESSAGE_DELETE_ERROR = "Error during deleting your user profile.";
-
 	private static final String MESSAGE_WRONG_PASSWORD = "Wrong password.";
-
 	private static final String MESSAGE_PROFILE_UPDATED = "User profile successfully updated.";
-
 	private static final String MESSAGE_NOT_ALLOWED = "You are not allowed to change this user profile.";
-
 	private static final String MESSAGE_NO_USERNAME_SET = "No username set.";
-
 	private static final String MESSAGE_PASSWORD_UPDATED = "Password successfully updated.";
-
 	private static final String MESSAGE_INVALID_RECOVERY_REQUEST = "Your recovery request is invalid or expired.";
-
 	private static final String MESSAGE_ACCOUNT_IS_INACTIVE = "Account is not activated.";
-
 	private static final String MESSAGE_ACCOUNT_NOT_FOUND = "We couldn't find an account with that username or email.";
-
 	private static final String MESSAGE_EMAIL_SENT = "We sent you an email with instructions on how to reset your password.";
-
 	private static final String MESSAGE_EMAIL_NOT_AVAILABLE = "No email address is associated with the provided username. Therefore, password recovery cannot be completed.";
-
 	private static final String MESSAGE_SENDING_EMAIL_FAILED = "Sending recovery email failed. ";
-
 	private static final String MESSAGE_INVALID_USERNAME = "Please enter a valid username or email address.";
-
 	private static final String MESSAGE_USER_CREATED = "User successfully created.";
-
 	private static final String MESSAGE_EMAIL_ALREADY_REGISTERED = "E-Mail is already registered.";
-
 	private static final String MESSAGE_USERNAME_ALREADY_EXISTS = "Username already exists.";
-
 	private static final String MESSAGE_WRONG_USERNAME = "Wrong username.";
-
 	private static final String MESSAGE_WRONG_ACTIVATION_CODE = "Wrong activation code.";
-
 	private static final String MESSAGE_USER_ACTIVATED = "User successfully activated.";
 
 	public static final String DEFAULT_ROLE = "User";
-
 	public static final String DEFAULT_ANONYMOUS_ROLE = "Anonymous_User";
 
-	@Inject
 	protected Application application;
+
+	public UserService(Application application) {
+		this.application = application;
+	}
 
 	public Page<User> getAll(String query, String page, int pageSize) {
 
@@ -184,14 +165,13 @@ public class UserService {
 		if (!application.getSettings().isEmailRequired()) {
 			if ((newUser.getMail() == null || newUser.getMail().isEmpty()) && user.hasRole(DEFAULT_ROLE)) {
 				newUser.replaceRole(DEFAULT_ROLE, DEFAULT_ANONYMOUS_ROLE);
-				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ANONYMOUS_ROLE,
-						newUser.getUsername(), newUser.getId()));
+				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ANONYMOUS_ROLE, newUser.getUsername(),
+						newUser.getId()));
 				roleMessage += "<br><br>Your account has been <b>downgraded</b>.<br>To apply these changes, please log out and log back in.";
-			} else if ((newUser.getMail() != null && !newUser.getMail().isEmpty())
-					&& user.hasRole(DEFAULT_ANONYMOUS_ROLE)) {
+			} else if ((newUser.getMail() != null && !newUser.getMail().isEmpty()) && user.hasRole(DEFAULT_ANONYMOUS_ROLE)) {
 				newUser.replaceRole(DEFAULT_ANONYMOUS_ROLE, DEFAULT_ROLE);
-				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ROLE,
-						newUser.getUsername(), newUser.getId()));
+				log.info(String.format("User: changed role to %s for user %s (ID %s)", DEFAULT_ROLE, newUser.getUsername(),
+						newUser.getId()));
 				roleMessage += "<br><br>Your account has been <b>upgraded</b>.<br>To apply these changes, please log out and log back in.";
 			}
 		}
@@ -324,7 +304,7 @@ public class UserService {
 			String body = application.getTemplate(Template.RECOVERY_MAIL, user.getFullName(), app, link);
 
 			try {
-				if (user.getMail() != null && !user.getMail().isEmpty()) {
+				if (user.getMail()!= null && !user.getMail().isEmpty()) {
 
 					log.info(String.format("Password reset link requested for user '%s'", username));
 
@@ -375,7 +355,7 @@ public class UserService {
 			}
 		}
 
-		String[] roles = new String[] { mailProvided ? DEFAULT_ROLE : DEFAULT_ANONYMOUS_ROLE };
+		String[] roles = new String[] { mailProvided ? DEFAULT_ROLE : DEFAULT_ANONYMOUS_ROLE};
 
 		// check password
 		error = User.checkPassword(new_password, confirm_new_password);

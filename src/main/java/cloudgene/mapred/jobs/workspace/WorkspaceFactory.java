@@ -3,19 +3,19 @@ package cloudgene.mapred.jobs.workspace;
 import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.util.Settings;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
 public class WorkspaceFactory {
 
-	@Inject
 	protected Application application;
 
+	public WorkspaceFactory(Application application) {
+		this.application = application;
+	}
+
 	public IWorkspace getDefault() {
-
 		Settings settings = application.getSettings();
-
 		String type = settings.getExternalWorkspaceType();
 
 		if (type == null) {
@@ -28,11 +28,9 @@ public class WorkspaceFactory {
 		}
 
 		return new LocalWorkspace(settings.getLocalWorkspace());
-
 	}
 
 	public IWorkspace getByUrl(String url) {
-
 		Settings settings = application.getSettings();
 
 		if (url == null || url.isEmpty()) {
@@ -45,7 +43,6 @@ public class WorkspaceFactory {
 		}
 
 		return new LocalWorkspace(settings.getLocalWorkspace());
-
 	}
 
 	public IWorkspace getByJob(AbstractJob job) {
@@ -53,5 +50,4 @@ public class WorkspaceFactory {
 		workspace.setJob(job.getId());
 		return workspace;
 	}
-
 }
