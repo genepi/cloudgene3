@@ -1,7 +1,7 @@
 package cloudgene.mapred.util;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 
 public class PublicUser {
@@ -12,7 +12,7 @@ public class PublicUser {
 		if (user == null) {
 			user = new User();
 			user.setUsername("public");
-			String password = HashUtil.getSha256("public-password");
+			String password = HashUtil.hashPassword("public-password");
 			user.setPassword(password);
 			user.setRoles(new String[]{"public"});
 			dao.insert(user);

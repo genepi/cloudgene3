@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.core.Template;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.TemplateDao;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.TemplateDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.util.HashUtil;
 
 public class Fixtures {
@@ -25,17 +25,16 @@ public class Fixtures {
 		if (user == null) {
 			user = new User();
 			user.setUsername(USERNAME);
-			PASSWORD = HashUtil.hashPassword(PASSWORD);
-			user.setPassword(PASSWORD);
+			user.setPassword(HashUtil.hashPassword(PASSWORD));
 			user.makeAdmin();
 
 			dao.insert(user);
 			log.info("User " + USERNAME + " created.");
-		} else {	
-			
+		} else {
+
 			log.info("User " + USERNAME + " already exists.");
-			
-			if (!user.isAdmin()){
+
+			if (!user.isAdmin()) {
 				user.makeAdmin();
 				dao.update(user);
 				log.info("User " + USERNAME + " has admin rights now.");

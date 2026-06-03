@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import cloudgene.mapred.database.DownloadDao;
+import cloudgene.mapred.database.dao.DownloadDao;
 import cloudgene.mapred.jobs.Download;
 import cloudgene.mapred.jobs.workspace.WorkspaceFactory;
 import cloudgene.mapred.jobs.workspace.IWorkspace;

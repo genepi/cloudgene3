@@ -10,9 +10,9 @@ import java.util.Map;
 import cloudgene.mapred.jobs.workspace.IWorkspace;
 import org.junit.jupiter.api.Test;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.jobs.CloudgeneJob;
 import cloudgene.mapred.jobs.Message;

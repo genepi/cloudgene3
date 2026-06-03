@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.CounterHistoryDao;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.CounterHistoryDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.jobs.AbstractJob;
 import cloudgene.mapred.jobs.WorkflowEngine;

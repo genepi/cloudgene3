@@ -6,14 +6,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cloudgene.mapred.jobs.workspace.IWorkspace;
+import cloudgene.mapred.test.TestUtil;
+import cloudgene.mapred.util.Settings;
 import org.junit.jupiter.api.Test;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.JobDao;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.JobDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.jobs.workspace.WorkspaceFactory;
-import cloudgene.mapred.util.Settings;
 import cloudgene.mapred.wdl.WdlApp;
 import cloudgene.mapred.wdl.WdlReader;
 import genepi.io.FileUtil;
@@ -31,32 +32,25 @@ public class WrongWorkspaceTest {
 
 	@Test
 	public void testReturnTrueStep() throws Exception {
-
 		WorkflowEngine engine = application.getWorkflowEngine();
-
 		WdlApp app = WdlReader.loadAppFromFile("test-data/return-true.yaml");
 
-		Map<String, String> inputs = new HashMap<String, String>();
+		Map<String, String> inputs = new HashMap<>();
 		inputs.put("input", "input-file");
 
 		AbstractJob job = createJobFromWdl(app, inputs);
 		engine.submit(job);
-		while (job.isRunning()) {
-			Thread.sleep(1000);
-		}
-		Thread.sleep(10000);
+
+		TestUtil.waitForJob(engine, job);
 
 		JobDao dao = new JobDao(application.getDatabase());
-
 		AbstractJob jobFromDb = dao.findById(job.getId());
 
 		assertEquals(AbstractJob.STATE_FAILED, jobFromDb.getState());
-
 		assertEquals(AbstractJob.STATE_FAILED, job.getState());
 	}
 
 	public CloudgeneJob createJobFromWdl(WdlApp app, Map<String, String> inputs) throws Exception {
-
 		UserDao userDao = new UserDao(application.getDatabase());
 		User user = userDao.findByUsername("user");
 
@@ -83,5 +77,4 @@ public class WrongWorkspaceTest {
 
 		return job;
 	}
-
 }

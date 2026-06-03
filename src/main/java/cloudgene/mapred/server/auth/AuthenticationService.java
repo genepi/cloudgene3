@@ -5,14 +5,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import cloudgene.mapred.core.ApiToken;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.responses.ValidatedApiTokenResponse;
 import io.micronaut.security.authentication.Authentication;
@@ -28,8 +28,10 @@ import reactor.core.publisher.Mono;
 public class AuthenticationService {
 
 	private static final String MESSAGE_VALID_API_TOKEN = "API Token was created by %s and is valid.";
-
 	private static final String MESSAGE_INVALID_API_TOKEN = "Invalid API Token.";
+
+	private static final String ATTRIBUTE_TOKEN_TYPE = "token_type";
+	private static final String ATTRIBUTE_API_HASH = "api_hash";
 
 	@Inject
 	protected Application application;
@@ -40,17 +42,12 @@ public class AuthenticationService {
 	@Inject
 	protected JwtTokenValidator validator;
 
-	public static String ATTRIBUTE_TOKEN_TYPE = "token_type";
-
-	public static String ATTRIBUTE_API_HASH = "api_hash";
-
 	public User getUserByAuthentication(Authentication authentication) {
 		return getUserByAuthentication(authentication, AuthenticationType.ACCESS_TOKEN);
 	}
 
 	public User getUserByAuthentication(Authentication authentication, AuthenticationType authenticationType) {
-
-		User user = null;
+		User user;
 		if (authentication != null) {
 			UserDao userDao = new UserDao(application.getDatabase());
 			user = userDao.findByUsername(authentication.getName());
@@ -69,36 +66,27 @@ public class AuthenticationService {
 							return user;
 						}
 					}
-
 				} else if (tokenType.equalsIgnoreCase(AuthenticationType.ACCESS_TOKEN.toString())) {
-
 					if (authenticationType == AuthenticationType.ACCESS_TOKEN
 							|| authenticationType == AuthenticationType.ALL_TOKENS) {
 						return user;
 					}
-
 				}
-
 			} else {
-
 				if (authenticationType == AuthenticationType.ACCESS_TOKEN
 						|| authenticationType == AuthenticationType.ALL_TOKENS) {
 					return user;
 				}
-
 			}
 
 			throw new AuthorizationException(authentication);
-
 		}
 
 		throw new AuthenticationException();
-
 	}
 
 	public ApiToken createApiToken(User user, int lifetime) {
-
-		String hash = RandomStringUtils.randomAlphanumeric(30);
+		String hash = RandomStringUtils.secure().nextAlphanumeric(30);
 
 		Map<String, Object> attributes = new HashMap<String, Object>();
 		attributes.put(ATTRIBUTE_TOKEN_TYPE, AuthenticationType.API_TOKEN.toString());
@@ -115,7 +103,6 @@ public class AuthenticationService {
 		Date expiresOn = new Date(System.currentTimeMillis() + (lifetime * 1000L));
 
 		return new ApiToken(token.get(), hash, expiresOn);
-
 	}
 
 	public Mono<ValidatedApiTokenResponse> validateApiToken(String token) {
@@ -162,10 +149,7 @@ public class AuthenticationService {
 					this.subscription = subscription;
 					subscription.request(1);
 				}
-
 			});
 		}).single();
-
 	}
-
 }

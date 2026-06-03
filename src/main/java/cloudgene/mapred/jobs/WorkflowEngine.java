@@ -3,29 +3,26 @@ package cloudgene.mapred.jobs;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.core.User;
 import cloudgene.mapred.jobs.queue.PriorityRunnable;
 import cloudgene.mapred.jobs.queue.Queue;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 
 public class WorkflowEngine implements Runnable {
 
 	private Thread threadLongTimeQueue;
 
-	private Queue longTimeQueue;
+	private final Queue longTimeQueue;
 
 	private boolean running = false;
 
-	private AtomicLong priorityCounter = new AtomicLong();
-
-	private static final Logger log = LoggerFactory.getLogger(WorkflowEngine.class);
+	private final AtomicLong priorityCounter = new AtomicLong();
 
 	public WorkflowEngine(int ltqThreads) {
-
 		longTimeQueue = new Queue("LongTimeQueue", ltqThreads, true, true) {
 
 			@Override
@@ -38,9 +35,7 @@ public class WorkflowEngine implements Runnable {
 				job.setEndTime(System.currentTimeMillis());
 				jobCompleted(job);
 			}
-
 		};
-
 	}
 
 	public void submit(AbstractJob job) {
@@ -48,13 +43,11 @@ public class WorkflowEngine implements Runnable {
 	}
 
 	public void submit(AbstractJob job, long priority) {
-
 		job.setPriority(priority);
 		job.setSubmittedOn(System.currentTimeMillis());
 		jobSubmitted(job);
 
-		boolean okey = job.afterSubmission();
-		if (okey) {
+		if (job.afterSubmission()) {
 			longTimeQueue.submit(job);
 		} else {
 			job.setEndTime(System.currentTimeMillis());
@@ -67,7 +60,6 @@ public class WorkflowEngine implements Runnable {
 	}
 
 	public void restart(AbstractJob job, long priority) {
-
 		job.setPriority(priority);
 		job.setSubmittedOn(System.currentTimeMillis());
 		job.setStartTime(0);
@@ -75,14 +67,12 @@ public class WorkflowEngine implements Runnable {
 		job.setState(AbstractJob.STATE_WAITING);
 		statusUpdated(job);
 
-		boolean okey = job.afterSubmission();
-		if (okey) {
+		if (job.afterSubmission()) {
 			longTimeQueue.submit(job);
 		} else {
 			job.setEndTime(System.currentTimeMillis());
 			statusUpdated(job);
 		}
-
 	}
 
 	public void updatePriority(AbstractJob job, long priority) {
@@ -100,7 +90,6 @@ public class WorkflowEngine implements Runnable {
 		threadLongTimeQueue = new Thread(longTimeQueue);
 		threadLongTimeQueue.start();
 		running = true;
-
 	}
 
 	public void stop() {
@@ -129,9 +118,11 @@ public class WorkflowEngine implements Runnable {
 		return longTimeQueue.getJobById(id);
 	}
 
-	public Map<String, Long> getCounters(int state, List<String> names) {
-		Map<String, Long> result = new HashMap<String, Long>();
+	@NonNull
+	public Map<String, Long> getCounters(int state, @Nullable List<String> names) {
+		Map<String, Long> result = new HashMap<>();
 		List<AbstractJob> jobs = longTimeQueue.getAllJobs();
+
 		for (AbstractJob job : jobs) {
 			if (job.getState() == state) {
 				Map<String, Integer> counters = job.getContext().getCounters();
@@ -140,45 +131,35 @@ public class WorkflowEngine implements Runnable {
 					Integer value = counters.get(name);
 					Long oldvalue = result.get(name);
 					if (oldvalue == null) {
-						oldvalue = new Long(0);
+						oldvalue = 0L;
 					}
 					result.put(name, oldvalue + value);
 				}
 			}
 		}
-		return result;
 
+		return result;
 	}
 
 	public List<AbstractJob> getJobsByUser(User user) {
-
 		List<AbstractJob> jobs = longTimeQueue.getJobsByUser(user);
 
 		for (AbstractJob job : jobs) {
-
 			if (job instanceof CloudgeneJob) {
-
 				((CloudgeneJob) job).updateProgress();
-
 			}
-
 		}
 
 		return jobs;
 	}
 
 	public List<AbstractJob> getAllJobsInLongTimeQueue() {
-
 		List<AbstractJob> jobs = longTimeQueue.getAllJobs();
 
 		for (AbstractJob job : jobs) {
-
 			if (job instanceof CloudgeneJob) {
-
 				((CloudgeneJob) job).updateProgress();
-
 			}
-
 		}
 
 		return jobs;
@@ -189,19 +170,19 @@ public class WorkflowEngine implements Runnable {
 	}
 
 	protected void statusUpdated(AbstractJob job) {
-
 	}
 
 	protected void jobCompleted(AbstractJob job) {
-
 	}
 
 	protected void jobSubmitted(AbstractJob job) {
-
 	}
 
 	public int getSize() {
 		return longTimeQueue.getSize();
 	}
 
+	public Future<?> getFuture(AbstractJob job) {
+		return longTimeQueue.getFuture(job);
+	}
 }

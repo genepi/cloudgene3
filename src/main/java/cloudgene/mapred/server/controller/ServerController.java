@@ -3,8 +3,8 @@ package cloudgene.mapred.server.controller;
 import java.util.List;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
-import cloudgene.mapred.database.JobValueDao;
+import cloudgene.mapred.database.dao.UserDao;
+import cloudgene.mapred.database.dao.JobValueDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.auth.AuthenticationService;
 import cloudgene.mapred.server.auth.AuthenticationType;

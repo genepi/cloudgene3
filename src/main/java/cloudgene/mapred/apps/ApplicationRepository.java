@@ -2,7 +2,6 @@ package cloudgene.mapred.apps;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -22,7 +21,7 @@ import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.util.DatabaseUpdater;
+import cloudgene.mapred.database.updates.DatabaseUpdater;
 import cloudgene.mapred.util.GitHubException;
 import cloudgene.mapred.util.GitHubUtil;
 import cloudgene.mapred.util.GitHubUtil.Repository;
@@ -34,24 +33,18 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class ApplicationRepository {
 
-	private List<Application> apps;
-
-	private Map<String, Application> indexApps;
-
-	public static final String CONFIG_PATH = Configuration.getConfigDirectory();
-
-	private String appsFolder = Configuration.getAppsDirectory();;
-
 	private static final Logger log = LoggerFactory.getLogger(ApplicationRepository.class);
 
 	public static int APPS = 1;
-
 	public static int APPS_AND_DATASETS = 2;
-
 	public static int DATASETS = 4;
 
+	private List<Application> apps;
+	private Map<String, Application> indexApps;
+	private String appsFolder = Configuration.getAppsDirectory();
+
 	public ApplicationRepository() {
-		apps = new Vector<Application>();
+		apps = new Vector<>();
 		reload();
 	}
 
@@ -69,31 +62,24 @@ public class ApplicationRepository {
 	}
 
 	public void reload() {
-		indexApps = new HashMap<String, Application>();
+		indexApps = new HashMap<>();
 		log.info("Reload applications...");
 		for (Application app : apps) {
 			try {
-				log.info("Load workflow file " + app.getFilename());
+				log.info("Load workflow file {}", app.getFilename());
 				app.loadWdlApp();
-				WdlApp wdlApp = app.getWdlApp();
-				// update wdl id with id from application
-				/*if (wdlApp != null) {
-					wdlApp.setId(app.getId());
-				}*/
-				log.info("Application " + app.getId() + " loaded.");
+				log.info("Application {} loaded.", app.getId());
 			} catch (IOException e) {
-				log.error("Application " + app.getFilename() + " has syntax errors.", e);
+				log.error("Application {} has syntax errors.", app.getFilename(), e);
 			}
 			indexApps.put(app.getId(), app);
-
 		}
 
 		Collections.sort(apps);
-		log.info("Loaded " + apps.size() + " applications.");
+		log.info("Loaded {} applications.", apps.size());
 	}
 
 	public Application getByIdAndUser(String id, User user) {
-
 		Application application = getById(id);
 
 		if (hasAccess(user, application) && isActivated(application)) {
@@ -101,19 +87,17 @@ public class ApplicationRepository {
 		}
 
 		return null;
-
 	}
 
 	public Application getById(String id) {
-
 		Application application = indexApps.get(id);
 		if (application != null) {
 			return application;
 		}
 
 		// try without version
-		List<Application> versions = new Vector<Application>();
-		for (Application app: apps) {
+		List<Application> versions = new Vector<>();
+		for (Application app : apps) {
 			if (id.equals(app.getWdlApp().getId())) {
 				versions.add(app);
 			}
@@ -133,87 +117,73 @@ public class ApplicationRepository {
 		}
 
 		return latest;
-
 	}
 
 	public List<Application> getAllByUser(User user, int filter) {
-
-		List<Application> listApps = new Vector<Application>();
+		List<Application> listApps = new Vector<>();
 
 		for (Application application : getAll()) {
+			if (!hasAccess(user, application) || !isActivated(application)) {
+				continue;
+			}
 
-            if (!hasAccess(user, application) || !isActivated(application)) {
-                continue;
-            }
+			WdlApp wdlApp = application.getWdlApp();
 
-            WdlApp wdlApp = application.getWdlApp();
-
-            if (filter == APPS_AND_DATASETS) {
-                listApps.add(application);
-            } else if (filter == APPS && wdlApp.getWorkflow() != null) {
+			if (filter == APPS_AND_DATASETS) {
 				listApps.add(application);
-
-            } else if (filter == DATASETS && wdlApp.getWorkflow() != null) {
+			} else if (filter == APPS && wdlApp.getWorkflow() != null) {
 				listApps.add(application);
-            }
-
-        }
+			} else if (filter == DATASETS && wdlApp.getWorkflow() != null) {
+				listApps.add(application);
+			}
+		}
 
 		Collections.sort(listApps);
 		return listApps;
-
 	}
 
 	public void remove(Application application) throws IOException {
-		log.info("Remove application " + application.getId());
+		log.info("Remove application {}", application.getId());
 		apps.remove(application);
 		reload();
 	}
 
 	public void updateConfig(Application app, Map<String, String> config) throws IOException {
-
 		WdlApp wdlApp = app.getWdlApp();
 
 		if (config == null) {
 			return;
 		}
 
-		for (IPlugin plugin: PluginManager.getInstance().getPlugins()) {
+		for (IPlugin plugin : PluginManager.getInstance().getPlugins()) {
 			Map<String, String> updatedConfig = plugin.getConfig(wdlApp);
 			if (updatedConfig == null) {
 				continue;
 			}
-			for (String key: config.keySet()){
+			for (String key : config.keySet()) {
 				updatedConfig.put(key, config.get(key));
 			}
 			plugin.updateConfig(wdlApp, updatedConfig);
 		}
-
 	}
 
 	public List<Application> install(String url) throws IOException, GitHubException {
-
 		List<Application> applications = new ArrayList<>();
-		Application application = null;
+		Application application;
+
 		if (url.startsWith("http://") || url.startsWith("https://")) {
-			return  installFromUrl(url);
+			return installFromUrl(url);
 		} else if (url.startsWith("s3://")) {
 			application = installFromS3(url);
 		} else if (url.startsWith("github://")) {
-
 			String repo = url.replace("github://", "");
-
 			Repository repository = GitHubUtil.parseShorthand(repo);
 			if (repository == null) {
 				throw new GitHubException(repo + " is not a valid GitHub repo.");
 			}
-
 			application = installFromGitHub(repository);
-
 		} else {
-
 			if (new File(url).exists()) {
-
 				if (url.endsWith(".zip")) {
 					application = installFromZipFile(url);
 				} else if (url.endsWith(".yaml")) {
@@ -223,7 +193,6 @@ public class ApplicationRepository {
 				} else {
 					application = installFromDirectory(url, false);
 				}
-
 			} else {
 				String repo = url.replace("github://", "");
 
@@ -233,31 +202,30 @@ public class ApplicationRepository {
 				}
 
 				application = installFromGitHub(repository);
-
 			}
 		}
+
 		if (application != null) {
 			applications.add(application);
 		}
-		return applications;
 
+		return applications;
 	}
 
 	public List<Application> installFromUrl(String url) throws IOException, GitHubException {
-
 		if (!url.endsWith(".zip")) {
 			return installFromUrlRepository(url);
-        }
+		}
 
 		// download file from url
 		File zipFile = new File(FileUtil.path(appsFolder, "archive.zip"));
-        FileUtils.copyURLToFile(new URL(url), zipFile);
-        Application application = installFromZipFile(zipFile.getAbsolutePath());
-        zipFile.delete();
-		List<Application> applications = new Vector<Application>();
+		FileUtils.copyURLToFile(new URL(url), zipFile);
+		Application application = installFromZipFile(zipFile.getAbsolutePath());
+		zipFile.delete();
+		List<Application> applications = new Vector<>();
 		applications.add(application);
-        return applications;
-    }
+		return applications;
+	}
 
 	public List<Application> installFromUrlRepository(String url) throws IOException, GitHubException {
 		Pattern pattern = Pattern.compile("@([^/\\?]*)");
@@ -283,7 +251,7 @@ public class ApplicationRepository {
 		}
 
 		JsonNode release = getVersion(releases, version);
-		if (release == null ) {
+		if (release == null) {
 			throw new IOException("Version " + version + " not found.");
 		}
 		switch (type) {
@@ -295,14 +263,14 @@ public class ApplicationRepository {
 			case "pack": {
 				JsonNode content = release.path("content");
 				if (content.isArray()) {
-					List<Application> applications = new Vector<Application>();
+					List<Application> applications = new Vector<>();
 					for (JsonNode item : content) {
 						String itemUrl = item.path("url").asText();
 						System.out.println("Installing application from " + itemUrl + "...");
 						List<Application> installedApplications = install(itemUrl);
 						if (item.has("config") && item.hasNonNull("config")){
-							Map<String, String> config = mapper.convertValue(item.get("config"), new TypeReference<Map<String, String>>() {});
-							for (Application application: installedApplications) {
+							Map<String, String> config = mapper.convertValue(item.get("config"), new TypeReference<>() {});
+							for (Application application : installedApplications) {
 								System.out.println("Configure application " + application.getId());
 								updateConfig(application, config);
 							}
@@ -351,10 +319,9 @@ public class ApplicationRepository {
 			String relativeKey = summary.getKey().replaceAll(baseKey, "");
 			String target = FileUtil.path(appPath, relativeKey);
 			FileUtil.createDirectory(target);
-
 		}
 
-		//copy files
+		// copy files
 		for (S3ObjectSummary summary : listing.getObjectSummaries()) {
 
 			String bucket = summary.getBucketName();
@@ -375,7 +342,6 @@ public class ApplicationRepository {
 			}
 			System.out.println("Copy file from " + bucket + "/" + key + " to " + target);
 			S3Util.copyToFile(bucket, key, file);
-
 		}
 
 		try {
@@ -383,12 +349,9 @@ public class ApplicationRepository {
 		} finally {
 			FileUtil.deleteDirectory(appPath);
 		}
-
-
 	}
 
-	public Application installFromGitHub(Repository repository) throws MalformedURLException, IOException {
-
+	public Application installFromGitHub(Repository repository) throws IOException {
 		String url = GitHubUtil.buildUrlFromRepository(repository);
 		File zipFile = new File(FileUtil.path(appsFolder, "archive.zip"));
 		FileUtils.copyURLToFile(new URL(url), zipFile);
@@ -396,15 +359,13 @@ public class ApplicationRepository {
 		String zipFilename = zipFile.getAbsolutePath();
 		Application application = installFromZipFile(zipFilename, repository.getYaml());
 		zipFile.delete();
-		return application;
 
+		return application;
 	}
 
 	public Application installFromZipFile(String zipFilename) throws IOException {
-
 		return installFromZipFile(zipFilename, null);
 	}
-
 
 	public Application installFromZipFile(String zipFilename, String yamlFilename) throws IOException {
 
@@ -425,7 +386,6 @@ public class ApplicationRepository {
 		} finally {
 			FileUtil.deleteDirectory(appPath);
 		}
-
 	}
 
 	public Application installFromDirectory(String path, boolean moveToApps) throws IOException {
@@ -442,12 +402,12 @@ public class ApplicationRepository {
 		String cloudgeneFilename = FileUtil.path(path, name);
 		if (new File(cloudgeneFilename).exists()) {
 			Application application = installFromYaml(cloudgeneFilename, moveToApps);
-				if (application != null) {
-					return application;
+			if (application != null) {
+				return application;
 			}
 		}
 
-		//No cloudgene.yaml found. try all other yaml files.
+		// No cloudgene.yaml found. try all other yaml files.
 		String[] files = FileUtil.getFiles(path, "*.yaml");
 		for (String filename : files) {
 			Application application = installFromYaml(filename, moveToApps);
@@ -463,8 +423,8 @@ public class ApplicationRepository {
 				return application;
 			}
 		}
-		return null;
 
+		return null;
 	}
 
 	public Application installFromYaml(String filename, boolean moveToApps) throws IOException {
@@ -475,7 +435,7 @@ public class ApplicationRepository {
 		try {
 			application.loadWdlApp();
 		} catch (IOException e) {
-			log.warn("Ignore file " + filename + ". Not a valid cloudgene file.", e);
+			log.warn("Ignore file {}. Not a valid Cloudgene file.", filename, e);
 			return null;
 		}
 
@@ -485,7 +445,6 @@ public class ApplicationRepository {
 		}
 
 		if (moveToApps) {
-
 			File file = new File(filename);
 			File folder = file.getParentFile();
 
@@ -505,10 +464,9 @@ public class ApplicationRepository {
 			try {
 				application.loadWdlApp();
 			} catch (IOException e) {
-				log.warn("Ignore file " + filename + ". Not a valid cloudgene file.", e);
+				log.warn("Ignore file {}. Not a valid Cloudgene file.", filename, e);
 				return null;
 			}
-
 		}
 
 		apps.add(application);
@@ -516,7 +474,6 @@ public class ApplicationRepository {
 		indexApps.put(application.getId(), application);
 
 		return application;
-
 	}
 
 	private String[] getDirectories(String path) {
@@ -549,7 +506,7 @@ public class ApplicationRepository {
 	}
 
 	public String getConfigDirectory(WdlApp app) {
-		return FileUtil.path(CONFIG_PATH, app.getId(), app.getVersion());
+		return FileUtil.path(Configuration.getConfigDirectory(), app.getId(), app.getVersion());
 	}
 
 	public boolean hasAccess(User user, Application application) {
@@ -570,12 +527,13 @@ public class ApplicationRepository {
 		if ("latest".equalsIgnoreCase(version)) {
 			return releases.get(0);
 		}
+
 		for (JsonNode release : releases) {
 			if (release.has("version") && release.get("version").asText().equals(version)) {
 				return release;
 			}
 		}
+
 		return null;
 	}
-
 }

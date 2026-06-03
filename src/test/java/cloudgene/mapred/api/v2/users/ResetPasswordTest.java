@@ -15,12 +15,12 @@ import org.junit.jupiter.api.TestInstance;
 
 import com.dumbster.smtp.SmtpMessage;
 
-import cloudgene.mapred.TestApplication;
+import cloudgene.mapred.test.TestApplication;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.database.util.Database;
 import cloudgene.mapred.util.HashUtil;
-import cloudgene.mapred.util.TestMailServer;
+import cloudgene.mapred.test.TestMailServer;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.restassured.RestAssured;
 import jakarta.inject.Inject;

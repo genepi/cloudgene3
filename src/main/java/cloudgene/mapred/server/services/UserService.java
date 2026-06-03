@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import cloudgene.mapred.core.Template;
 import cloudgene.mapred.core.User;
-import cloudgene.mapred.database.UserDao;
+import cloudgene.mapred.database.dao.UserDao;
 import cloudgene.mapred.server.Application;
 import cloudgene.mapred.server.exceptions.JsonHttpStatusException;
 import cloudgene.mapred.server.responses.MessageResponse;
@@ -16,62 +16,43 @@ import cloudgene.mapred.util.HashUtil;
 import cloudgene.mapred.util.MailUtil;
 import cloudgene.mapred.util.Page;
 import io.micronaut.http.HttpStatus;
-import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 @Singleton
 public class UserService {
 
-	private static Logger log = LoggerFactory.getLogger(UserService.class);
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
 	public static final String MESSAGE_USER_NOT_FOUND = "User %s not found.";
-
 	private static final String MESSAGE_USER_PROFILE_DELETE = "User profile successfully delete.";
-
 	private static final String MESSAGE_DELETE_ERROR = "Error during deleting your user profile.";
-
 	private static final String MESSAGE_WRONG_PASSWORD = "Wrong password.";
-
 	private static final String MESSAGE_PROFILE_UPDATED = "User profile successfully updated.";
-
 	private static final String MESSAGE_NOT_ALLOWED = "You are not allowed to change this user profile.";
-
 	private static final String MESSAGE_NO_USERNAME_SET = "No username set.";
-
 	private static final String MESSAGE_PASSWORD_UPDATED = "Password successfully updated.";
-
 	private static final String MESSAGE_INVALID_RECOVERY_REQUEST = "Your recovery request is invalid or expired.";
-
 	private static final String MESSAGE_ACCOUNT_IS_INACTIVE = "Account is not activated.";
-
 	private static final String MESSAGE_ACCOUNT_NOT_FOUND = "We couldn't find an account with that username or email.";
-
 	private static final String MESSAGE_EMAIL_SENT = "We sent you an email with instructions on how to reset your password.";
-
 	private static final String MESSAGE_EMAIL_NOT_AVAILABLE = "No email address is associated with the provided username. Therefore, password recovery cannot be completed.";
-
 	private static final String MESSAGE_SENDING_EMAIL_FAILED = "Sending recovery email failed. ";
-
 	private static final String MESSAGE_INVALID_USERNAME = "Please enter a valid username or email address.";
-
 	private static final String MESSAGE_USER_CREATED = "User successfully created.";
-
 	private static final String MESSAGE_EMAIL_ALREADY_REGISTERED = "E-Mail is already registered.";
-
 	private static final String MESSAGE_USERNAME_ALREADY_EXISTS = "Username already exists.";
-
 	private static final String MESSAGE_WRONG_USERNAME = "Wrong username.";
-
 	private static final String MESSAGE_WRONG_ACTIVATION_CODE = "Wrong activation code.";
-
 	private static final String MESSAGE_USER_ACTIVATED = "User successfully activated.";
 
 	public static final String DEFAULT_ROLE = "User";
-
 	public static final String DEFAULT_ANONYMOUS_ROLE = "Anonymous_User";
 
-	@Inject
 	protected Application application;
+
+	public UserService(Application application) {
+		this.application = application;
+	}
 
 	public Page<User> getAll(String query, String page, int pageSize) {
 
@@ -307,7 +288,7 @@ public class UserService {
 			} else {
 
 				// create activation token
-				key = HashUtil.getActivationHash(user);
+				key = HashUtil.getSecureHash();
 				user.setActivationCode(key);
 				dao.update(user);
 			}
@@ -405,7 +386,7 @@ public class UserService {
 
 			if (application.getSettings().getMail() != null && mailProvided) {
 
-				String activationKey = HashUtil.getActivationHash(newUser);
+				String activationKey = HashUtil.getSecureHash();
 				newUser.setActive(false);
 				newUser.setActivationCode(activationKey);
 

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import cloudgene.mapred.database.*;
+import cloudgene.mapred.database.dao.*;
 import cloudgene.mapred.jobs.engine.handler.IJobErrorHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -19,3 +19,5 @@
 /apps
 *.DS_Store
 /.apt_generated/
+/.idea/
+/test*.txt

@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Vector;
 
+import cloudgene.mapred.database.connector.DatabaseConnector;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

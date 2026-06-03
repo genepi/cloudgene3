@@ -4,24 +4,22 @@ import java.io.IOException;
 
 import cloudgene.mapred.wdl.WdlApp;
 import cloudgene.mapred.wdl.WdlReader;
-import genepi.io.FileUtil;
 
 public class Application implements Comparable<Application> {
 
 	private String filename;
-
 	private String permission;
 
 	private boolean syntaxError = false;
-
 	private WdlApp wdlApp = null;
-
 	private String errorMessage = "";
-
 	private boolean enabled = true;
 
-	public Application() {
+	public Application() {}
 
+	public Application(String filename, String permission) {
+		this.filename = filename;
+		this.permission = permission;
 	}
 
 	public String getFilename() {
@@ -109,12 +107,11 @@ public class Application implements Comparable<Application> {
 			return result;
 		}
 		// sort by name
-		result =  wdlApp.getName().compareTo(o.wdlApp.getName());
+		result = wdlApp.getName().compareTo(o.wdlApp.getName());
 		if (result != 0) {
 			return result;
 		}
 		// sort by version
-		return  wdlApp.getVersion().compareTo(o.wdlApp.getVersion());
+		return wdlApp.getVersion().compareTo(o.wdlApp.getVersion());
 	}
-
 }
