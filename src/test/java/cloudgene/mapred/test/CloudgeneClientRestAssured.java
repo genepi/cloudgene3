@@ -5,14 +5,27 @@ import io.micronaut.context.annotation.Prototype;
 import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
+import jakarta.inject.Inject;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 @Prototype
 public class CloudgeneClientRestAssured {
 
-	public static int POLL_INTERVAL_MS = 500;
+	@Inject
+	private TestApplication application;
 
+	/**
+	 * Logs in with the provided {@code username} and {@code password}, and returns
+	 * the bearer token header required for API authentication. Fails the test if
+	 * the credentials are not valid.
+	 */
 	public Header login(String username, String password) {
-
 		Response response = RestAssured
 				.given()
 				.formParams("username", username, "password", password)
@@ -30,11 +43,16 @@ public class CloudgeneClientRestAssured {
 		return login("public", "public-password");
 	}
 
+	/**
+	 * Sleeps until the job with the given {@code id} completes. Errors if there is
+	 * no such reachable job. Times out after 30 seconds.
+	 */
 	public void waitForJob(String id, Header accessToken) {
 		Response response = RestAssured
 				.given()
+				.header(accessToken)
 				.when()
-				.header(accessToken).get("/api/v2/jobs/" + id + "/status")
+				.get("/api/v2/jobs/" + id + "/status")
 				.thenReturn();
 
 		response.then().statusCode(200);
@@ -47,10 +65,11 @@ public class CloudgeneClientRestAssured {
 
 		if (running) {
 			try {
-				Thread.sleep(POLL_INTERVAL_MS);
-				waitForJob(id, accessToken);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				AbstractJob job = application.getWorkflowEngine().getJobById(id);
+				Future<?> future = application.getWorkflowEngine().getFuture(job);
+				future.get(30, TimeUnit.SECONDS);
+			} catch (ExecutionException | InterruptedException | TimeoutException e) {
+				fail();
 			}
 		}
 	}
